@@ -17,6 +17,7 @@ const ChatComponent = ({ apiKey, setExplanation, messageInputEnabled, setMessage
       sender: "GPT"
     }
   ]);
+  const [imageSrc, setImageSrc] = useState(modelInfo.explanations[0].visualization);
 
   useEffect(() => {
     const fetchSystemMessage = async () => {
@@ -119,15 +120,36 @@ const ChatComponent = ({ apiKey, setExplanation, messageInputEnabled, setMessage
     }
   };
 
-  const explainVisualization = async (index) => {
-    const visualization = {
-      type: "image",
-      direction: 'outgoing',
-      sender: "user",
-      payload: { src: modelInfo.explanations[index].visualization, height: "80vh" }
-    };
+  // const explainVisualization = async (index) => {
+  //   const visualization = {
+  //     type: "image",
+  //     direction: 'outgoing',
+  //     sender: "user",
+  //     payload: { src: modelInfo.explanations[index].visualization, height: "80vh" }
+  //   };
 
-    setMessages(messages => [...messages, visualization]);
+  //   setMessages(messages => [...messages, visualization]);
+
+  //   const newMessage = {
+  //     message: "'''" + modelInfo.explanations[index].message + "'''",
+  //     direction: 'outgoing',
+  //     sender: "system"
+  //   };
+
+  //   setIsTyping(true);
+  //   try {
+  //     let processedMessages = await processMessagesToGPT([...messages, newMessage]);
+  //     let response = await sendMessageToGPT(processedMessages);
+  //     await streamResponseToChat(response, [...messages, visualization]);
+  //   } catch (error) {
+  //     console.error("Error in explainVisualization:", error);
+  //   } finally {
+  //     setIsTyping(false);
+  //   }
+  // };
+
+  const explainVisualization = async (index) => {
+    setImageSrc(modelInfo.explanations[index].visualization);
 
     const newMessage = {
       message: "'''" + modelInfo.explanations[index].message + "'''",
@@ -139,7 +161,7 @@ const ChatComponent = ({ apiKey, setExplanation, messageInputEnabled, setMessage
     try {
       let processedMessages = await processMessagesToGPT([...messages, newMessage]);
       let response = await sendMessageToGPT(processedMessages);
-      await streamResponseToChat(response, [...messages, visualization]);
+      await streamResponseToChat(response, [...messages]);
     } catch (error) {
       console.error("Error in explainVisualization:", error);
     } finally {
@@ -165,8 +187,11 @@ const ChatComponent = ({ apiKey, setExplanation, messageInputEnabled, setMessage
   };
 
   return (
-    <div>
-      <MainContainer style={{ height: "100vh" }}>
+    <div style={{ display: "flex", flexDirection: "column" }}>
+      <div style={{ height: "60vh", width: "100%", alignContent: "center" }}>
+        <img src={imageSrc} style={{ maxHeight: "100%", maxWidth: "100%" }} />
+      </div>
+      <MainContainer style={{ height: "40vh" }}>
         <ChatContainer>
           <MessageList
             scrollBehavior="auto"

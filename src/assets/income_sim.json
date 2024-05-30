@@ -1,0 +1,98 @@
+{
+    "Age": {
+        "999": 37.0,
+        "23706": 42.0,
+        "17316": 35.0,
+        "521": 34.0,
+        "22585": 40.0,
+        "872": 35.0
+    },
+    "Workclass": {
+        "999": " Private",
+        "23706": " Private",
+        "17316": " Private",
+        "521": " Private",
+        "22585": " Private",
+        "872": " Private"
+    },
+    "Education-Num": {
+        "999": 10.0,
+        "23706": 10.0,
+        "17316": 10.0,
+        "521": 10.0,
+        "22585": 10.0,
+        "872": 10.0
+    },
+    "Marital Status": {
+        "999": " Never-married",
+        "23706": " Never-married",
+        "17316": " Never-married",
+        "521": " Never-married",
+        "22585": " Never-married",
+        "872": " Never-married"
+    },
+    "Occupation": {
+        "999": " Exec-managerial",
+        "23706": " Exec-managerial",
+        "17316": " Exec-managerial",
+        "521": " Exec-managerial",
+        "22585": " Sales",
+        "872": " Sales"
+    },
+    "Relationship": {
+        "999": " Not-in-family",
+        "23706": " Not-in-family",
+        "17316": " Not-in-family",
+        "521": " Not-in-family",
+        "22585": " Not-in-family",
+        "872": " Not-in-family"
+    },
+    "Race": {
+        "999": " White",
+        "23706": " White",
+        "17316": " White",
+        "521": " White",
+        "22585": " White",
+        "872": " White"
+    },
+    "Sex": {
+        "999": " Female",
+        "23706": " Female",
+        "17316": " Female",
+        "521": " Female",
+        "22585": " Female",
+        "872": " Female"
+    },
+    "Capital Gain": {
+        "999": 0.0,
+        "23706": 0.0,
+        "17316": 0.0,
+        "521": 0.0,
+        "22585": 0.0,
+        "872": 0.0
+    },
+    "Capital Loss": {
+        "999": 0.0,
+        "23706": 0.0,
+        "17316": 0.0,
+        "521": 0.0,
+        "22585": 0.0,
+        "872": 0.0
+    },
+    "Hours per week": {
+        "999": 40.0,
+        "23706": 40.0,
+        "17316": 40.0,
+        "521": 40.0,
+        "22585": 40.0,
+        "872": 40.0
+    },
+    "Country": {
+        "999": " United-States",
+        "23706": " United-States",
+        "17316": " United-States",
+        "521": " United-States",
+        "22585": " United-States",
+        "872": " United-States"
+    }
+}

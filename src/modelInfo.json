@@ -2,15 +2,15 @@
   "firstMessage": "I'm ExplainoBot 😒 I help explain visualizations 🙄 Submit your GPT key in the box to the left 😮‍💨",
   "explanations": [
     {
-      "visualization": "https://upload.wikimedia.org/wikipedia/commons/6/6e/1_number_LZNQBD.jpg",
-      "message": "**Visualization Description:**\n The feature importance plot is a bar chart where the X-axis represents different clinical features such as Age, Blood Pressure, Cholesterol Level, Smoking Status, and Physical Activity. The Y-axis represents the importance scores assigned to each feature by the model.\n\n**Example Explanation:**\n - **Age:** This feature has the highest importance score, shown by the longest bar in the plot. This implies that age is a significant predictor in the model's decision-making process. As age increases, the likelihood of the disease might increase as well, which suggests a strong dependency of the disease prediction on the patient's age.\n  \n - **Blood Pressure:** The second longest bar represents blood pressure, underscoring its strong influence on the model's predictions. Higher or abnormally low blood pressure could be strong indicators for the disease.\n\n - **Cholesterol Level:** This feature has a moderate importance score. It's relevant but less critical compared to age or blood pressure. It indicates that while cholesterol level affects the model's outcome, its impact is less pronounced compared to the top features.\n\n - **Smoking Status and Physical Activity:** These features have shorter bars, indicating lower importance scores. Though these factors contribute to the model's predictions, their influence is relatively minor compared to clinical measures like age and blood pressure. The model considers these, but they are not primary drivers in assessing disease risk.\n\n**Interpretation and Use:**\n This feature importance plot helps us understand which features are most predictive according to the model and hence should be closely monitored and accurately measured in clinical assessments. Healthcare professionals might pay extra attention to the age and blood pressure of patients when assessing the risk of this disease. Additionally, it can guide further medical research to focus on these critical factors and explore why they are so influential."
+      "visualization": "src/assets/income_waterfall.png",
+      "message": "This is a SHAP water fall plot showing that the marital status of Married-civ spouse, age of 45, and relationship of husband contributed the most to this datapoint's prediction, each of them increasing the likelihood that the person represented by the data makes more than $50k a year"
     },
     {
-      "visualization": "https://images.rawpixel.com/image_png_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA0L2pvYjcwOS0xNC1wLnBuZw.png",
+      "visualization": "src/assets/income_sim.png",
       "message": "**Visualization Description:**\n This is a simple pie chart demonstrating that the most common mental illnesses are depression and anxiety."
     },
     {
-      "visualization": "https://freerangestock.com/sample/134923/number-3--bw.jpg",
+      "visualization": "src/assets/income_cf.png",
       "message": "This is the third explanation message. idk, make something up lol"
     }
   ]

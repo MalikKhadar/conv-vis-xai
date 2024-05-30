@@ -38,6 +38,9 @@ function App() {
           messageInputEnabled={messageInputEnabled}
         /> : null}
         <ExplanationButtons buttonsEnabled={messageInputEnabled || !chatInterface} showExplanation={explanation} />
+        {/* <div style={{ marginTop: "100px" }}>
+          <QuizComponent />
+        </div> */}
       </div>
 
       <div style={{ flex: "10 1.4 100%" }}>
@@ -50,7 +53,6 @@ function App() {
           setTestKeyFunc={setTestKeyFunc}
         /> : <NoChatComponent setExplanation={setExplanation} />}
       </div>
-
       <div style={{ flex: "0 3 100%" }}>
         <QuizComponent />
       </div>

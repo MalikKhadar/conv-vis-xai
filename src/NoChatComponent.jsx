@@ -13,8 +13,8 @@ const NoChatComponent = ({ setExplanation }) => {
   };
 
   return (
-    <div style={{ width: "100%" }}>
-      <img src={imageSrc} style={{ display: "block", height: "100vh", marginLeft: "auto", marginRight: "auto" }} />
+    <div style={{ width: "100%", height: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
+      <img src={imageSrc} style={{ maxWidth: "100%" }} />
     </div>
   );
 };

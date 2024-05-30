@@ -1,0 +1,98 @@
+{
+    "Age": {
+        "999": 37.0,
+        "17916": 38.0,
+        "17240": 39.0,
+        "9386": 37.0,
+        "3825": 38.0,
+        "20345": 43.0
+    },
+    "Workclass": {
+        "999": " Private",
+        "17916": " Private",
+        "17240": " Private",
+        "9386": " Private",
+        "3825": " Private",
+        "20345": " Private"
+    },
+    "Education-Num": {
+        "999": 10.0,
+        "17916": 13.0,
+        "17240": 13.0,
+        "9386": 13.0,
+        "3825": 14.0,
+        "20345": 15.0
+    },
+    "Marital Status": {
+        "999": " Never-married",
+        "17916": " Never-married",
+        "17240": " Never-married",
+        "9386": " Never-married",
+        "3825": " Divorced",
+        "20345": " Divorced"
+    },
+    "Occupation": {
+        "999": " Exec-managerial",
+        "17916": " Sales",
+        "17240": " Exec-managerial",
+        "9386": " Exec-managerial",
+        "3825": " Exec-managerial",
+        "20345": " Exec-managerial"
+    },
+    "Relationship": {
+        "999": " Not-in-family",
+        "17916": " Not-in-family",
+        "17240": " Not-in-family",
+        "9386": " Not-in-family",
+        "3825": " Not-in-family",
+        "20345": " Not-in-family"
+    },
+    "Race": {
+        "999": " White",
+        "17916": " White",
+        "17240": " White",
+        "9386": " White",
+        "3825": " White",
+        "20345": " White"
+    },
+    "Sex": {
+        "999": " Female",
+        "17916": " Male",
+        "17240": " Male",
+        "9386": " Male",
+        "3825": " Male",
+        "20345": " Male"
+    },
+    "Capital Gain": {
+        "999": 0.0,
+        "17916": 0.0,
+        "17240": 0.0,
+        "9386": 0.0,
+        "3825": 0.0,
+        "20345": 0.0
+    },
+    "Capital Loss": {
+        "999": 0.0,
+        "17916": 0.0,
+        "17240": 0.0,
+        "9386": 0.0,
+        "3825": 0.0,
+        "20345": 0.0
+    },
+    "Hours per week": {
+        "999": 40.0,
+        "17916": 45.0,
+        "17240": 50.0,
+        "9386": 50.0,
+        "3825": 45.0,
+        "20345": 40.0
+    },
+    "Country": {
+        "999": " United-States",
+        "17916": " ?",
+        "17240": " United-States",
+        "9386": " United-States",
+        "3825": " United-States",
+        "20345": " United-States"
+    }
+}
