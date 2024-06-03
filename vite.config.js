@@ -4,5 +4,5 @@ import react from '@vitejs/plugin-react'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: "/conv-vis-xai/"
+  base: "https://malikkhadar.github.io/conv-vis-xai/"
 })
