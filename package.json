@@ -2,7 +2,7 @@
   "name": "conv-vis-xai",
   "private": true,
   "version": "0.0.0",
-  "homepage": "https://MalikKhadar.github.io/conv-vis-xai/",
+  "homepage": "https://malikkhadar.github.io/conv-vis-xai/",
   "type": "module",
   "scripts": {
     "predeploy": "npm run build",
