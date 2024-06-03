@@ -1,22 +1,23 @@
 import React from 'react';
 import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
 import { Button } from '@chatscope/chat-ui-kit-react';
+import VisualizationRenderer from './VisualizationRenderer';
 
 const ExplanationButtons = ({ buttonsEnabled, showExplanation }) => {
   return (
-    <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
-      <h3 style={{ textAlign: "center" }}>Click to view explanations</h3>
-      <Button disabled={!buttonsEnabled} border onClick={() => showExplanation(0)}>
+    <div style={{ display: "flex", flexDirection: "column", maxHeight: "100%" }}>
+      <h2 style={{ textAlign: "center" }}>Click to view explanations</h2>
+      <Button disabled={!buttonsEnabled} border onClick={() => showExplanation(0)} style={{ flex: "1" }}>
         Waterfall Plot
-        <img src="src\assets\income_waterfall.png" style={{ width: "100%" }} />
+        <img src="src\assets\datapoint\income_waterfall.png" style={{ width: "100%" }} />
       </Button>
-      <Button disabled={!buttonsEnabled} border onClick={() => showExplanation(1)}> 
+      <Button disabled={!buttonsEnabled} border onClick={() => showExplanation(1)} style={{ flex: "1", overflow: "hidden" }}>
         Similar Data Points
-        <img src="src\assets\income_sim.png" style={{ width: "100%" }} />
+        <VisualizationRenderer parentState={1} />
       </Button>
-      <Button disabled={!buttonsEnabled} border onClick={() => showExplanation(2)}> 
+      <Button disabled={!buttonsEnabled} border onClick={() => showExplanation(2)} style={{ flex: "1", overflow: "hidden" }}>
         Counterfactual Data Points
-        <img src="src\assets\income_cf.png" style={{ width: "100%" }} />
+        <VisualizationRenderer parentState={2} />
       </Button>
     </div>
   )

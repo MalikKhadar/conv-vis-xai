@@ -1,20 +1,20 @@
 import { useState, useEffect } from 'react';
-import modelInfo from './modelInfo.json';
+import VisualizationRenderer from './VisualizationRenderer';
 
 const NoChatComponent = ({ setExplanation }) => {
-  const [imageSrc, setImageSrc] = useState(modelInfo.explanations[0].visualization);
+  const [myState, setMyState] = useState(-1);
 
   useEffect(() => {
     setExplanation(() => showVisualization);
   }, [setExplanation]);
 
   const showVisualization = (index) => {
-    setImageSrc(modelInfo.explanations[index].visualization);
+    setMyState(index);
   };
 
   return (
-    <div style={{ width: "100%", height: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
-      <img src={imageSrc} style={{ maxWidth: "100%" }} />
+    <div style={{ display: "flex", width: "100%", alignContent: "center" }}>
+      <VisualizationRenderer parentState={myState} defaultMessage={"Click on the explanations to the left to help understand the model's prediction"}/>
     </div>
   );
 };

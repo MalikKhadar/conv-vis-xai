@@ -6,6 +6,7 @@ import ExplanationButtons from './ExplanationButtons';
 import ChatComponent from './ChatComponent';
 import KeyComponent from './KeyComponent';
 import NoChatComponent from './NoChatComponent';
+import PredictionDisplay from './PredictionDisplay';
 
 function App() {
   const [explanation, setExplanation] = useState(() => { });
@@ -28,32 +29,42 @@ function App() {
   }
 
   return (
-    <div className="App" style={{ display: 'flex', height: "100vh", width: "100%" }}>
-      <div style={{ flex: "0 3 100%" }}>
-        {chatInterface ? <KeyComponent
+    <div className="App" style={{ display: 'flex', gap: '5px', height: "100vh", width: "100%" }}>
+      <div style={{ display: 'flex', flexDirection: 'column', flex: "1", height: "100vh", maxWidth: "20vw", overflowY: "hidden" }}>
+        {chatInterface && !messageInputEnabled ? <KeyComponent
           apiKey={key}
           keyColor={keyColor}
           testKeyFunc={testKeyFunc}
           changeKey={changeKey}
           messageInputEnabled={messageInputEnabled}
+          style={{ flex: "1 0" }}
         /> : null}
-        <ExplanationButtons buttonsEnabled={messageInputEnabled || !chatInterface} showExplanation={explanation} />
-        {/* <div style={{ marginTop: "100px" }}>
-          <QuizComponent />
-        </div> */}
+        <ExplanationButtons buttonsEnabled={messageInputEnabled || !chatInterface} showExplanation={explanation} style={{ flex: "1" }} />
       </div>
 
-      <div style={{ flex: "10 1.4 100%" }}>
-        {chatInterface ? <ChatComponent
-          apiKey={key}
-          setExplanation={setExplanation}
-          messageInputEnabled={messageInputEnabled}
-          setMessageInputEnabled={setMessageInputEnabled}
-          setKeyColor={setKeyColor}
-          setTestKeyFunc={setTestKeyFunc}
-        /> : <NoChatComponent setExplanation={setExplanation} />}
+      <div style={{ width: "1px", height: "100vh", backgroundColor: "lightgrey" }} />
+
+      <div style={{ flex: "3" }}>
+        <div style={{ display: "flex", flexDirection: "column", height: "100%", flexGrow: "0", overflowY: "auto" }}>
+          <div style={{ height: "10vh" }}>
+            <PredictionDisplay />
+          </div>
+          <div style={{ height: "90vh" }}>
+            {chatInterface ? <ChatComponent
+              apiKey={key}
+              setExplanation={setExplanation}
+              messageInputEnabled={messageInputEnabled}
+              setMessageInputEnabled={setMessageInputEnabled}
+              setKeyColor={setKeyColor}
+              setTestKeyFunc={setTestKeyFunc}
+            /> : <NoChatComponent setExplanation={setExplanation} />}
+          </div>
+        </div>
       </div>
-      <div style={{ flex: "0 3 100%" }}>
+
+      <div style={{ width: "1px", height: "100vh", backgroundColor: "lightgrey" }} />
+
+      <div style={{ flex: "1 0", height: "100vh", overflowY: "auto" }}>
         <QuizComponent />
       </div>
     </div>

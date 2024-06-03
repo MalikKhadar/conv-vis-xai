@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import OpenAI from 'openai';
 import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
 import { MainContainer, ChatContainer, MessageList, Message, MessageInput, TypingIndicator } from '@chatscope/chat-ui-kit-react';
-import modelInfo from './modelInfo.json';
+import modelInfo from './assets/modelInfo.json';
+import VisualizationRenderer from './VisualizationRenderer';
 
 const gptModel = "gpt-4o";
 
@@ -14,15 +15,19 @@ const ChatComponent = ({ apiKey, setExplanation, messageInputEnabled, setMessage
       message: modelInfo["firstMessage"],
       sentTime: "just now",
       direction: "incoming",
-      sender: "GPT"
+      sender: "assistant"
     }
   ]);
-  const [imageSrc, setImageSrc] = useState(modelInfo.explanations[0].visualization);
+  const [myState, setMyState] = useState(-1);
+
+  useEffect(() => {
+    setExplanation(() => explainVisualization);
+  }, [setExplanation, messages]);
 
   useEffect(() => {
     const fetchSystemMessage = async () => {
       try {
-        let response = await fetch('/MalikKhadar/con-vis-xai/src/systemMessage.txt');
+        let response = await fetch('src/assets/systemMessage.txt');
         let text = await response.text();
         setSystemMessage(text);
       } catch (error) {
@@ -61,12 +66,7 @@ const ChatComponent = ({ apiKey, setExplanation, messageInputEnabled, setMessage
 
   const processMessagesToGPT = async (chatMessages) => {
     let apiMessages = chatMessages.map((messageObject) => {
-      let role = (messageObject.sender === "GPT") ? "assistant" : "user";
-      if (messageObject.type !== "image") {
-        return { role, content: messageObject.message };
-      } else {
-        return { role, content: "*The user sends an image of a visualization*" };
-      }
+      return { role: messageObject.sender, content: messageObject.message };
     });
 
     return apiMessages;
@@ -111,7 +111,7 @@ const ChatComponent = ({ apiKey, setExplanation, messageInputEnabled, setMessage
           setMessages([...chatMessages, {
             message: stream,
             direction: 'incoming',
-            sender: "GPT"
+            sender: "assistant"
           }]);
         }
       }
@@ -120,36 +120,8 @@ const ChatComponent = ({ apiKey, setExplanation, messageInputEnabled, setMessage
     }
   };
 
-  // const explainVisualization = async (index) => {
-  //   const visualization = {
-  //     type: "image",
-  //     direction: 'outgoing',
-  //     sender: "user",
-  //     payload: { src: modelInfo.explanations[index].visualization, height: "80vh" }
-  //   };
-
-  //   setMessages(messages => [...messages, visualization]);
-
-  //   const newMessage = {
-  //     message: "'''" + modelInfo.explanations[index].message + "'''",
-  //     direction: 'outgoing',
-  //     sender: "system"
-  //   };
-
-  //   setIsTyping(true);
-  //   try {
-  //     let processedMessages = await processMessagesToGPT([...messages, newMessage]);
-  //     let response = await sendMessageToGPT(processedMessages);
-  //     await streamResponseToChat(response, [...messages, visualization]);
-  //   } catch (error) {
-  //     console.error("Error in explainVisualization:", error);
-  //   } finally {
-  //     setIsTyping(false);
-  //   }
-  // };
-
   const explainVisualization = async (index) => {
-    setImageSrc(modelInfo.explanations[index].visualization);
+    setMyState(index);
 
     const newMessage = {
       message: "'''" + modelInfo.explanations[index].message + "'''",
@@ -161,7 +133,7 @@ const ChatComponent = ({ apiKey, setExplanation, messageInputEnabled, setMessage
     try {
       let processedMessages = await processMessagesToGPT([...messages, newMessage]);
       let response = await sendMessageToGPT(processedMessages);
-      await streamResponseToChat(response, [...messages]);
+      await streamResponseToChat(response, messages);
     } catch (error) {
       console.error("Error in explainVisualization:", error);
     } finally {
@@ -187,11 +159,11 @@ const ChatComponent = ({ apiKey, setExplanation, messageInputEnabled, setMessage
   };
 
   return (
-    <div style={{ display: "flex", flexDirection: "column" }}>
-      <div style={{ height: "60vh", width: "100%", alignContent: "center" }}>
-        <img src={imageSrc} style={{ maxHeight: "100%", maxWidth: "100%" }} />
+    <div style={{ height: "100%" }}>
+      <div style={{ display: "flex", height: "70%", width: "100%", alignContent: "center" }}>
+        <VisualizationRenderer parentState={myState} defaultMessage={"Submit your GPT key in the upper left corner, and then click on the explanations to the left to help understand the model's prediction. Use the conversation interface to help understand the explanations"} />
       </div>
-      <MainContainer style={{ height: "40vh" }}>
+      <MainContainer style={{height: "30%"}}>
         <ChatContainer>
           <MessageList
             scrollBehavior="auto"

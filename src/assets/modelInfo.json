@@ -1,5 +1,5 @@
 {
-  "firstMessage": "I'm ExplainoBot 😒 I help explain visualizations 🙄 Submit your GPT key in the box to the left 😮‍💨",
+  "firstMessage": "I'm here to help you understand the explanations!",
   "explanations": [
     {
       "visualization": "src/assets/income_waterfall.png",

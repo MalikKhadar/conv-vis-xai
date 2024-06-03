@@ -1,0 +1,18 @@
+[
+  {
+    "question": "Do you agree with the model's prediction? Why or why not?",
+    "options": [
+      "Yes",
+      "No"
+    ],
+    "explain": true
+  },
+  {
+    "question": "Do you think the prediction would change if we update sex from female to male?",
+    "options": [
+      "Yes",
+      "No"
+    ],
+    "explain": false
+  }
+]
