@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import OpenAI from 'openai';
 import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
 import { MainContainer, ChatContainer, MessageList, Message, MessageInput, TypingIndicator } from '@chatscope/chat-ui-kit-react';
@@ -18,7 +18,12 @@ const ChatComponent = ({ apiKey, setExplanation, messageInputEnabled, setMessage
       sender: "assistant"
     }
   ]);
+  const [apiMessages, setApiMessages] = useState([
+    { "role": "assistant", "content": modelInfo["firstMessage"] },
+  ]);
   const [myState, setMyState] = useState(-1);
+  const [sendMessage, setSendMessage] = useState(0);
+  const isFirstRender = useRef(true);
 
   useEffect(() => {
     setExplanation(() => explainVisualization);
@@ -27,11 +32,13 @@ const ChatComponent = ({ apiKey, setExplanation, messageInputEnabled, setMessage
   useEffect(() => {
     const fetchSystemMessage = async () => {
       try {
-        let response = await fetch('https://raw.githubusercontent.com/MalikKhadar/conv-vis-xai/main/src/assets/systemMessage.txt');
+        let response = await fetch('src/assets/systemMessage.txt');
         let text = await response.text();
         setSystemMessage(text);
       } catch (error) {
-        console.error('Error fetching the file:', error);
+        let response = await fetch('https://raw.githubusercontent.com/MalikKhadar/conv-vis-xai/main/src/assets/systemMessage.txt');
+        let text = await response.text();
+        setSystemMessage(text);
       }
     };
 
@@ -42,6 +49,18 @@ const ChatComponent = ({ apiKey, setExplanation, messageInputEnabled, setMessage
     setTestKeyFunc(() => testKey);
     setExplanation(() => explainVisualization);
   }, [apiKey, setTestKeyFunc, setExplanation]);
+
+  useEffect(() => {
+    if (isFirstRender.current || apiKey == "") {
+      isFirstRender.current = false;
+      return;
+    }
+    const fetchGPTResponse = async () => {
+      let response = await sendMessageToGPT(apiMessages);
+      await streamResponseToChat(response, [...messages]);
+    };
+    fetchGPTResponse();
+  }, [sendMessage]);
 
   const handleSend = async (message) => {
     const newMessage = {
@@ -54,9 +73,8 @@ const ChatComponent = ({ apiKey, setExplanation, messageInputEnabled, setMessage
 
     setIsTyping(true);
     try {
-      let processedMessages = await processMessagesToGPT([...messages, newMessage]);
-      let response = await sendMessageToGPT(processedMessages);
-      await streamResponseToChat(response, [...messages, newMessage]);
+      setApiMessages([...apiMessages, { role: "user", content: message }]);
+      setSendMessage(sendMessage+1);
     } catch (error) {
       console.error("Error in handleSend:", error);
     } finally {
@@ -64,20 +82,13 @@ const ChatComponent = ({ apiKey, setExplanation, messageInputEnabled, setMessage
     }
   };
 
-  const processMessagesToGPT = async (chatMessages) => {
-    let apiMessages = chatMessages.map((messageObject) => {
-      return { role: messageObject.sender, content: messageObject.message };
-    });
-
-    return apiMessages;
-  };
-
-  const sendMessageToGPT = async (apiMessages) => {
+  const sendMessageToGPT = async (messages) => {
+    console.log(messages);
     const apiRequestBody = {
       "model": gptModel,
       "messages": [
         { "role": "system", "content": systemMessage },
-        ...apiMessages
+        ...messages
       ],
       "stream": true
     };
@@ -115,6 +126,7 @@ const ChatComponent = ({ apiKey, setExplanation, messageInputEnabled, setMessage
           }]);
         }
       }
+      setApiMessages([...apiMessages, { role: "assistant", content: stream }]);
     } catch (error) {
       console.error("Error while processing response:", error);
     }
@@ -123,17 +135,10 @@ const ChatComponent = ({ apiKey, setExplanation, messageInputEnabled, setMessage
   const explainVisualization = async (index) => {
     setMyState(index);
 
-    const newMessage = {
-      message: "'''" + modelInfo.explanations[index].message + "'''",
-      direction: 'outgoing',
-      sender: "system"
-    };
-
     setIsTyping(true);
     try {
-      let processedMessages = await processMessagesToGPT([...messages, newMessage]);
-      let response = await sendMessageToGPT(processedMessages);
-      await streamResponseToChat(response, messages);
+      setApiMessages([...apiMessages, { role: "system", content: "'''" + modelInfo.explanations[index].message + "'''" }]);
+      setSendMessage(sendMessage+1);
     } catch (error) {
       console.error("Error in explainVisualization:", error);
     } finally {

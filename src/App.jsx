@@ -13,7 +13,7 @@ function App() {
   const [testKeyFunc, setTestKeyFunc] = useState(() => { });
 
   // Dynamic key variable
-  const [key, setKey] = useState("You still need to provide a key");
+  const [key, setKey] = useState("");
   const changeKey = event => {
     setKey(event.target.value);
   }

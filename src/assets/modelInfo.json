@@ -3,11 +3,11 @@
   "explanations": [
     {
       "visualization": "./assets/datapoint/income_waterfall.png",
-      "message": "This is a SHAP water fall plot showing that the marital status of Married-civ spouse, age of 45, and relationship of husband contributed the most to this datapoint's prediction, each of them increasing the likelihood that the person represented by the data makes more than $50k a year"
+      "message": "VISUALIZATION_NAME: SHAP waterfall plot. EXPLANATION: this plot explains a prediction that classified someone as making less than $50k according to US census data from 1995. In this plot, the features that contributed the most to this prediction were the number of hours the person worked per week (55, increased likelihood of >$50k), their occupation (Exec-managerial, increased likelihood of >$50k), and their sex (female, decreased likelihood of >$50k). "
     },
     {
       "visualization": "src/assets/income_sim.png",
-      "message": "**Visualization Description:**\n This is a simple pie chart demonstrating that the most common mental illnesses are depression and anxiety."
+      "message": "VISUALIZATION_NAME: Pie chart. EXPLANATION: chocolate and vanilla each occupy a third of this chart, while the remaining third is split equally between mint and strawberry."
     },
     {
       "visualization": "src/assets/income_cf.png",
