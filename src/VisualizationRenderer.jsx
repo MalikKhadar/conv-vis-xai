@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import simData from "./assets/datapoint/income_sim.json";
 import cfData from "./assets/datapoint/income_cf.json";
 import ComparisonTable from './ComparisonTable';
-import waterfall from "./assets/datapoint/income_waterfall.png";
 
 const VisualizationRenderer = ({ parentState, defaultMessage }) => {
   const [visState, setVisState] = useState(0);
