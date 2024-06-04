@@ -33,11 +33,11 @@ const ChatComponent = ({ apiKey, setExplanation, messageInputEnabled, setMessage
   useEffect(() => {
     const fetchSystemMessage = async () => {
       try {
-        let response = await fetch('src/assets/systemMessage.txt');
+        let response = await fetch('https://raw.githubusercontent.com/MalikKhadar/conv-vis-xai/main/src/assets/systemMessage.txt');
         let text = await response.text();
         setSystemMessage(text);
       } catch (error) {
-        let response = await fetch('https://raw.githubusercontent.com/MalikKhadar/conv-vis-xai/main/src/assets/systemMessage.txt');
+        let response = await fetch('src/assets/systemMessage.txt');
         let text = await response.text();
         setSystemMessage(text);
       }
@@ -48,8 +48,8 @@ const ChatComponent = ({ apiKey, setExplanation, messageInputEnabled, setMessage
 
   useEffect(() => {
     const fetchExplanations = async () => {
-      const folderPath = 'src/assets/datapoint/';
-      const fallbackFolderPath = 'https://raw.githubusercontent.com/MalikKhadar/conv-vis-xai/main/src/assets/datapoint/';
+      const fallbackFolderPath = 'src/assets/datapoint/';
+      const folderPath = 'https://raw.githubusercontent.com/MalikKhadar/conv-vis-xai/main/src/assets/datapoint/';
       const numberOfExplanations = 3; // Adjust this to the actual number of explanation files you have
 
       const fetchedExplanations = [];
