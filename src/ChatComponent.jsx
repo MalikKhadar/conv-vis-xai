@@ -27,7 +27,7 @@ const ChatComponent = ({ apiKey, setExplanation, messageInputEnabled, setMessage
   useEffect(() => {
     const fetchSystemMessage = async () => {
       try {
-        let response = await fetch('./assets/systemMessage.txt');
+        let response = await fetch('https://raw.githubusercontent.com/MalikKhadar/conv-vis-xai/main/src/assets/systemMessage.txt');
         let text = await response.text();
         setSystemMessage(text);
       } catch (error) {

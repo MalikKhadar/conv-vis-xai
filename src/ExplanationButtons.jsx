@@ -9,7 +9,7 @@ const ExplanationButtons = ({ buttonsEnabled, showExplanation }) => {
       <h2 style={{ textAlign: "center" }}>Click to view explanations</h2>
       <Button disabled={!buttonsEnabled} border onClick={() => showExplanation(0)} style={{ flex: "1" }}>
         Waterfall Plot
-        <img src="./assets/datapoint/income_waterfall.png" style={{ width: "100%" }} />
+        <img src="https://raw.githubusercontent.com/MalikKhadar/conv-vis-xai/main/src/assets/datapoint/income_waterfall.png" style={{ width: "100%" }} />
       </Button>
       <Button disabled={!buttonsEnabled} border onClick={() => showExplanation(1)} style={{ flex: "1", overflow: "hidden" }}>
         Similar Data Points
