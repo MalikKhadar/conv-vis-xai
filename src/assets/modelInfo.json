@@ -2,7 +2,7 @@
   "firstMessage": "I'm here to help you understand the explanations!",
   "explanations": [
     {
-      "visualization": "src/assets/income_waterfall.png",
+      "visualization": "src/assets/datapoint/income_waterfall.png",
       "message": "This is a SHAP water fall plot showing that the marital status of Married-civ spouse, age of 45, and relationship of husband contributed the most to this datapoint's prediction, each of them increasing the likelihood that the person represented by the data makes more than $50k a year"
     },
     {
