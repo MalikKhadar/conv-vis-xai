@@ -53,7 +53,9 @@ const ComparisonTable = ({ tableData }) => {
                   <TableCell style={{
                     backgroundColor: tableData[id][field] === tableData[ids[0]][field] ? '#FFFF7C' : 'white',
                     borderWidth: 1,
+                    borderBottom: id == refId ? 3 : 1,
                     borderColor: "lightgrey",
+                    borderBottomColor: id == refId ? "black" : "lightgrey",
                     borderStyle: "solid"
                   }} align="right" key={field}>{tableData[id][field]}</TableCell>
                 ))
