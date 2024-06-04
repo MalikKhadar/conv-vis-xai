@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import OpenAI from 'openai';
 import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
 import { MainContainer, ChatContainer, MessageList, Message, MessageInput, TypingIndicator } from '@chatscope/chat-ui-kit-react';
-import modelInfo from './assets/modelInfo.json';
+import metadata from './assets/datapoint/metadata.json';
 import VisualizationRenderer from './VisualizationRenderer';
 
 const gptModel = "gpt-4o";
@@ -12,18 +12,19 @@ const ChatComponent = ({ apiKey, setExplanation, messageInputEnabled, setMessage
   const [systemMessage, setSystemMessage] = useState('');
   const [messages, setMessages] = useState([
     {
-      message: modelInfo["firstMessage"],
+      message: metadata["firstMessage"],
       sentTime: "just now",
       direction: "incoming",
       sender: "assistant"
     }
   ]);
   const [apiMessages, setApiMessages] = useState([
-    { "role": "assistant", "content": modelInfo["firstMessage"] },
+    { "role": "assistant", "content": metadata["firstMessage"] },
   ]);
   const [myState, setMyState] = useState(-1);
   const [sendMessage, setSendMessage] = useState(0);
   const isFirstRender = useRef(true);
+  const [explanations, setExplanations] = useState([]);
 
   useEffect(() => {
     setExplanation(() => explainVisualization);
@@ -43,6 +44,42 @@ const ChatComponent = ({ apiKey, setExplanation, messageInputEnabled, setMessage
     };
 
     fetchSystemMessage();
+  }, []);
+
+  useEffect(() => {
+    const fetchExplanations = async () => {
+      const folderPath = 'src/assets/datapoint/';
+      const fallbackFolderPath = 'https://raw.githubusercontent.com/MalikKhadar/conv-vis-xai/main/src/assets/datapoint/';
+      const numberOfExplanations = 3; // Adjust this to the actual number of explanation files you have
+
+      const fetchedExplanations = [];
+
+      for (let i = 0; i < numberOfExplanations; i++) {
+        try {
+          let response = await fetch(`${folderPath}${i}.txt`);
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          let text = await response.text();
+          fetchedExplanations.push(text);
+        } catch (error) {
+          try {
+            let response = await fetch(`${fallbackFolderPath}${i}.txt`);
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            let text = await response.text();
+            fetchedExplanations.push(text);
+          } catch (fallbackError) {
+            console.error(`Failed to fetch explanation ${i}.txt from both primary and fallback locations.`, fallbackError);
+          }
+        }
+      }
+
+      setExplanations(fetchedExplanations);
+    };
+
+    fetchExplanations();
   }, []);
 
   useEffect(() => {
@@ -74,7 +111,7 @@ const ChatComponent = ({ apiKey, setExplanation, messageInputEnabled, setMessage
     setIsTyping(true);
     try {
       setApiMessages([...apiMessages, { role: "user", content: message }]);
-      setSendMessage(sendMessage+1);
+      setSendMessage(sendMessage + 1);
     } catch (error) {
       console.error("Error in handleSend:", error);
     } finally {
@@ -137,8 +174,8 @@ const ChatComponent = ({ apiKey, setExplanation, messageInputEnabled, setMessage
 
     setIsTyping(true);
     try {
-      setApiMessages([...apiMessages, { role: "system", content: "'''" + modelInfo.explanations[index].message + "'''" }]);
-      setSendMessage(sendMessage+1);
+      setApiMessages([...apiMessages, { role: "system", content: "'''" + explanations[index] + "'''" }]);
+      setSendMessage(sendMessage + 1);
     } catch (error) {
       console.error("Error in explainVisualization:", error);
     } finally {
@@ -168,7 +205,7 @@ const ChatComponent = ({ apiKey, setExplanation, messageInputEnabled, setMessage
       <div style={{ display: "flex", height: "70%", width: "100%", alignContent: "center" }}>
         <VisualizationRenderer parentState={myState} defaultMessage={"Submit your GPT key in the upper left corner, and then click on the explanations to the left to help understand the model's prediction. Use the conversation interface to help understand the explanations"} />
       </div>
-      <MainContainer style={{height: "30%"}}>
+      <MainContainer style={{ height: "30%" }}>
         <ChatContainer>
           <MessageList
             scrollBehavior="auto"

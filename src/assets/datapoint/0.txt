@@ -1,0 +1,14 @@
+VISUALIZATION_NAME: SHAP waterfall plot
+
+EXPLANATION: 
+this plot explains a prediction that classified someone as making less than $50k according to US census data from 1995. In this plot, the features that contributed to this prediction from most to least significant were:
+the number of hours the person worked per week (55, increased likelihood of >$50k)
+occupation (Exec-managerial, increased likelihood of >$50k)
+sex (female, decreased likelihood of >$50k)
+age (42, increased likelihood of >$50k)
+marital status (widowed, decreased likelihood of >$50k)
+relationship (not in famliy, increased likelihood of >$50k)
+capital gain (0, decreased likelihood of >$50k)
+work class (private, increased likelihood of >$50k)
+capital loss (0, increased likelihood of >$50k)
+and 3 other features that were relatively insignificant and unnamed (increased likelihood of >$50k)
