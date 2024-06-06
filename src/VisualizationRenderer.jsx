@@ -13,7 +13,7 @@ const VisualizationRenderer = ({ parentState, defaultMessage }) => {
   const renderSwitch = (index) => {
     switch (index) {
       case 0:
-        return <div><img src="https://raw.githubusercontent.com/MalikKhadar/conv-vis-xai/main/src/assets/datapoint/income_waterfall.png" style={{ maxHeight: "60vh" }} /><p>In this plot, negative f(x) values indicate "less than $50k" classifications, whereas positive f(x) values indicate the opposite</p></div>
+        return <div style={{display: "flex", flexFlow: "column", alignItems: "center"}}><img src="https://raw.githubusercontent.com/MalikKhadar/conv-vis-xai/main/src/assets/datapoint/income_waterfall.png" style={{ maxHeight: "55vh" }} /><p>In this plot, negative f(x) values indicate "<b>less</b> than $50k" classifications, whereas positive f(x) values indicate the opposite</p></div>
       case 1:
         return <div style={{ width: "100%", maxHeight: "60vh" }}><ComparisonTable tableData={simData} />(The model made <b>the same prediction</b> on each of these data points. The first row is the main data point. Cells are gold when they share the same value as the main data point)</div>
       case 2:
@@ -24,7 +24,7 @@ const VisualizationRenderer = ({ parentState, defaultMessage }) => {
   }
 
   return (
-    <div style={{ margin: "auto", overflowX: "auto", overflowY: "hidden" }}>
+    <div style={{ margin: "auto", textAlign: "center" }}>
       {renderSwitch(visState)}
     </div>
   );

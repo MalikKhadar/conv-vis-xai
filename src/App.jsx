@@ -29,7 +29,7 @@ function App() {
   }
 
   return (
-    <div className="App" style={{ display: 'flex', gap: '5px', height: "100vh", width: "100%" }}>
+    <div className="App" style={{ display: 'flex', gap: '5px', height: "100vh", width: "99.5%", margin: "auto" }}>
       <div style={{ display: 'flex', flexDirection: 'column', flex: "1", height: "100vh", maxWidth: "20vw", overflowY: "hidden" }}>
         {chatInterface && !messageInputEnabled ? <KeyComponent
           apiKey={key}
@@ -46,10 +46,10 @@ function App() {
 
       <div style={{ flex: "3" }}>
         <div style={{ display: "flex", flexDirection: "column", height: "100%", flexGrow: "0", overflowY: "auto" }}>
-          <div style={{ height: "10vh" }}>
+          <div style={{ height: "8vh" }}>
             <PredictionDisplay />
           </div>
-          <div style={{ height: "90vh" }}>
+          <div style={{ height: "92vh" }}>
             {chatInterface ? <ChatComponent
               apiKey={key}
               setExplanation={setExplanation}

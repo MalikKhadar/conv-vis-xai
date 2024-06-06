@@ -4,6 +4,7 @@ import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
 import { MainContainer, ChatContainer, MessageList, Message, MessageInput, TypingIndicator } from '@chatscope/chat-ui-kit-react';
 import metadata from './assets/datapoint/metadata.json';
 import VisualizationRenderer from './VisualizationRenderer';
+import './ChatComponent.css'; // Import the custom CSS file
 
 const gptModel = "gpt-4o";
 
@@ -33,11 +34,11 @@ const ChatComponent = ({ apiKey, setExplanation, messageInputEnabled, setMessage
   useEffect(() => {
     const fetchSystemMessage = async () => {
       try {
-        let response = await fetch('https://raw.githubusercontent.com/MalikKhadar/conv-vis-xai/main/src/assets/systemMessage.txt');
+        let response = await fetch('src/assets/systemMessage.txt');
         let text = await response.text();
         setSystemMessage(text);
       } catch (error) {
-        let response = await fetch('src/assets/systemMessage.txt');
+        let response = await fetch('https://raw.githubusercontent.com/MalikKhadar/conv-vis-xai/main/src/assets/systemMessage.txt');
         let text = await response.text();
         setSystemMessage(text);
       }
@@ -48,8 +49,8 @@ const ChatComponent = ({ apiKey, setExplanation, messageInputEnabled, setMessage
 
   useEffect(() => {
     const fetchExplanations = async () => {
-      const fallbackFolderPath = 'src/assets/datapoint/';
-      const folderPath = 'https://raw.githubusercontent.com/MalikKhadar/conv-vis-xai/main/src/assets/datapoint/';
+      const folderPath = 'src/assets/datapoint/';
+      const fallbackFolderPath = 'https://raw.githubusercontent.com/MalikKhadar/conv-vis-xai/main/src/assets/datapoint/';
       const numberOfExplanations = 3; // Adjust this to the actual number of explanation files you have
 
       const fetchedExplanations = [];
@@ -114,13 +115,13 @@ const ChatComponent = ({ apiKey, setExplanation, messageInputEnabled, setMessage
       setSendMessage(sendMessage + 1);
     } catch (error) {
       console.error("Error in handleSend:", error);
-    } finally {
       setIsTyping(false);
     }
   };
 
   const sendMessageToGPT = async (messages) => {
-    console.log(messages);
+    // console.log(messages);
+
     const apiRequestBody = {
       "model": gptModel,
       "messages": [
@@ -167,6 +168,7 @@ const ChatComponent = ({ apiKey, setExplanation, messageInputEnabled, setMessage
     } catch (error) {
       console.error("Error while processing response:", error);
     }
+    setIsTyping(false);
   };
 
   const explainVisualization = async (index) => {
@@ -174,11 +176,15 @@ const ChatComponent = ({ apiKey, setExplanation, messageInputEnabled, setMessage
 
     setIsTyping(true);
     try {
-      setApiMessages([...apiMessages, { role: "system", content: "'''" + explanations[index] + "'''" }]);
+      if (index == 0) {
+        setApiMessages([...apiMessages, { role: "user", content: [{ type: "text", text: "'''" + explanations[index] + "'''" }, { type: "image_url", image_url: { url: "https://raw.githubusercontent.com/MalikKhadar/conv-vis-xai/main/src/assets/datapoint/income_waterfall.png" } }] }]);
+      }
+      else {
+        setApiMessages([...apiMessages, { role: "system", content: "'''" + explanations[index] + "'''" }]);
+      }
       setSendMessage(sendMessage + 1);
     } catch (error) {
       console.error("Error in explainVisualization:", error);
-    } finally {
       setIsTyping(false);
     }
   };
