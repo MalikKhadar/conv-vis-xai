@@ -6,20 +6,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 
 const ComparisonTable = ({ tableData }) => {
-  let headers = Object.keys(tableData);
-  // Locate the "reference" id, remove ref header
-  let ref = tableData["ref"];
-  let ids = headers.filter(function (item) {
-    return item !== "ref";
-  })
-
-  // Swap reference id and first element of array
-  var refIdx = ids.indexOf(ref);
-  var refId = ids[refIdx];
-  ids[refIdx] = ids[0];
-  ids[0] = refId;
-
-  const fields = Object.keys(tableData[ids[0]]);
+  const fields = Object.keys(tableData[0]);
 
   return (
     <TableContainer style={{ overflow: "auto" }}
@@ -43,20 +30,20 @@ const ComparisonTable = ({ tableData }) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {ids.map((id) => (
+          {tableData.map((item, index) => (
             <TableRow
-              key={id}
+              key={index}
             >
               {
                 fields.map((field) => (
                   <TableCell style={{
-                    backgroundColor: tableData[id][field] === tableData[ids[0]][field] ? '#FFFF7C' : 'white',
+                    backgroundColor: item[field] === tableData[0][field] ? '#FFFF7C' : 'white',
                     borderWidth: 1,
-                    borderBottom: id == refId ? 3 : 1,
+                    borderBottom: index == 0 ? 3 : 1,
                     borderColor: "lightgrey",
-                    borderBottomColor: id == refId ? "black" : "lightgrey",
+                    borderBottomColor: index == 0 ? "black" : "lightgrey",
                     borderStyle: "solid"
-                  }} align="right" key={field}>{tableData[id][field]}</TableCell>
+                  }} align="right" key={field}>{item[field]}</TableCell>
                 ))
               }
             </TableRow>

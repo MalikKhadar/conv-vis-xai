@@ -1,0 +1,16 @@
+VISUALIZATION_NAME: Similar data point table
+
+EXPLANATION:
+This table displays the main data point and five similar data points that had the same model prediction, meaning each data point was predicted as making less than $50k according to 1995 US census data.
+Here's a layout of the table:
+|   Age | Workclass   |   Education-Num | Marital Status   | Occupation      | Relationship   | Race   | Sex    |   Capital Gain |   Capital Loss |   Hours per week | Country       |
+|------:|:------------|----------------:|:-----------------|:----------------|:---------------|:-------|:-------|---------------:|---------------:|-----------------:|:--------------|
+|    42 | Private     |              10 | Widowed          | Exec-managerial | Not-in-family  | White  | Female |              0 |              0 |               55 | United-States |
+|    45 | Private     |              10 | Widowed          | Exec-managerial | Unmarried      | White  | Female |              0 |              0 |               55 | United-States |
+|    38 | Private     |              10 | Widowed          | Exec-managerial | Not-in-family  | White  | Female |              0 |              0 |               40 | United-States |
+|    36 | Local-gov   |              11 | Never-married    | Protective-serv | Not-in-family  | Black  | Female |              0 |              0 |               60 | United-States |
+|    53 | Private     |              10 | Widowed          | Exec-managerial | Not-in-family  | White  | Female |              0 |              0 |               54 | United-States |
+|    41 | Private     |              11 | Never-married    | Prof-specialty  | Not-in-family  | White  | Female |              0 |              0 |               60 | United-States |
+
+Here's a note that users are provided when they view this visualization:
+The model made the same prediction on each of these data points. The first row is the main data point. Cells are gold when they share the same value as the main data point.

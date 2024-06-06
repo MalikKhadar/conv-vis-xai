@@ -1,6 +1,6 @@
 import React from 'react';
 import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
-import metadata from "./assets/datapoint/metadata.json"
+import metadata from "./assets/datapoints/0/metadata.json"
 
 function PredictionDisplay() {
   return (

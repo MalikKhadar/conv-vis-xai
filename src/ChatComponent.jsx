@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import OpenAI from 'openai';
 import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
 import { MainContainer, ChatContainer, MessageList, Message, MessageInput, TypingIndicator } from '@chatscope/chat-ui-kit-react';
-import metadata from './assets/datapoint/metadata.json';
+import metadata from './assets/metadata.json';
 import VisualizationRenderer from './VisualizationRenderer';
 import './ChatComponent.css'; // Import the custom CSS file
 

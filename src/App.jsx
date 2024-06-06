@@ -7,10 +7,15 @@ import ChatComponent from './ChatComponent';
 import KeyComponent from './KeyComponent';
 import NoChatComponent from './NoChatComponent';
 import PredictionDisplay from './PredictionDisplay';
+import TutorialPage from './TutorialPage';
 
 function App() {
   const [explanation, setExplanation] = useState(() => { });
   const [testKeyFunc, setTestKeyFunc] = useState(() => { });
+  const [finishedTutorial, setFinishedTutorial] = useState(false);
+  const handleFinishTutorial = () => {
+    setFinishedTutorial(true);
+  };
 
   // Dynamic key variable
   const [key, setKey] = useState("");
@@ -26,6 +31,17 @@ function App() {
   let chatInterface = false;
   if (urlParams.has('chat')) {
     chatInterface = true;
+  }
+
+  if (!finishedTutorial) {
+    return (
+      <div>
+        <TutorialPage />
+        <div style={{display: "flex", justifyContent: "center", alignItems: "center" }}>
+          <button onClick={handleFinishTutorial} style={{marginBottom: "10px"}}>Begin</button>
+        </div>
+      </div >
+    )
   }
 
   return (

@@ -1,0 +1,16 @@
+VISUALIZATION_NAME: Counterfactual data point table
+
+EXPLANATION:
+This table displays the main data point and five similar data points that had the opposite model prediction, meaning each data point was predicted as making less than $50k according to US census data except the main data point in the top row.
+Here's a layout of the table:
+|   Age | Workclass        |   Education-Num | Marital Status     | Occupation      | Relationship   | Race   | Sex    |   Capital Gain |   Capital Loss |   Hours per week | Country       |
+|------:|:-----------------|----------------:|:-------------------|:----------------|:---------------|:-------|:-------|---------------:|---------------:|-----------------:|:--------------|
+|    51 | Federal-gov      |              13 | Married-civ-spouse | Exec-managerial | Husband        | White  | Male   |              0 |           1902 |               40 | United-States |
+|    56 | Self-emp-not-inc |              13 | Married-civ-spouse | Adm-clerical    | Husband        | White  | Male   |              0 |              0 |               40 | United-States |
+|    45 | Local-gov        |              13 | Married-civ-spouse | Prof-specialty  | Wife           | White  | Female |              0 |              0 |               55 | United-States |
+|    55 | Self-emp-not-inc |              13 | Married-civ-spouse | Exec-managerial | Husband        | White  | Male   |              0 |              0 |               99 | United-States |
+|    45 | Self-emp-not-inc |              10 | Married-civ-spouse | Craft-repair    | Husband        | White  | Male   |              0 |           1485 |               40 | United-States |
+|    39 | State-gov        |              13 | Married-civ-spouse | Exec-managerial | Husband        | White  | Male   |              0 |              0 |               40 | United-States |
+
+Here's a note that users are provided when they view this visualization:
+The model made the same prediction on each of these data points. The first row is the main data point. Cells are gold when they share the same value as the main data point.

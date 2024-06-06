@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import questionsData from './assets/questions.json';
+import questionsData from './assets/datapoints/0/questions.json';
 import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
 import { Button } from '@chatscope/chat-ui-kit-react';
 import TextField from '@mui/material/TextField';
@@ -85,13 +85,13 @@ function QuizComponent() {
   const currentQuestion = shuffledQuestions[currentIndex];
 
   if (quizCompleted) {
-    return <h3 style={{ textAlign: "center" }}>Quiz complete! Do the next thing you're supposed to do</h3>
+    return <div><h3 style={{ textAlign: "center" }}>Quiz complete</h3><p>Thank you for participating! You can exit the page</p></div>
   }
 
   return (
     <div style={{ textAlign: "center" }}>
       <h2>Question {currentIndex + 1}/{shuffledQuestions.length}</h2>
-      <h3>{currentQuestion.question}</h3>
+      <h3 style={{ whiteSpace: 'pre-wrap' }}>{currentQuestion.question}</h3>
       <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
         {currentQuestion.options.map((option, index) => (
           <Button
@@ -99,7 +99,7 @@ function QuizComponent() {
             border
             onClick={() => handleOptionClick(option)}
             style={{
-              margin: '5px',
+              margin: '2px',
               backgroundColor: selectedOption === option ? '#c6e3fa' : 'white',
             }}
           >
@@ -112,7 +112,7 @@ function QuizComponent() {
             placeholder='Explain your reasoning'
             onChange={(e) => setExplanation(e.target.value)}
             value={explanation}
-            style={{ margin: '5px 5px' }}
+            style={{ margin: '5px 2px' }}
           />
         ) : null}
         <Button
