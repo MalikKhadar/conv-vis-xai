@@ -34,14 +34,28 @@ const ChatComponent = ({ apiKey, setExplanation, messageInputEnabled, setMessage
 
   useEffect(() => {
     const fetchSystemMessage = async () => {
-      try {
-        let response = await fetch('src/assets/systemMessage.txt');
-        let text = await response.text();
-        setSystemMessage(text);
-      } catch (error) {
-        let response = await fetch('https://raw.githubusercontent.com/MalikKhadar/conv-vis-xai/main/src/assets/systemMessage.txt');
-        let text = await response.text();
-        setSystemMessage(text);
+      const systemMessageFiles = import.meta.glob('/src/assets/systemMessage.txt');
+      const systemMessagePaths = Object.keys(systemMessageFiles);
+
+      if (systemMessagePaths.length === 0) {
+        console.error("No system message files found.");
+        return;
+      }
+
+      for (const path of systemMessagePaths) {
+        try {
+          const module = await systemMessageFiles[path]();
+          const response = await fetch(module.default);
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          const text = await response.text();
+          setSystemMessage(text);
+          // Once you found and set the system message, you can break the loop
+          break;
+        } catch (error) {
+          console.error(`Failed to fetch system message from ${path}.`, error);
+        }
       }
     };
 
@@ -180,7 +194,7 @@ const ChatComponent = ({ apiKey, setExplanation, messageInputEnabled, setMessage
       } else {
         setApiMessages([...apiMessages, {
           role: "system",
-          content: "'''" + explanations[index] + "'''" 
+          content: "'''" + explanations[index] + "'''"
         }]);
       }
       setSendMessage(sendMessage + 1);
@@ -210,7 +224,7 @@ const ChatComponent = ({ apiKey, setExplanation, messageInputEnabled, setMessage
   return (
     <div style={{ height: "100%" }}>
       <div style={{ display: "flex", height: "70%", width: "100%", alignContent: "center" }}>
-        <VisualizationRenderer parentState={myState} datapointPath={datapointPath} setCurrentVisualizationPath={setCurrentVisualizationPath} defaultMessage={"Submit your GPT key in the upper left corner, and then click on the explanations to the left to help understand the model's prediction. Use the conversation interface to help understand the explanations"}/>
+        <VisualizationRenderer parentState={myState} datapointPath={datapointPath} setCurrentVisualizationPath={setCurrentVisualizationPath} defaultMessage={"Submit your GPT key in the upper left corner, and then click on the explanations to the left to help understand the model's prediction. Use the conversation interface to help understand the explanations"} />
       </div>
       <MainContainer style={{ height: "30%" }}>
         <ChatContainer>
