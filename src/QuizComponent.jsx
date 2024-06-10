@@ -4,7 +4,7 @@ import { Button } from '@chatscope/chat-ui-kit-react';
 import TextField from '@mui/material/TextField';
 import $ from 'jquery';
 
-const QuizComponent = ({ datapointPath }) => {
+const QuizComponent = ({ datapointPath, id }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [quizCompleted, setQuizCompleted] = useState(false);
   const [answers, setAnswers] = useState({});
@@ -76,7 +76,7 @@ const QuizComponent = ({ datapointPath }) => {
   useEffect(() => {
     if (quizCompleted) {
       let data = {
-        participantId: "Joe of the Schmoe clan",
+        participantId: id,
       };
 
       Object.keys(answers).forEach((key, index) => {

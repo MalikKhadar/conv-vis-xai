@@ -26,6 +26,7 @@ function App() {
   const [keyColor, setKeyColor] = useState("#ffffff");
   const [messageInputEnabled, setMessageInputEnabled] = useState(false);
 
+  // extract url params
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   let chatInterface = false;
@@ -34,18 +35,21 @@ function App() {
   }
   let datapoint = urlParams.get("datapoint");
   const datapointPath = "src/assets/datapoints/" + datapoint;
+  let id = urlParams.get("id");
 
+  // render tutorial
   if (!finishedTutorial) {
     return (
       <div>
         <TutorialPage />
-        <div style={{display: "flex", justifyContent: "center", alignItems: "center" }}>
-          <button onClick={handleFinishTutorial} style={{marginBottom: "10px"}}>Begin</button>
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+          <button onClick={handleFinishTutorial} style={{ marginBottom: "10px" }}>Begin</button>
         </div>
       </div >
     )
   }
 
+  // main attraction
   return (
     <div className="App" style={{ display: 'flex', gap: '5px', height: "100vh", width: "99.5%", margin: "auto" }}>
       <div style={{ display: 'flex', flexDirection: 'column', flex: "1", height: "100vh", maxWidth: "20vw", overflowY: "hidden" }}>
@@ -84,7 +88,7 @@ function App() {
       <div style={{ width: "1px", height: "100vh", backgroundColor: "lightgrey" }} />
 
       <div style={{ flex: "1 0", height: "100vh", overflowY: "auto" }}>
-        <QuizComponent datapointPath={datapointPath}/>
+        <QuizComponent datapointPath={datapointPath} id={id} />
       </div>
     </div>
   );
