@@ -13,4 +13,4 @@ Here's a layout of the table:
 |    43 | Self-emp-inc |              10 | Married-civ-spouse | Exec-managerial | Husband        | White  | Male   |              0 |              0 |               50 | United-States |
 
 Here's a note that users are provided when they view this visualization:
-The model made the same prediction on each of these data points. The first row is the main data point. Cells are gold when they share the same value as the main data point.
+The model made the opposite prediction for each of these data points when compared to the main data point in the first row. Cells are gold when they share the same value as the main data point

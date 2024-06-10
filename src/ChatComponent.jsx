@@ -8,7 +8,7 @@ import './ChatComponent.css'; // Import the custom CSS file
 
 const gptModel = "gpt-4o";
 
-const ChatComponent = ({ apiKey, setExplanation, messageInputEnabled, setMessageInputEnabled, setTestKeyFunc, setKeyColor }) => {
+const ChatComponent = ({ apiKey, setExplanation, messageInputEnabled, setMessageInputEnabled, setTestKeyFunc, setKeyColor, datapointPath }) => {
   const [isTyping, setIsTyping] = useState(false);
   const [systemMessage, setSystemMessage] = useState('');
   const [messages, setMessages] = useState([
@@ -26,6 +26,7 @@ const ChatComponent = ({ apiKey, setExplanation, messageInputEnabled, setMessage
   const [sendMessage, setSendMessage] = useState(0);
   const isFirstRender = useRef(true);
   const [explanations, setExplanations] = useState([]);
+  const [currentVisualizationPath, setCurrentVisualizationPath] = useState(null);
 
   useEffect(() => {
     setExplanation(() => explainVisualization);
@@ -49,30 +50,22 @@ const ChatComponent = ({ apiKey, setExplanation, messageInputEnabled, setMessage
 
   useEffect(() => {
     const fetchExplanations = async () => {
-      const folderPath = 'src/assets/datapoint/';
-      const fallbackFolderPath = 'https://raw.githubusercontent.com/MalikKhadar/conv-vis-xai/main/src/assets/datapoint/';
-      const numberOfExplanations = 3; // Adjust this to the actual number of explanation files you have
-
+      const allFiles = import.meta.glob('/src/assets/datapoints/**/explanations/*.txt');
       const fetchedExplanations = [];
 
-      for (let i = 0; i < numberOfExplanations; i++) {
-        try {
-          let response = await fetch(`${folderPath}${i}.txt`);
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          let text = await response.text();
-          fetchedExplanations.push(text);
-        } catch (error) {
+      for (const path in allFiles) {
+        if (path.includes(datapointPath)) {
           try {
-            let response = await fetch(`${fallbackFolderPath}${i}.txt`);
+            const file = allFiles[path];
+            const module = await file();
+            const response = await fetch(module.default);
             if (!response.ok) {
               throw new Error('Network response was not ok');
             }
-            let text = await response.text();
+            const text = await response.text();
             fetchedExplanations.push(text);
-          } catch (fallbackError) {
-            console.error(`Failed to fetch explanation ${i}.txt from both primary and fallback locations.`, fallbackError);
+          } catch (error) {
+            console.error(`Failed to fetch explanation from ${path}.`, error);
           }
         }
       }
@@ -81,7 +74,7 @@ const ChatComponent = ({ apiKey, setExplanation, messageInputEnabled, setMessage
     };
 
     fetchExplanations();
-  }, []);
+  }, [datapointPath]);
 
   useEffect(() => {
     setTestKeyFunc(() => testKey);
@@ -176,11 +169,19 @@ const ChatComponent = ({ apiKey, setExplanation, messageInputEnabled, setMessage
 
     setIsTyping(true);
     try {
-      if (index == 0) {
-        setApiMessages([...apiMessages, { role: "user", content: [{ type: "text", text: "'''" + explanations[index] + "'''" }, { type: "image_url", image_url: { url: "https://raw.githubusercontent.com/MalikKhadar/conv-vis-xai/main/src/assets/datapoint/income_waterfall.png" } }] }]);
-      }
-      else {
-        setApiMessages([...apiMessages, { role: "system", content: "'''" + explanations[index] + "'''" }]);
+      if (currentVisualizationPath && currentVisualizationPath.endsWith('.png')) {
+        setApiMessages([...apiMessages, {
+          role: "user",
+          content: [
+            { type: "text", text: "'''" + explanations[index] + "'''" },
+            { type: "image_url", image_url: { url: currentVisualizationPath } }
+          ]
+        }]);
+      } else {
+        setApiMessages([...apiMessages, {
+          role: "system",
+          content: "'''" + explanations[index] + "'''" 
+        }]);
       }
       setSendMessage(sendMessage + 1);
     } catch (error) {
@@ -209,7 +210,7 @@ const ChatComponent = ({ apiKey, setExplanation, messageInputEnabled, setMessage
   return (
     <div style={{ height: "100%" }}>
       <div style={{ display: "flex", height: "70%", width: "100%", alignContent: "center" }}>
-        <VisualizationRenderer parentState={myState} defaultMessage={"Submit your GPT key in the upper left corner, and then click on the explanations to the left to help understand the model's prediction. Use the conversation interface to help understand the explanations"} />
+        <VisualizationRenderer parentState={myState} datapointPath={datapointPath} setCurrentVisualizationPath={setCurrentVisualizationPath} defaultMessage={"Submit your GPT key in the upper left corner, and then click on the explanations to the left to help understand the model's prediction. Use the conversation interface to help understand the explanations"}/>
       </div>
       <MainContainer style={{ height: "30%" }}>
         <ChatContainer>

@@ -32,6 +32,8 @@ function App() {
   if (urlParams.has('chat')) {
     chatInterface = true;
   }
+  let datapoint = urlParams.get("datapoint");
+  const datapointPath = "src/assets/datapoints/" + datapoint;
 
   if (!finishedTutorial) {
     return (
@@ -55,7 +57,7 @@ function App() {
           messageInputEnabled={messageInputEnabled}
           style={{ flex: "1 0" }}
         /> : null}
-        <ExplanationButtons buttonsEnabled={messageInputEnabled || !chatInterface} showExplanation={explanation} style={{ flex: "1" }} />
+        <ExplanationButtons buttonsEnabled={messageInputEnabled || !chatInterface} showExplanation={explanation} style={{ flex: "1" }} datapointPath={datapointPath} />
       </div>
 
       <div style={{ width: "1px", height: "100vh", backgroundColor: "lightgrey" }} />
@@ -73,7 +75,8 @@ function App() {
               setMessageInputEnabled={setMessageInputEnabled}
               setKeyColor={setKeyColor}
               setTestKeyFunc={setTestKeyFunc}
-            /> : <NoChatComponent setExplanation={setExplanation} />}
+              datapointPath={datapointPath}
+            /> : <NoChatComponent setExplanation={setExplanation} datapointPath={datapointPath} />}
           </div>
         </div>
       </div>
@@ -81,7 +84,7 @@ function App() {
       <div style={{ width: "1px", height: "100vh", backgroundColor: "lightgrey" }} />
 
       <div style={{ flex: "1 0", height: "100vh", overflowY: "auto" }}>
-        <QuizComponent />
+        <QuizComponent datapointPath={datapointPath}/>
       </div>
     </div>
   );

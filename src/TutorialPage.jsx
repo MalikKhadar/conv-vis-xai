@@ -26,11 +26,6 @@ const StyledListItem = styled('li')({
     marginBottom: '5px',
 });
 
-const StyledButton = styled(Button)({
-    marginTop: '20px',
-});
-
-
 const TutorialPage = () => {
     const featureDescriptions = {
         age: 'age of the individual in years',
@@ -61,14 +56,14 @@ const TutorialPage = () => {
             <StyledParagraph>
                 <b>Important Context:</b> 1995 is nearly 30 years in the past. According to the 1995 US Census, the <b>median household income in 1995 was $34,076</b>
             </StyledParagraph>
-            <StyledParagraph>
+            <div>
                 <b>Features:</b>
                 <StyledList>
                     {Object.keys(featureDescriptions).map((feature, index) => (
                         <StyledListItem key={index}>{feature} - {featureDescriptions[feature]}</StyledListItem>
                     ))}
                 </StyledList>
-            </StyledParagraph>
+            </div>
             <StyledParagraph>
                 <b>Objective:</b> Predict whether an individual makes <b>over $50k a year</b>.
             </StyledParagraph>
@@ -110,11 +105,13 @@ const TutorialPage = () => {
             <StyledParagraph>
                 <b>SHAP Waterfall Plot:</b> Visualize the impact of each feature on a single prediction.
             </StyledParagraph>
-            <StyledList>
-                <StyledListItem><b>Threshold of Classification at 0:</b> A decision threshold that determines the classification outcome.</StyledListItem>
-                <StyledListItem><b>Expected Value:</b> The baseline value if no features are considered.</StyledListItem>
-                <StyledListItem><b>Feature Contributions:</b> Red bars indicate features that push the prediction higher, while blue bars indicate features that push it lower.</StyledListItem>
-            </StyledList>
+            <div>
+                <StyledList>
+                    <StyledListItem><b>Threshold of Classification at 0:</b> A decision threshold that determines the classification outcome.</StyledListItem>
+                    <StyledListItem><b>Expected Value:</b> The baseline value if no features are considered.</StyledListItem>
+                    <StyledListItem><b>Feature Contributions:</b> Red bars indicate features that push the prediction higher, while blue bars indicate features that push it lower.</StyledListItem>
+                </StyledList>
+            </div>
             {/* Include a picture of a SHAP waterfall plot */}
             <StyledParagraph>
                 <b>Explanation:</b> This plot explains why an individual was classified as making less than <b>$50k</b>. Features like '<b>hours per week</b>' and '<b>occupation</b>' contributed positively, while '<b>sex</b>' and '<b>marital status</b>' contributed negatively.
