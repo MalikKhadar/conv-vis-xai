@@ -1,0 +1,30 @@
+[
+    {
+        "Age": 34.0,
+        "Workclass": " Private",
+        "Education-Num": 10.0,
+        "Marital Status": " Never-married",
+        "Occupation": " Adm-clerical",
+        "Relationship": " Own-child",
+        "Race": " White",
+        "Sex": " Female",
+        "Capital Gain": 0.0,
+        "Capital Loss": 0.0,
+        "Hours per week": 40.0,
+        "Country": " United-States"
+    },
+    {
+        "Age": 57.0,
+        "Workclass": " Private",
+        "Education-Num": 2.0,
+        "Marital Status": " Married-civ-spouse",
+        "Occupation": " Handlers-cleaners",
+        "Relationship": " Husband",
+        "Race": " White",
+        "Sex": " Male",
+        "Capital Gain": 0.0,
+        "Capital Loss": 0.0,
+        "Hours per week": 40.0,
+        "Country": " Portugal"
+    }
+]

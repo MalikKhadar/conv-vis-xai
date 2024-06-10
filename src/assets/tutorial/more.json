@@ -1,0 +1,30 @@
+[
+    {
+        "Age": 34.0,
+        "Workclass": " Self-emp-inc",
+        "Education-Num": 15.0,
+        "Marital Status": " Married-civ-spouse",
+        "Occupation": " Prof-specialty",
+        "Relationship": " Husband",
+        "Race": " White",
+        "Sex": " Male",
+        "Capital Gain": 15024.0,
+        "Capital Loss": 0.0,
+        "Hours per week": 40.0,
+        "Country": " United-States"
+    },
+    {
+        "Age": 35.0,
+        "Workclass": " Private",
+        "Education-Num": 14.0,
+        "Marital Status": " Married-civ-spouse",
+        "Occupation": " Exec-managerial",
+        "Relationship": " Husband",
+        "Race": " Asian-Pac-Islander",
+        "Sex": " Male",
+        "Capital Gain": 0.0,
+        "Capital Loss": 0.0,
+        "Hours per week": 50.0,
+        "Country": " United-States"
+    }
+]
