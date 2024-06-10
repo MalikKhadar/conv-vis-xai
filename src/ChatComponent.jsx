@@ -182,27 +182,61 @@ const ChatComponent = ({ apiKey, setExplanation, messageInputEnabled, setMessage
     setMyState(index);
 
     setIsTyping(true);
-    try {
-      if (currentVisualizationPath && currentVisualizationPath.endsWith('.png')) {
-        setApiMessages([...apiMessages, {
-          role: "user",
-          content: [
-            { type: "text", text: "'''" + explanations[index] + "'''" },
-            { type: "image_url", image_url: { url: currentVisualizationPath } }
-          ]
-        }]);
-      } else {
-        setApiMessages([...apiMessages, {
-          role: "system",
-          content: "'''" + explanations[index] + "'''"
-        }]);
-      }
-      setSendMessage(sendMessage + 1);
-    } catch (error) {
-      console.error("Error in explainVisualization:", error);
-      setIsTyping(false);
-    }
   };
+
+  const encodeImage = async (imagePath) => {
+    const imageFiles = import.meta.glob('/src/assets/datapoints/**/visualizations/*.png');
+  
+    if (imageFiles[imagePath]) {
+      const module = await imageFiles[imagePath]();
+      const response = await fetch(module.default);
+  
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+  
+      const blob = await response.blob();
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          resolve(reader.result.split(',')[1]);
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+      });
+    } else {
+      throw new Error('Image not found');
+    }
+  };  
+
+  useEffect(() => {
+    const explainVisualizationHelper = async () => {
+      try {
+        console.log(currentVisualizationPath);
+        if (currentVisualizationPath && currentVisualizationPath.endsWith('.png')) {
+          const base64 = await encodeImage(currentVisualizationPath);
+          
+          setApiMessages([...apiMessages, {
+            role: "user",
+            content: [
+              { type: "text", text: "'''" + explanations[myState] + "'''" },
+              { type: "image_url", image_url: { url: "data:image/png;base64," + base64 } }
+            ]
+          }]);
+        } else {
+          setApiMessages([...apiMessages, {
+            role: "system",
+            content: "'''" + explanations[myState] + "'''"
+          }]);
+        }
+        setSendMessage(sendMessage + 1);
+      } catch (error) {
+        console.error("Error in explainVisualization:", error);
+        setIsTyping(false);
+      }
+    }
+    explainVisualizationHelper();
+  }, [currentVisualizationPath]);
 
   const testKey = async () => {
     try {

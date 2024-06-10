@@ -65,7 +65,7 @@ function App() {
       <div style={{ flex: "3" }}>
         <div style={{ display: "flex", flexDirection: "column", height: "100%", flexGrow: "0", overflowY: "auto" }}>
           <div style={{ height: "8vh" }}>
-            <PredictionDisplay />
+            <PredictionDisplay datapointPath={datapointPath} />
           </div>
           <div style={{ height: "92vh" }}>
             {chatInterface ? <ChatComponent

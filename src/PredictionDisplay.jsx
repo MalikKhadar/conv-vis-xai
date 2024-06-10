@@ -1,11 +1,32 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
-import metadata from "./assets/datapoints/0/metadata.json"
 
-function PredictionDisplay() {
+function PredictionDisplay({ datapointPath }) {
+  const [prediction, setPrediction] = useState(null);
+
+  useEffect(() => {
+    const fetchMetadata = async () => {
+      const metadataFiles = import.meta.glob(`/src/assets/datapoints/*/metadata.json`);
+      const metadataPath = Object.keys(metadataFiles).find(path => path.includes(datapointPath));
+
+      if (metadataPath) {
+        try {
+          const module = await metadataFiles[metadataPath]();
+          setPrediction(module.prediction);
+        } catch (error) {
+          console.error('Error fetching metadata:', error);
+        }
+      } else {
+        console.error(`Metadata file not found for path: ${datapointPath}`);
+      }
+    };
+
+    fetchMetadata();
+  }, [datapointPath]);
+
   return (
-    <h2 style={{ textAlign: "center", fontWeight: "normal" }} >
-      Model prediction: <b>{metadata["prediction"] ? "more" : "less"}</b> than $50k
+    <h2 style={{ textAlign: "center", fontWeight: "normal" }}>
+      Model prediction: <b>{prediction ? "more" : "less"} than $50k</b>
     </h2>
   );
 }
