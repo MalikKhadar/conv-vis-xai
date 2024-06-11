@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import './App.css'
 import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
 import QuizComponent from './QuizComponent';
@@ -8,13 +8,25 @@ import KeyComponent from './KeyComponent';
 import NoChatComponent from './NoChatComponent';
 import PredictionDisplay from './PredictionDisplay';
 import TutorialPage from './TutorialPage';
+import { useAddLog } from './Logger';
 
 function App() {
   const [explanation, setExplanation] = useState(() => { });
   const [testKeyFunc, setTestKeyFunc] = useState(() => { });
   const [finishedTutorial, setFinishedTutorial] = useState(false);
+  const addLog = useAddLog();
+  const hasLoggedRef = useRef(false); // Create a ref to track if logging has been done
+
+  useEffect(() => {
+    if (!hasLoggedRef.current) {
+      addLog('Loaded page');
+      hasLoggedRef.current = true; // Set the ref to true after logging
+    }
+  }, [addLog]);
+
   const handleFinishTutorial = () => {
     setFinishedTutorial(true);
+    addLog('Finished tutorial');
   };
 
   // Dynamic key variable
@@ -88,7 +100,7 @@ function App() {
       <div style={{ width: "1px", height: "100vh", backgroundColor: "lightgrey" }} />
 
       <div style={{ flex: "1 0", height: "100vh", overflowY: "auto" }}>
-        <QuizComponent datapointPath={datapointPath} id={id} />
+        <QuizComponent datapointPath={datapointPath} id={id} isChatting={chatInterface} />
       </div>
     </div>
   );

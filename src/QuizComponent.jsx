@@ -3,8 +3,9 @@ import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
 import { Button } from '@chatscope/chat-ui-kit-react';
 import TextField from '@mui/material/TextField';
 import $ from 'jquery';
+import { useLogger } from './Logger';
 
-const QuizComponent = ({ datapointPath, id }) => {
+const QuizComponent = ({ datapointPath, id, isChatting }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [quizCompleted, setQuizCompleted] = useState(false);
   const [answers, setAnswers] = useState({});
@@ -13,6 +14,7 @@ const QuizComponent = ({ datapointPath, id }) => {
   const [shuffledQuestions, setShuffledQuestions] = useState([]);
   const [indexMap, setIndexMap] = useState({});
   const [questionsData, setQuestionsData] = useState([]);
+  const { addLog, logs } = useLogger();
 
   useEffect(() => {
     const loadQuestions = async () => {
@@ -53,6 +55,7 @@ const QuizComponent = ({ datapointPath, id }) => {
 
   const handleOptionClick = (option) => {
     setSelectedOption(option);
+    addLog('Selected option ' + option);
   };
 
   const handleSubmit = () => {
@@ -62,6 +65,8 @@ const QuizComponent = ({ datapointPath, id }) => {
       ...prevAnswers,
       [originalIndex]: [selectedOption, explanation],
     }));
+    
+    addLog('Submitted question ' + currentIndex.toString());
 
     setExplanation("");
     setSelectedOption("");
@@ -78,11 +83,15 @@ const QuizComponent = ({ datapointPath, id }) => {
       let data = {
         participantId: id,
       };
+      data[`datapoint`] = datapointPath.split('/').pop();
+      data[`chat`] = isChatting.toString();
 
       Object.keys(answers).forEach((key, index) => {
         data[`q${parseInt(key) + 1}`] = answers[key][0];
         data[`e${parseInt(key) + 1}`] = answers[key][1];
       });
+      
+      data[`logs`] = logs.join('\n');
 
       $.ajax({
         url: "https://script.google.com/macros/s/AKfycbweLsnfsFu-Q59DRQwoGUi3bz1BmoYXGcNaLOqmWYF6OErfcd3-VLFmLe-2LtS7-rZP/exec",

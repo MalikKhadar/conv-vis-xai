@@ -5,6 +5,7 @@ import { MainContainer, ChatContainer, MessageList, Message, MessageInput, Typin
 import metadata from './assets/metadata.json';
 import VisualizationRenderer from './VisualizationRenderer';
 import './ChatComponent.css'; // Import the custom CSS file
+import { useAddLog } from './Logger';
 
 const gptModel = "gpt-4o";
 
@@ -27,6 +28,7 @@ const ChatComponent = ({ apiKey, setExplanation, messageInputEnabled, setMessage
   const isFirstRender = useRef(true);
   const [explanations, setExplanations] = useState([]);
   const [currentVisualizationPath, setCurrentVisualizationPath] = useState(null);
+  const addLog = useAddLog();
 
   useEffect(() => {
     setExplanation(() => explainVisualization);
@@ -113,6 +115,7 @@ const ChatComponent = ({ apiKey, setExplanation, messageInputEnabled, setMessage
       direction: 'outgoing',
       sender: "user"
     };
+    addLog('Sent ' + message);
 
     setMessages(messages => [...messages, newMessage]);
 
@@ -127,8 +130,6 @@ const ChatComponent = ({ apiKey, setExplanation, messageInputEnabled, setMessage
   };
 
   const sendMessageToGPT = async (messages) => {
-    // console.log(messages);
-
     const apiRequestBody = {
       "model": gptModel,
       "messages": [
@@ -172,6 +173,7 @@ const ChatComponent = ({ apiKey, setExplanation, messageInputEnabled, setMessage
         }
       }
       setApiMessages([...apiMessages, { role: "assistant", content: stream }]);
+      addLog('Reply ' + stream);
     } catch (error) {
       console.error("Error while processing response:", error);
     }
@@ -180,8 +182,8 @@ const ChatComponent = ({ apiKey, setExplanation, messageInputEnabled, setMessage
 
   const explainVisualization = async (index) => {
     setMyState(index);
-
     setIsTyping(true);
+    addLog('Viewing visualization ' + index.toString())
   };
 
   const encodeImage = async (imagePath) => {
@@ -212,7 +214,6 @@ const ChatComponent = ({ apiKey, setExplanation, messageInputEnabled, setMessage
   useEffect(() => {
     const explainVisualizationHelper = async () => {
       try {
-        console.log(currentVisualizationPath);
         if (currentVisualizationPath && currentVisualizationPath.endsWith('.png')) {
           const base64 = await encodeImage(currentVisualizationPath);
           
@@ -239,6 +240,8 @@ const ChatComponent = ({ apiKey, setExplanation, messageInputEnabled, setMessage
   }, [currentVisualizationPath]);
 
   const testKey = async () => {
+    addLog('Testing key');
+    
     try {
       let sentStatus = await sendMessageToGPT([{ role: "user", content: "test" }]);
       if (sentStatus) {
