@@ -25,9 +25,9 @@ function PredictionDisplay({ datapointPath }) {
   }, [datapointPath]);
 
   return (
-    <h2 style={{ textAlign: "center", fontWeight: "normal" }}>
+    <h3 style={{ textAlign: "center", fontWeight: "normal" }}>
       Model prediction: <b>{prediction ? "more" : "less"} than $50k</b>
-    </h2>
+    </h3>
   );
 }
 

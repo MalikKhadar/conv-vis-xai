@@ -1,18 +1,7 @@
-VISUALIZATION_NAME: SHAP waterfall plot
+VISUALIZATION_NAME: Main data point
 
 EXPLANATION:
-This plot explains a prediction that classified someone as making more than $50k according to US census data from 1995.
-In this plot, the features that contributed to this prediction from most to least significant were:
-Capital Loss: 1902.0 | SHAP Value: 1.45
-Relationship: Husband | SHAP Value: 1.44
-Age: 51.0 | SHAP Value: 0.95
-Education-Num: 13.0 | SHAP Value: 0.69
-Marital Status: Married-civ-spouse | SHAP Value: 0.6
-Occupation: Exec-managerial | SHAP Value: 0.56
-Workclass: Federal-gov | SHAP Value: -0.36
-Sex: Male | SHAP Value: 0.18
-Capital Gain: 0.0 | SHAP Value: -0.17
-3 other features: SHAP Value: 0.14
-
-Here's a note that users are provided when they view this visualization:
-In this plot, negative f(x) values indicate 'less than $50k' classifications, whereas positive f(x) values indicate the opposite.
+This table displays the feature values for the main data point:
+|   Age | Workclass   |   Education-Num | Marital Status     | Occupation      | Relationship   | Race   | Sex   |   Capital Gain |   Capital Loss |   Hours per week | Country       |
+|------:|:------------|----------------:|:-------------------|:----------------|:---------------|:-------|:------|---------------:|---------------:|-----------------:|:--------------|
+|    51 | Federal-gov |              13 | Married-civ-spouse | Exec-managerial | Husband        | White  | Male  |              0 |           1902 |               40 | United-States |

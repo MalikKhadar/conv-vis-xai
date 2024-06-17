@@ -37,11 +37,10 @@ const ComparisonTable = ({ tableData }) => {
               {
                 fields.map((field) => (
                   <TableCell style={{
-                    backgroundColor: item[field] === tableData[0][field] ? '#FFFF7C' : 'white',
                     borderWidth: 1,
-                    borderBottom: index == 0 ? 3 : 1,
                     borderColor: "lightgrey",
-                    borderBottomColor: index == 0 ? "black" : "lightgrey",
+                    // borderBottom: index == 0 ? 2 : 1,
+                    // borderBottomColor: index == 0 ? "black" : "lightgrey",
                     borderStyle: "solid"
                   }} align="right" key={field}>{item[field]}</TableCell>
                 ))

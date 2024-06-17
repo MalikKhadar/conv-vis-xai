@@ -3,13 +3,12 @@ import OpenAI from 'openai';
 import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
 import { MainContainer, ChatContainer, MessageList, Message, MessageInput, TypingIndicator } from '@chatscope/chat-ui-kit-react';
 import metadata from './assets/metadata.json';
-import VisualizationRenderer from './VisualizationRenderer';
 import './ChatComponent.css'; // Import the custom CSS file
 import { useAddLog } from './Logger';
 
 const gptModel = "gpt-4o";
 
-const ChatComponent = ({ apiKey, setExplanation, messageInputEnabled, setMessageInputEnabled, setTestKeyFunc, setKeyColor, datapointPath }) => {
+const ChatComponent = ({ apiKey, visualizationState, datapointPath }) => {
   const [isTyping, setIsTyping] = useState(false);
   const [systemMessage, setSystemMessage] = useState('');
   const [messages, setMessages] = useState([
@@ -23,16 +22,11 @@ const ChatComponent = ({ apiKey, setExplanation, messageInputEnabled, setMessage
   const [apiMessages, setApiMessages] = useState([
     { "role": "assistant", "content": metadata["firstMessage"] },
   ]);
-  const [myState, setMyState] = useState(-1);
   const [sendMessage, setSendMessage] = useState(0);
-  const isFirstRender = useRef(true);
   const [explanations, setExplanations] = useState([]);
-  const [currentVisualizationPath, setCurrentVisualizationPath] = useState(null);
+  const [visualizations, setVisualizations] = useState([]);
+  const isFirstRender = useRef({ typing: 0, fetchResponse: 0, explainVisualization: 0 });
   const addLog = useAddLog();
-
-  useEffect(() => {
-    setExplanation(() => explainVisualization);
-  }, [setExplanation, messages]);
 
   useEffect(() => {
     const fetchSystemMessage = async () => {
@@ -85,21 +79,31 @@ const ChatComponent = ({ apiKey, setExplanation, messageInputEnabled, setMessage
           }
         }
       }
-
       setExplanations(fetchedExplanations);
     };
+    const fetchVisualizations = async () => {
+      // Only keep the files that match our visualization path
+      const allVisualizations = import.meta.glob('/src/assets/datapoints/**/visualizations/*.{json,png}');
+      const loadedVisualizations = [];
 
+      for (const path in allVisualizations) {
+        // filter out irrelevant assets and the notes
+        if (path.includes(datapointPath) && !path.includes("notes")) {
+          const module = await allVisualizations[path]();
+          const index = path.match(/\/(\d+)\.[json|png]+$/)[1];
+          loadedVisualizations[index] = { path, module: module.default || module };
+        }
+      }
+
+      setVisualizations(loadedVisualizations);
+    };
+    fetchVisualizations();
     fetchExplanations();
   }, [datapointPath]);
 
   useEffect(() => {
-    setTestKeyFunc(() => testKey);
-    setExplanation(() => explainVisualization);
-  }, [apiKey, setTestKeyFunc, setExplanation]);
-
-  useEffect(() => {
-    if (isFirstRender.current || apiKey == "") {
-      isFirstRender.current = false;
+    if (isFirstRender.current["fetchResponse"] < 2) {
+      isFirstRender.current["fetchResponse"] += 1;
       return;
     }
     const fetchGPTResponse = async () => {
@@ -180,23 +184,17 @@ const ChatComponent = ({ apiKey, setExplanation, messageInputEnabled, setMessage
     setIsTyping(false);
   };
 
-  const explainVisualization = async (index) => {
-    setMyState(index);
-    setIsTyping(true);
-    addLog('Viewing visualization ' + index.toString())
-  };
-
   const encodeImage = async (imagePath) => {
     const imageFiles = import.meta.glob('/src/assets/datapoints/**/visualizations/*.png');
-  
+
     if (imageFiles[imagePath]) {
       const module = await imageFiles[imagePath]();
       const response = await fetch(module.default);
-  
+
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-  
+
       const blob = await response.blob();
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -209,25 +207,30 @@ const ChatComponent = ({ apiKey, setExplanation, messageInputEnabled, setMessage
     } else {
       throw new Error('Image not found');
     }
-  };  
+  };
 
   useEffect(() => {
-    const explainVisualizationHelper = async () => {
+    const explainVisualization = async () => {
+      if (isFirstRender.current["explainVisualization"] < 1) {
+        isFirstRender.current["explainVisualization"] += 1;
+        return;
+      }
+      setIsTyping(true);
       try {
-        if (currentVisualizationPath && currentVisualizationPath.endsWith('.png')) {
-          const base64 = await encodeImage(currentVisualizationPath);
-          
+        if (visualizations[visualizationState].path.endsWith('.png')) {
+          const base64 = await encodeImage(visualizations[visualizationState].path);
+
           setApiMessages([...apiMessages, {
             role: "user",
             content: [
-              { type: "text", text: "'''" + explanations[myState] + "'''" },
+              { type: "text", text: "'''" + explanations[visualizationState] + "'''" },
               { type: "image_url", image_url: { url: "data:image/png;base64," + base64 } }
             ]
           }]);
         } else {
           setApiMessages([...apiMessages, {
             role: "system",
-            content: "'''" + explanations[myState] + "'''"
+            content: "'''" + explanations[visualizationState] + "'''"
           }]);
         }
         setSendMessage(sendMessage + 1);
@@ -236,34 +239,12 @@ const ChatComponent = ({ apiKey, setExplanation, messageInputEnabled, setMessage
         setIsTyping(false);
       }
     }
-    explainVisualizationHelper();
-  }, [currentVisualizationPath]);
-
-  const testKey = async () => {
-    addLog('Testing key');
-    
-    try {
-      let sentStatus = await sendMessageToGPT([{ role: "user", content: "test" }]);
-      if (sentStatus) {
-        setMessageInputEnabled(true);
-        setKeyColor("#ffffff");
-      } else {
-        setMessageInputEnabled(false);
-        setKeyColor("#ff6961");
-      }
-    } catch (error) {
-      console.error("Error in testKey:", error);
-      setMessageInputEnabled(false);
-      setKeyColor("#ff6961");
-    }
-  };
+    explainVisualization();
+  }, [visualizationState]);
 
   return (
-    <div style={{ height: "100%" }}>
-      <div style={{ display: "flex", height: "70%", width: "100%", alignContent: "center" }}>
-        <VisualizationRenderer parentState={myState} datapointPath={datapointPath} setCurrentVisualizationPath={setCurrentVisualizationPath} defaultMessage={"Submit your GPT key in the upper left corner, and then click on the explanations to the left to help understand the model's prediction. Use the conversation interface to help understand the explanations"} />
-      </div>
-      <MainContainer style={{ height: "30%" }}>
+    <div>
+      <MainContainer style={{width: "22vw"}}>
         <ChatContainer>
           <MessageList
             scrollBehavior="auto"
@@ -273,7 +254,7 @@ const ChatComponent = ({ apiKey, setExplanation, messageInputEnabled, setMessage
               <Message key={i} model={message} />
             ))}
           </MessageList>
-          <MessageInput disabled={!messageInputEnabled} placeholder="Type message here" onSend={handleSend} />
+          <MessageInput placeholder="Type message here" onSend={handleSend} />
         </ChatContainer>
       </MainContainer>
     </div>

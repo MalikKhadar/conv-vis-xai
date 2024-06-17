@@ -1,16 +1,14 @@
-VISUALIZATION_NAME: Similar data point table
+VISUALIZATION_NAME: SHAP waterfall plot
 
-EXPLANATION:
-This table displays the main data point and five similar data points that had the same model prediction, meaning each data point was predicted as making more than $50k according to 1995 US census data.
-Here's a layout of the table:
-|   Age | Workclass   |   Education-Num | Marital Status     | Occupation      | Relationship   | Race               | Sex   |   Capital Gain |   Capital Loss |   Hours per week | Country       |
-|------:|:------------|----------------:|:-------------------|:----------------|:---------------|:-------------------|:------|---------------:|---------------:|-----------------:|:--------------|
-|    51 | Federal-gov |              13 | Married-civ-spouse | Exec-managerial | Husband        | White              | Male  |              0 |           1902 |               40 | United-States |
-|    42 | Federal-gov |              14 | Married-civ-spouse | Prof-specialty  | Husband        | White              | Male  |              0 |           1902 |               40 | United-States |
-|    51 | Local-gov   |              13 | Married-civ-spouse | Prof-specialty  | Husband        | White              | Male  |              0 |           1902 |               40 | United-States |
-|    42 | Local-gov   |              13 | Married-civ-spouse | Protective-serv | Husband        | White              | Male  |              0 |           1902 |               40 | United-States |
-|    49 | Local-gov   |              14 | Married-civ-spouse | Prof-specialty  | Husband        | White              | Male  |              0 |           1902 |               40 | United-States |
-|    42 | Federal-gov |              14 | Married-civ-spouse | Prof-specialty  | Husband        | Asian-Pac-Islander | Male  |              0 |           1902 |               40 | South         |
-
-Here's a note that users are provided when they view this visualization:
-The model made the same prediction on each of these data points. The first row is the main data point. Cells are gold when they share the same value as the main data point.
+EXPLANATION
+In this plot, the features that contributed to this prediction from most to least significant were:
+Hours per week: 55.0 | SHAP Value: 0.83
+Occupation:  Exec-managerial | SHAP Value: 0.77
+Sex:  Female | SHAP Value: -0.62
+Age: 42.0 | SHAP Value: 0.5
+Marital Status:  Widowed | SHAP Value: -0.44
+Relationship:  Not-in-family | SHAP Value: 0.26
+Capital Gain: 0.0 | SHAP Value: -0.18
+Workclass:  Private | SHAP Value: 0.14
+Capital Loss: 0.0 | SHAP Value: 0.1
+3 other features: SHAP Value: 0.14

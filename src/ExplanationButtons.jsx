@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
 import { Button } from '@chatscope/chat-ui-kit-react';
-import VisualizationRenderer from './VisualizationRenderer';
+import { useAddLog } from './Logger';
 
 const notes = import.meta.glob('/src/assets/datapoints/**/visualizations/notes.json');
 
-const ExplanationButtons = ({ buttonsEnabled, showExplanation, datapointPath }) => {
+const ExplanationButtons = ({ datapointPath, setVisualizationState, visualizationState }) => {
   const [noteMap, setNoteMap] = useState({});
+  const addLog = useAddLog();
 
   useEffect(() => {
     const loadNotes = async () => {
@@ -23,19 +24,15 @@ const ExplanationButtons = ({ buttonsEnabled, showExplanation, datapointPath }) 
 
   return (
     <div style={{ display: "flex", flexDirection: "column", maxHeight: "100%" }}>
-      <h2 style={{ textAlign: "center" }}>Click to view explanations</h2>
+      <h3 style={{ textAlign: "center", fontWeight: "normal" }}>Click to view explanations</h3>
       {Object.keys(noteMap).map((key, index) => (
         <Button
           key={index}
-          disabled={!buttonsEnabled}
           border
-          onClick={() => showExplanation(index)}
-          style={{ flex: "1", overflow: "hidden" }}
+          onClick={() => {setVisualizationState(index); addLog('Viewing visualization ' + index.toString())}}
+          style={{ flex: "1", backgroundColor: index == visualizationState ? '#c6e3fa' : "white" }}
         >
           {noteMap[key].name}
-          <div style={{ flex: "1", display: "flex", justifyContent: "center", alignItems: "center", width: "100%", height: "100%" }}>
-            <VisualizationRenderer parentState={index} defaultMessage={""} datapointPath={datapointPath} />
-          </div>
         </Button>
       ))}
     </div>

@@ -20,7 +20,7 @@ const QuizComponent = ({ datapointPath, id, isChatting }) => {
     const loadQuestions = async () => {
       const questions = import.meta.glob('/src/assets/datapoints/**/questions.json');
       const questionsPath = Object.keys(questions).find(path => path.includes(datapointPath));
-      
+
       if (questionsPath) {
         const questionsModule = await questions[questionsPath]();
         setQuestionsData(questionsModule.default || questionsModule);
@@ -28,7 +28,7 @@ const QuizComponent = ({ datapointPath, id, isChatting }) => {
         console.error(`No questions found for path: ${datapointPath}`);
       }
     };
-    
+
     loadQuestions();
   }, [datapointPath]);
 
@@ -65,7 +65,7 @@ const QuizComponent = ({ datapointPath, id, isChatting }) => {
       ...prevAnswers,
       [originalIndex]: [selectedOption, explanation],
     }));
-    
+
     addLog('Submitted question ' + currentIndex.toString());
 
     setExplanation("");
@@ -90,7 +90,7 @@ const QuizComponent = ({ datapointPath, id, isChatting }) => {
         data[`q${parseInt(key) + 1}`] = answers[key][0];
         data[`e${parseInt(key) + 1}`] = answers[key][1];
       });
-      
+
       data[`logs`] = logs.join('\n');
 
       $.ajax({
@@ -117,10 +117,12 @@ const QuizComponent = ({ datapointPath, id, isChatting }) => {
   }
 
   return (
-    <div style={{ textAlign: "center" }}>
-      <h2>Question {currentIndex + 1}/{shuffledQuestions.length}</h2>
-      <h3 style={{ whiteSpace: 'pre-wrap' }}>{currentQuestion.question}</h3>
-      <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
+    <div style={{ display: 'flex', width: '100%', height: "100%" }}>
+      <h3 style={{ whiteSpace: 'pre-wrap', fontWeight: 'normal', flex: '1' }}>
+        <b>Question {currentIndex + 1}/{shuffledQuestions.length}</b>: {currentQuestion.question}
+      </h3>
+      <div style={{ display: 'flex', flexDirection: 'column', width: '40%', height: "100%" }}>
+        <div style={{ height: '1em' }} />
         {currentQuestion.options.map((option, index) => (
           <Button
             key={index}
@@ -129,6 +131,7 @@ const QuizComponent = ({ datapointPath, id, isChatting }) => {
             style={{
               margin: '2px',
               backgroundColor: selectedOption === option ? '#c6e3fa' : 'white',
+              flex: "1"
             }}
           >
             {option}
@@ -140,14 +143,14 @@ const QuizComponent = ({ datapointPath, id, isChatting }) => {
             placeholder='Explain your reasoning'
             onChange={(e) => setExplanation(e.target.value)}
             value={explanation}
-            style={{ margin: '5px 2px' }}
+            style={{ margin: '5px 2px', overflowY: 'auto', maxHeight: "10vh" }}
           />
         ) : null}
+        <div style={{ flex: "10" }} />
         <Button
           border
           onClick={handleSubmit}
           disabled={!selectedOption || (currentQuestion.explain && explanation.trim() === "")}
-          style={{ marginTop: '30px' }}
         >
           Submit
         </Button>
