@@ -16,6 +16,8 @@ function App() {
   const addLog = useAddLog();
   const hasLoggedRef = useRef(false); // Create a ref to track if logging has been done
 
+  // Testing new workflow for github
+
   useEffect(() => {
     if (!hasLoggedRef.current) {
       addLog('Loaded page');
