@@ -17,6 +17,7 @@ function App() {
   const addLog = useAddLog();
   const hasLoggedRef = useRef(false); // Create a ref to track if logging has been done
   const [apiKey, setApiKey] = useState('');
+  const [chatActive, setChatActive] = useState(false);
 
   // Testing new workflow for github
 
@@ -61,7 +62,7 @@ function App() {
   // main attraction
   return (
     <div className="App" style={{ display: 'flex', gap: '5px', height: "100vh", margin: "auto" }}>
-      <TestKey apiKey={apiKey} setApiKey={setApiKey} />
+      {isChatting ? <TestKey apiKey={apiKey} setApiKey={setApiKey} setChatActive={setChatActive} /> : null}
 
       <div style={{ display: 'flex', flexDirection: 'column', flex: "1", height: "100vh", minWidth: "15vw", overflowY: "hidden" }}>
         <OpenTutorialButton />
@@ -101,6 +102,7 @@ function App() {
           apiKey={apiKey}
           visualizationState={visualizationState}
           datapointPath={datapointPath}
+          chatActive={chatActive}
         />
         : <div />}
     </div>

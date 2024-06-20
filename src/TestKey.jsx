@@ -5,7 +5,7 @@ import Sheet from '@mui/joy/Sheet';
 import { TextField, Button } from '@mui/material';
 import OpenAI from 'openai';
 
-function TestKey({ apiKey, setApiKey }) {
+function TestKey({ apiKey, setApiKey, setChatActive }) {
   const [keyOpen, setKeyOpen] = useState(true);
   const [isValid, setIsValid] = useState(true);
 
@@ -39,6 +39,7 @@ function TestKey({ apiKey, setApiKey }) {
       // Assuming a successful response means the key is valid
       if (response) {
         setIsValid(true);
+        setChatActive(true);
         setKeyOpen(false); // Close modal on valid key
       }
     } catch (error) {

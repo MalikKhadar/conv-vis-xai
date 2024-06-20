@@ -8,7 +8,7 @@ import { useAddLog } from './Logger';
 
 const gptModel = "gpt-4o";
 
-const ChatComponent = ({ apiKey, visualizationState, datapointPath }) => {
+const ChatComponent = ({ apiKey, visualizationState, datapointPath, chatActive }) => {
   const [isTyping, setIsTyping] = useState(false);
   const [systemMessage, setSystemMessage] = useState('');
   const [messages, setMessages] = useState([
@@ -25,7 +25,6 @@ const ChatComponent = ({ apiKey, visualizationState, datapointPath }) => {
   const [sendMessage, setSendMessage] = useState(0);
   const [explanations, setExplanations] = useState([]);
   const [visualizations, setVisualizations] = useState([]);
-  const isFirstRender = useRef({ typing: 0, fetchResponse: 0, explainVisualization: 0 });
   const addLog = useAddLog();
 
   useEffect(() => {
@@ -102,8 +101,7 @@ const ChatComponent = ({ apiKey, visualizationState, datapointPath }) => {
   }, [datapointPath]);
 
   useEffect(() => {
-    if (isFirstRender.current["fetchResponse"] < 2) {
-      isFirstRender.current["fetchResponse"] += 1;
+    if (!chatActive) {
       return;
     }
     const fetchGPTResponse = async () => {
@@ -211,8 +209,7 @@ const ChatComponent = ({ apiKey, visualizationState, datapointPath }) => {
 
   useEffect(() => {
     const explainVisualization = async () => {
-      if (isFirstRender.current["explainVisualization"] < 2) {
-        isFirstRender.current["explainVisualization"] += 1;
+      if (!chatActive) {
         return;
       }
       setIsTyping(true);
