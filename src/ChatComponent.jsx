@@ -211,7 +211,7 @@ const ChatComponent = ({ apiKey, visualizationState, datapointPath }) => {
 
   useEffect(() => {
     const explainVisualization = async () => {
-      if (isFirstRender.current["explainVisualization"] < 1) {
+      if (isFirstRender.current["explainVisualization"] < 2) {
         isFirstRender.current["explainVisualization"] += 1;
         return;
       }

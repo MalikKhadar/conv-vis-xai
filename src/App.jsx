@@ -8,6 +8,7 @@ import PredictionDisplay from './PredictionDisplay';
 import TutorialPage from './TutorialPage';
 import VisualizationRenderer from './VisualizationRenderer';
 import OpenTutorialButton from './OpenTutorialButton';
+import TestKey from './TestKey'
 import { useAddLog } from './Logger';
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
   const [visualizationState, setVisualizationState] = useState(0);
   const addLog = useAddLog();
   const hasLoggedRef = useRef(false); // Create a ref to track if logging has been done
+  const [apiKey, setApiKey] = useState('');
 
   // Testing new workflow for github
 
@@ -59,6 +61,8 @@ function App() {
   // main attraction
   return (
     <div className="App" style={{ display: 'flex', gap: '5px', height: "100vh", margin: "auto" }}>
+      <TestKey apiKey={apiKey} setApiKey={setApiKey} />
+
       <div style={{ display: 'flex', flexDirection: 'column', flex: "1", height: "100vh", minWidth: "15vw", overflowY: "hidden" }}>
         <OpenTutorialButton />
         <div style={{ height: "3vh" }} />
@@ -94,7 +98,7 @@ function App() {
 
       {isChatting ?
         <ChatComponent
-          apiKey={import.meta.env.VITE_API_KEY}
+          apiKey={apiKey}
           visualizationState={visualizationState}
           datapointPath={datapointPath}
         />
