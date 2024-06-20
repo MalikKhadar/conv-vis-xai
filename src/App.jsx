@@ -77,13 +77,11 @@ function App() {
           <PredictionDisplay datapointPath={datapointPath} />
         </div>
         <div style={{ flex: "1 1 auto", display: 'flex', flexDirection: 'column', overflowY: "auto" }}>
-          <div style={{ height: "70%" }}>
-            <VisualizationRenderer
-              parentState={visualizationState}
-              datapointPath={datapointPath}
-              defaultMessage={"Click on the explanations to the left to help understand the model's prediction"}
-            />
-          </div>
+          <VisualizationRenderer
+            parentState={visualizationState}
+            datapointPath={datapointPath}
+            defaultMessage={"Click on the explanations to the left to help understand the model's prediction"}
+          />
 
           <div style={{ height: "1px", width: "100%", marginTop: "5px", marginBottom: "5px", backgroundColor: "lightgrey" }} />
 

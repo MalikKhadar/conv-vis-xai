@@ -39,10 +39,8 @@ const ComparisonTable = ({ tableData }) => {
                   <TableCell style={{
                     borderWidth: 1,
                     borderColor: "lightgrey",
-                    // borderBottom: index == 0 ? 2 : 1,
-                    // borderBottomColor: index == 0 ? "black" : "lightgrey",
                     borderStyle: "solid"
-                  }} align="right" key={field}>{item[field]}</TableCell>
+                  }} align="right" key={field}>{item[field] == tableData[0][field] && item != tableData[0] ? "-" : item[field]}</TableCell>
                 ))
               }
             </TableRow>

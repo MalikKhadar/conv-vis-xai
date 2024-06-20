@@ -40,13 +40,13 @@ const VisualizationRenderer = ({ parentState, defaultMessage, datapointPath, set
   const renderVisualization = (visualization, index) => {
     if (visualization.path.endsWith('.json')) {
       return (
-        <div key={index} style={{ width: "100%", maxHeight: "50vh" }}>
+        <div key={index} style={{ display: "flex", width: "100%", maxHeight: "50vh", alignItems: "center", height: "100%" }}>
           <ComparisonTable tableData={visualization.module} />
         </div>
       );
     } else if (visualization.path.endsWith('.png')) {
       return (
-        <div key={index} style={{ display: "flex", flexFlow: "column", alignItems: "center" }}>
+        <div key={index} style={{ display: "flex", flexFlow: "column", alignItems: "center", height: "100%" }}>
           <img src={visualization.module} style={{ maxHeight: "60vh" }} />
         </div>
       );
@@ -56,7 +56,7 @@ const VisualizationRenderer = ({ parentState, defaultMessage, datapointPath, set
   };
 
   return (
-    <div style={{ margin: "auto", textAlign: "center" }}>
+    <div style={{ margin: "auto", textAlign: "center", height: "100%" }}>
       {visualizations[visState] ? (
         renderVisualization(visualizations[visState], visState)
       ) : (

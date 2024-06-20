@@ -3,6 +3,7 @@ import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
 import { Button } from '@chatscope/chat-ui-kit-react';
 import TextField from '@mui/material/TextField';
 import $ from 'jquery';
+import RadioGroupRating from './RadioGroupRating';
 import { useLogger } from './Logger';
 
 const QuizComponent = ({ datapointPath, id, isChatting }) => {
@@ -14,6 +15,7 @@ const QuizComponent = ({ datapointPath, id, isChatting }) => {
   const [shuffledQuestions, setShuffledQuestions] = useState([]);
   const [indexMap, setIndexMap] = useState({});
   const [questionsData, setQuestionsData] = useState([]);
+  const [confidenceRating, setConfidenceRating] = useState(null);
   const { addLog, logs } = useLogger();
 
   useEffect(() => {
@@ -63,13 +65,14 @@ const QuizComponent = ({ datapointPath, id, isChatting }) => {
 
     setAnswers((prevAnswers) => ({
       ...prevAnswers,
-      [originalIndex]: [selectedOption, explanation],
+      [originalIndex]: [selectedOption, explanation, confidenceRating],
     }));
 
     addLog('Submitted question ' + currentIndex.toString());
 
     setExplanation("");
     setSelectedOption("");
+    setConfidenceRating(null);
 
     if (currentIndex < shuffledQuestions.length - 1) {
       setCurrentIndex(currentIndex + 1);
@@ -89,6 +92,7 @@ const QuizComponent = ({ datapointPath, id, isChatting }) => {
       Object.keys(answers).forEach((key, index) => {
         data[`q${parseInt(key) + 1}`] = answers[key][0];
         data[`e${parseInt(key) + 1}`] = answers[key][1];
+        data[`c${parseInt(key) + 1}`] = answers[key][2]-1;
       });
 
       data[`logs`] = logs.join('\n');
@@ -140,17 +144,18 @@ const QuizComponent = ({ datapointPath, id, isChatting }) => {
         {currentQuestion.explain ? (
           <TextField
             multiline
-            placeholder='Explain your reasoning'
+            placeholder='Explain your reasoning (minimum 10 characters)'
             onChange={(e) => setExplanation(e.target.value)}
             value={explanation}
             style={{ margin: '5px 2px', overflowY: 'auto', maxHeight: "10vh" }}
           />
         ) : null}
         <div style={{ flex: "10" }} />
+        <RadioGroupRating confidenceRating={confidenceRating} setConfidenceRating={setConfidenceRating} />
         <Button
           border
           onClick={handleSubmit}
-          disabled={!selectedOption || (currentQuestion.explain && explanation.trim() === "")}
+          disabled={!selectedOption || !confidenceRating || (currentQuestion.explain && explanation.trim().length < 10)}
         >
           Submit
         </Button>
