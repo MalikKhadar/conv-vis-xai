@@ -3,7 +3,7 @@ import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
 import { Button } from '@chatscope/chat-ui-kit-react';
 import TextField from '@mui/material/TextField';
 import $ from 'jquery';
-import RadioGroupRating from './RadioGroupRating';
+import ConfidenceDropdown from './ConfidenceDropdown';
 import { useLogger } from './Logger';
 
 const QuizComponent = ({ datapointPath, id, isChatting }) => {
@@ -115,7 +115,7 @@ const QuizComponent = ({ datapointPath, id, isChatting }) => {
     return (
       <div>
         <h3 style={{ textAlign: "center" }}>Quiz complete</h3>
-        <p>Thank you for participating! You can exit the page</p>
+        <p style={{ textAlign: "center" }}>Thank you for participating! You can exit the page</p>
       </div>
     );
   }
@@ -141,17 +141,15 @@ const QuizComponent = ({ datapointPath, id, isChatting }) => {
             {option}
           </Button>
         ))}
-        {currentQuestion.explain ? (
-          <TextField
-            multiline
-            placeholder='Explain your reasoning (minimum 10 characters)'
-            onChange={(e) => setExplanation(e.target.value)}
-            value={explanation}
-            style={{ margin: '5px 2px', overflowY: 'auto', maxHeight: "10vh" }}
-          />
-        ) : null}
+        <TextField
+          multiline
+          placeholder={`Explain your reasoning${currentQuestion.explain ? ' (response required)' : ''}`}
+          onChange={(e) => setExplanation(e.target.value)}
+          value={explanation}
+          style={{ margin: '5px 2px', overflowY: 'auto', maxHeight: "10vh" }}
+        />
         <div style={{ flex: "10" }} />
-        <RadioGroupRating confidenceRating={confidenceRating} setConfidenceRating={setConfidenceRating} />
+        <ConfidenceDropdown confidenceRating={confidenceRating} setConfidenceRating={setConfidenceRating} />
         <Button
           border
           onClick={handleSubmit}
