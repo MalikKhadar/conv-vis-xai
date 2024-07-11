@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import ComparisonTable from './ComparisonTable';
 
-const VisualizationRenderer = ({ parentState, defaultMessage, datapointPath, setCurrentVisualizationPath }) => {
+const VisualizationRenderer = ({ parentState, defaultMessage, datapointPath }) => {
   const [visState, setVisState] = useState(0);
   const [visualizations, setVisualizations] = useState([]);
 
@@ -30,12 +30,6 @@ const VisualizationRenderer = ({ parentState, defaultMessage, datapointPath, set
   useEffect(() => {
     setVisState(parentState);
   }, [parentState]);
-
-  useEffect(() => {
-    if (setCurrentVisualizationPath && visualizations[visState]) {
-      setCurrentVisualizationPath(visualizations[visState].path);
-    }
-  }, [visState, visualizations, setCurrentVisualizationPath]);
 
   const renderVisualization = (visualization, index) => {
     if (visualization.path.endsWith('.json')) {
