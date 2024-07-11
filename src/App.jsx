@@ -18,6 +18,10 @@ function App() {
   const hasLoggedRef = useRef(false); // Create a ref to track if logging has been done
   const [apiKey, setApiKey] = useState('');
   const [chatActive, setChatActive] = useState(false);
+  const [datapointPath, setDatapointPath] = useState('');
+  const [id, setId] = useState('');
+  const [tutorialOnly, setTutorialOnly] = useState(false);
+  const [isChatting, setIsChatting] = useState(false);
 
   // Testing new workflow for github
 
@@ -25,6 +29,18 @@ function App() {
     if (!hasLoggedRef.current) {
       addLog('Loaded page');
       hasLoggedRef.current = true; // Set the ref to true after logging
+
+      // extract url params
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+
+      if (urlParams.has('chat')) {
+        setIsChatting(true);
+      }
+      let datapoint = urlParams.get("datapoint");
+      setDatapointPath("src/assets/datapoints/" + datapoint);
+      setId(urlParams.get("id"));
+      setTutorialOnly(urlParams.has('tutorialOnly'));
     }
   }, [addLog]);
 
@@ -33,17 +49,9 @@ function App() {
     addLog('Finished tutorial');
   };
 
-  // extract url params
-  const queryString = window.location.search;
-  const urlParams = new URLSearchParams(queryString);
-  let isChatting = false;
-  if (urlParams.has('chat')) {
-    isChatting = true;
-  }
-  let datapoint = urlParams.get("datapoint");
-  const datapointPath = "src/assets/datapoints/" + datapoint;
-  let id = urlParams.get("id");
-  let tutorialOnly = urlParams.has('tutorialOnly');
+  const switchDatapoints = () => {
+    setDatapointPath("src/assets/datapoints/1");
+  };
 
   // render tutorial
   if (!finishedTutorial) {
@@ -89,6 +97,7 @@ function App() {
             <QuizComponent
               datapointPath={datapointPath}
               id={id}
+              setDatapointPath={setDatapointPath}
               isChatting={isChatting}
             />
           </div>

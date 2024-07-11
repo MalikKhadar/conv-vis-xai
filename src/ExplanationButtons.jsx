@@ -20,7 +20,7 @@ const ExplanationButtons = ({ datapointPath, setVisualizationState, visualizatio
       }
     };
     loadNotes();
-  }, []);
+  }, [datapointPath]);
 
   return (
     <div style={{ display: "flex", flexDirection: "column", maxHeight: "100%" }}>

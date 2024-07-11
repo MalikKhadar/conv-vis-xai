@@ -1,6 +1,7 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { Select, MenuItem, FormControl, InputLabel } from '@mui/material';
+import { useAddLog } from './Logger';
 
 const confidenceLevels = [
   { value: 1, label: '0 - Not at all confident' },
@@ -12,13 +13,18 @@ const confidenceLevels = [
 ];
 
 function ConfidenceDropdown({ confidenceRating, setConfidenceRating }) {
+  const addLog = useAddLog();
+  
   return (
     <FormControl fullWidth variant="outlined">
       <InputLabel id="confidence-select-label">Confidence in your answer</InputLabel>
       <Select
         labelId="confidence-select-label"
         value={confidenceRating}
-        onChange={(event) => setConfidenceRating(event.target.value)}
+        onChange={(event) => {
+          setConfidenceRating(event.target.value);
+          addLog('Set confidence to ' + (event.target.value-1).toString())
+        }}
         label="Confidence in your answer"
       >
         {confidenceLevels.map((level) => (
@@ -31,9 +37,9 @@ function ConfidenceDropdown({ confidenceRating, setConfidenceRating }) {
   );
 }
 
-ConfidenceDropdown.propTypes = {
-  confidenceRating: PropTypes.number.isRequired,
-  setConfidenceRating: PropTypes.func.isRequired,
-};
+// ConfidenceDropdown.propTypes = {
+//   confidenceRating: PropTypes.number.isRequired,
+//   setConfidenceRating: PropTypes.func.isRequired,
+// };
 
 export default ConfidenceDropdown;

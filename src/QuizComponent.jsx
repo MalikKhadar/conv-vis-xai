@@ -6,26 +6,45 @@ import $ from 'jquery';
 import ConfidenceDropdown from './ConfidenceDropdown';
 import { useLogger } from './Logger';
 
-const QuizComponent = ({ datapointPath, id, isChatting }) => {
+const QuizComponent = ({ datapointPath, id, setDatapointPath, isChatting }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [quizCompleted, setQuizCompleted] = useState(false);
+  const [quizCompleted, setQuizCompleted] = useState(0);
   const [answers, setAnswers] = useState({});
   const [explanation, setExplanation] = useState("");
   const [selectedOption, setSelectedOption] = useState("");
   const [shuffledQuestions, setShuffledQuestions] = useState([]);
   const [indexMap, setIndexMap] = useState({});
-  const [questionsData, setQuestionsData] = useState([]);
-  const [confidenceRating, setConfidenceRating] = useState(null);
+  const [confidenceRating, setConfidenceRating] = useState("");
   const { addLog, logs } = useLogger();
 
   useEffect(() => {
     const loadQuestions = async () => {
       const questions = import.meta.glob('/src/assets/datapoints/**/questions.json');
       const questionsPath = Object.keys(questions).find(path => path.includes(datapointPath));
+      setCurrentIndex(0);
+      setAnswers({});
 
       if (questionsPath) {
         const questionsModule = await questions[questionsPath]();
-        setQuestionsData(questionsModule.default || questionsModule);
+        let questionsData = questionsModule.default || questionsModule;
+        if (questionsData.length > 0) {
+          const shuffleArray = (array) => {
+            for (let i = array.length - 1; i > 0; i--) {
+              const j = Math.floor(Math.random() * (i + 1));
+              [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+          };
+    
+          const shuffled = shuffleArray([...questionsData]);
+          const map = shuffled.reduce((acc, question, index) => {
+            acc[index] = questionsData.findIndex(q => q.question === question.question);
+            return acc;
+          }, {});
+    
+          setShuffledQuestions(shuffled);
+          setIndexMap(map);
+        }
       } else {
         console.error(`No questions found for path: ${datapointPath}`);
       }
@@ -33,27 +52,6 @@ const QuizComponent = ({ datapointPath, id, isChatting }) => {
 
     loadQuestions();
   }, [datapointPath]);
-
-  useEffect(() => {
-    if (questionsData.length > 0) {
-      const shuffleArray = (array) => {
-        for (let i = array.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [array[i], array[j]] = [array[j], array[i]];
-        }
-        return array;
-      };
-
-      const shuffled = shuffleArray([...questionsData]);
-      const map = shuffled.reduce((acc, question, index) => {
-        acc[index] = questionsData.findIndex(q => q.question === question.question);
-        return acc;
-      }, {});
-
-      setShuffledQuestions(shuffled);
-      setIndexMap(map);
-    }
-  }, [questionsData]);
 
   const handleOptionClick = (option) => {
     setSelectedOption(option);
@@ -72,12 +70,12 @@ const QuizComponent = ({ datapointPath, id, isChatting }) => {
 
     setExplanation("");
     setSelectedOption("");
-    setConfidenceRating(null);
+    setConfidenceRating("");
 
     if (currentIndex < shuffledQuestions.length - 1) {
       setCurrentIndex(currentIndex + 1);
     } else {
-      setQuizCompleted(true);
+      setQuizCompleted(quizCompleted + 1);
     }
   };
 
@@ -102,6 +100,17 @@ const QuizComponent = ({ datapointPath, id, isChatting }) => {
         type: "post",
         data: data,
       });
+
+      const chunks = datapointPath.split('/');
+    
+      // Get the last chunk and increment it
+      const lastChunk = chunks.pop(); // Remove and get the last chunk
+      const incrementedChunk = (parseInt(lastChunk, 10) + 1).toString();
+      
+      // Add the incremented chunk back to the array
+      chunks.push(incrementedChunk);
+
+      setDatapointPath(chunks.join('/'));
     }
   }, [quizCompleted]);
 
@@ -111,14 +120,14 @@ const QuizComponent = ({ datapointPath, id, isChatting }) => {
 
   const currentQuestion = shuffledQuestions[currentIndex];
 
-  if (quizCompleted) {
-    return (
-      <div>
-        <h3 style={{ textAlign: "center" }}>Quiz complete</h3>
-        <p style={{ textAlign: "center" }}>Thank you for participating! You can exit the page</p>
-      </div>
-    );
-  }
+  // if (quizCompleted) {
+  //   return (
+  //     <div>
+  //       <h3 style={{ textAlign: "center" }}>Quiz complete</h3>
+  //       <p style={{ textAlign: "center" }}>Thank you for participating! You can exit the page</p>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div style={{ display: 'flex', width: '100%', height: "100%" }}>
