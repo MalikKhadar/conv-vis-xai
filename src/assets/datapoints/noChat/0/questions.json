@@ -1,0 +1,35 @@
+[
+    {
+      "question": "Do you agree with the model's prediction? Why or why not?",
+      "options": [
+        "Yes",
+        "No"
+      ],
+      "explain": true
+    },
+    {
+      "question": "Would the model make the same prediction given these modifications to the features? \nSex = Male",
+      "options": [
+        "Yes",
+        "No"
+      ],
+      "explain": false
+    },
+    {
+    "question": "Would the model make the same prediction given these modifications to the features? \nHours per week = 50\nAge = 50",
+      "options": [
+        "Yes",
+        "No"
+      ],
+      "explain": false
+    },
+    {
+      "question": "What is the most important feature for this prediction?",
+      "options": [
+        "Age",
+        "Hours per week",
+        "Sex",
+        "Occupation"
+      ]
+    }
+  ]

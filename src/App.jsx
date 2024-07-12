@@ -22,36 +22,80 @@ function App() {
   const [id, setId] = useState('');
   const [tutorialOnly, setTutorialOnly] = useState(false);
   const [isChatting, setIsChatting] = useState(false);
-
-  // Testing new workflow for github
+  const [datapointIndex, setDatapointIndex] = useState(0);
+  const [datapointOrder, setDatapointOrder] = useState(["0", "1"]);
+  const [loaded, setLoaded] = useState(false);
+  const [done, setDone] = useState(false);
 
   useEffect(() => {
     if (!hasLoggedRef.current) {
-      addLog('Loaded page');
-      hasLoggedRef.current = true; // Set the ref to true after logging
+      firstLoad();
+      hasLoggedRef.current = true;
+    }
+  }, []);
 
-      // extract url params
+  const firstLoad = () => {
+    addLog('Loaded page');
+    // extract url params
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+
+    // load datapoint paths
+    let newPath = '/src/assets/datapoints/noChat/';
+    let newDatapointOrder = ["0", "1"];
+
+    if (urlParams.has('chat')) {
+      setIsChatting(true);
+      newPath = '/src/assets/datapoints/chat/';
+    }
+
+    if (Math.random() > 0.5) {
+      newDatapointOrder = ["1", "0"];
+    }
+
+    const updatedPath = newPath + (newDatapointOrder[datapointIndex] || '');
+
+    setDatapointOrder(newDatapointOrder);
+    console.log(updatedPath);
+    setDatapointPath(updatedPath);
+    setId(urlParams.get("id"));
+    setTutorialOnly(urlParams.has('tutorialOnly'));
+    setLoaded(true);
+  };
+
+  useEffect(() => {
+    // console.log("the datapointIndex effect has run");
+    if (loaded) {
+      if (datapointIndex >= 2) {
+        setDone(true);
+        return;
+      }
+
       const queryString = window.location.search;
       const urlParams = new URLSearchParams(queryString);
 
+      let newPath = '/src/assets/datapoints/noChat/';
+
       if (urlParams.has('chat')) {
         setIsChatting(true);
+        newPath = '/src/assets/datapoints/chat/';
       }
-      let datapoint = urlParams.get("datapoint");
-      setDatapointPath("src/assets/datapoints/" + datapoint);
-      setId(urlParams.get("id"));
-      setTutorialOnly(urlParams.has('tutorialOnly'));
+
+      const updatedPath = newPath + (datapointOrder[datapointIndex] || '');
+      setDatapointPath(updatedPath);
     }
-  }, [addLog]);
+  }, [datapointIndex]);
 
   const handleFinishTutorial = () => {
     setFinishedTutorial(true);
     addLog('Finished tutorial');
   };
 
-  const switchDatapoints = () => {
-    setDatapointPath("src/assets/datapoints/1");
-  };
+  if (done) {
+    return (
+      <p style={{ textAlign: "center" }}>This segment of the study is complete. Please return to Qualtrics to finish this study (you may exit out of this page)</p>
+    )
+  }
 
   // render tutorial
   if (!finishedTutorial) {
@@ -97,7 +141,8 @@ function App() {
             <QuizComponent
               datapointPath={datapointPath}
               id={id}
-              setDatapointPath={setDatapointPath}
+              datapointIndex={datapointIndex}
+              setDatapointIndex={setDatapointIndex}
               isChatting={isChatting}
             />
           </div>

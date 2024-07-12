@@ -1,0 +1,15 @@
+VISUALIZATION_NAME: SHAP waterfall plot
+
+EXPLANATION:
+This plot explains a prediction that classified someone as making less than $50k according to US census data from 1995.
+In this plot, the features that contributed to this prediction from most to least significant were:
+Hours per week: 55.0 | SHAP Value: 0.83
+Occupation: Exec-managerial | SHAP Value: 0.77
+Sex: Female | SHAP Value: -0.62
+Age: 42.0 | SHAP Value: 0.5
+Marital Status: Widowed | SHAP Value: -0.44
+Relationship: Not-in-family | SHAP Value: 0.26
+Capital Gain: 0.0 | SHAP Value: -0.18
+Workclass: Private | SHAP Value: 0.14
+Capital Loss: 0.0 | SHAP Value: 0.1
+3 other features: SHAP Value: 0.14

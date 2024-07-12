@@ -6,7 +6,7 @@ function PredictionDisplay({ datapointPath }) {
 
   useEffect(() => {
     const fetchMetadata = async () => {
-      const metadataFiles = import.meta.glob(`/src/assets/datapoints/*/metadata.json`);
+      const metadataFiles = import.meta.glob(`/src/assets/datapoints/**/metadata.json`);
       const metadataPath = Object.keys(metadataFiles).find(path => path.includes(datapointPath));
 
       if (metadataPath) {

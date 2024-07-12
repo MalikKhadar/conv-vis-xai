@@ -6,7 +6,7 @@ import $ from 'jquery';
 import ConfidenceDropdown from './ConfidenceDropdown';
 import { useLogger } from './Logger';
 
-const QuizComponent = ({ datapointPath, id, setDatapointPath, isChatting }) => {
+const QuizComponent = ({ datapointPath, id, datapointIndex, setDatapointIndex, isChatting }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [quizCompleted, setQuizCompleted] = useState(0);
   const [answers, setAnswers] = useState({});
@@ -110,7 +110,7 @@ const QuizComponent = ({ datapointPath, id, setDatapointPath, isChatting }) => {
       // Add the incremented chunk back to the array
       chunks.push(incrementedChunk);
 
-      setDatapointPath(chunks.join('/'));
+      setDatapointIndex(datapointIndex + 1);
     }
   }, [quizCompleted]);
 
