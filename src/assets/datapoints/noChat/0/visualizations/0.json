@@ -1,16 +1,1 @@
-[
-    {
-        "Age": 42.0,
-        "Workclass": " Private",
-        "Education-Num": 10.0,
-        "Marital Status": " Widowed",
-        "Occupation": " Exec-managerial",
-        "Relationship": " Not-in-family",
-        "Race": " White",
-        "Sex": " Female",
-        "Capital Gain": 0.0,
-        "Capital Loss": 0.0,
-        "Hours per week": 55.0,
-        "Country": " United-States"
-    }
-]
+[{"Age": 59.0, "Workclass": " Private", "Education-Num": 13.0, "Marital Status": " Never-married", "Occupation": " Craft-repair", "Relationship": " Not-in-family", "Race": " White", "Sex": " Male", "Capital Gain": 0.0, "Capital Loss": 0.0, "Hours per week": 50.0, "Country": " United-States"}]

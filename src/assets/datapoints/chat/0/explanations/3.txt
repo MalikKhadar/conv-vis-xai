@@ -1,13 +1,11 @@
 VISUALIZATION_NAME: Counterfactual data point table
 
-EXPLANATION:
-This table displays the main data point and five similar data points that had the opposite model prediction, meaning each data point was predicted as making more than $50k according to US census data except the main data point in the top row.
-Here's a layout of the table:
-|   Age | Workclass    |   Education-Num | Marital Status     | Occupation      | Relationship   | Race   | Sex    |   Capital Gain |   Capital Loss |   Hours per week | Country       |
-|------:|:-------------|----------------:|:-------------------|:----------------|:---------------|:-------|:-------|---------------:|---------------:|-----------------:|:--------------|
-|    42 | Private      |              10 | Widowed            | Exec-managerial | Not-in-family  | White  | Female |              0 |              0 |               55 | United-States |
-|    62 | Self-emp-inc |              11 | Married-civ-spouse | Exec-managerial | Husband        | White  | Male   |              0 |              0 |               50 | United-States |
-|    38 | Private      |              14 | Divorced           | Exec-managerial | Not-in-family  | White  | Male   |              0 |              0 |               45 | United-States |
-|    41 | Self-emp-inc |              10 | Married-civ-spouse | Exec-managerial | Husband        | White  | Male   |              0 |              0 |               50 | United-States |
-|    35 | Private      |              14 | Never-married      | Exec-managerial | Not-in-family  | White  | Female |              0 |              0 |               55 | United-States |
-|    43 | Self-emp-inc |              10 | Married-civ-spouse | Exec-managerial | Husband        | White  | Male   |              0 |              0 |               50 | United-States |
+This table displays the main data point and five similar data points that had the opposite model prediction:
+| Age   | Workclass    | Education-Num   | Marital Status     | Occupation       | Relationship   | Race   | Sex    | Capital Gain   | Capital Loss   | Hours per week   | Country       |
+|:------|:-------------|:----------------|:-------------------|:-----------------|:---------------|:-------|:-------|:---------------|:---------------|:-----------------|:--------------|
+| 39.0  | Private      | 10.0            | Married-civ-spouse | Adm-clerical     | Own-child      | Black  | Female | 0.0            | 0.0            | 50.0             | United-States |
+| 38.0  | -            | -               | -                  | Exec-managerial  | Other-relative | White  | Male   | -              | -              | -                | -             |
+| -     | -            | -               | -                  | Craft-repair     | Husband        | -      | Male   | -              | -              | 52.0             | -             |
+| 41.0  | -            | -               | -                  | Transport-moving | Husband        | White  | Male   | -              | -              | 65.0             | -             |
+| 43.0  | Self-emp-inc | 11.0            | -                  | Exec-managerial  | Other-relative | White  | Male   | -              | -              | -                | -             |
+| -     | -            | -               | -                  | Craft-repair     | Husband        | White  | Male   | -              | -              | -                | -             |

@@ -1,11 +1,11 @@
 VISUALIZATION_NAME: Similar data point table
 
 This table displays the main data point and five similar data points that had the same model prediction:
-|   Age | Workclass   |   Education-Num | Marital Status     | Occupation      | Relationship   | Race               | Sex   |   Capital Gain |   Capital Loss |   Hours per week | Country       |
-|------:|:------------|----------------:|:-------------------|:----------------|:---------------|:-------------------|:------|---------------:|---------------:|-----------------:|:--------------|
-|    51 | Federal-gov |              13 | Married-civ-spouse | Exec-managerial | Husband        | White              | Male  |              0 |           1902 |               40 | United-States |
-|    42 | Federal-gov |              14 | Married-civ-spouse | Prof-specialty  | Husband        | White              | Male  |              0 |           1902 |               40 | United-States |
-|    51 | Local-gov   |              13 | Married-civ-spouse | Prof-specialty  | Husband        | White              | Male  |              0 |           1902 |               40 | United-States |
-|    42 | Local-gov   |              13 | Married-civ-spouse | Protective-serv | Husband        | White              | Male  |              0 |           1902 |               40 | United-States |
-|    49 | Local-gov   |              14 | Married-civ-spouse | Prof-specialty  | Husband        | White              | Male  |              0 |           1902 |               40 | United-States |
-|    42 | Federal-gov |              14 | Married-civ-spouse | Prof-specialty  | Husband        | Asian-Pac-Islander | Male  |              0 |           1902 |               40 | South         |
+| Age   | Workclass   | Education-Num   | Marital Status     | Occupation        | Relationship   | Race   | Sex   | Capital Gain   | Capital Loss   | Hours per week   | Country       |
+|:------|:------------|:----------------|:-------------------|:------------------|:---------------|:-------|:------|:---------------|:---------------|:-----------------|:--------------|
+| 53.0  | Private     | 9.0             | Married-civ-spouse | Other-service     | Husband        | White  | Male  | 0.0            | 0.0            | 50.0             | Germany       |
+| 56.0  | -           | -               | -                  | Machine-op-inspct | -              | -      | -     | -              | -              | 40.0             | Italy         |
+| 54.0  | -           | -               | -                  | Machine-op-inspct | -              | -      | -     | -              | -              | 40.0             | England       |
+| -     | -           | -               | -                  | Craft-repair      | -              | -      | -     | -              | -              | 52.0             | United-States |
+| 54.0  | ?           | 10.0            | -                  | ?                 | -              | -      | -     | -              | -              | -                | United-States |
+| 52.0  | -           | -               | -                  | Adm-clerical      | -              | -      | -     | -              | -              | 48.0             | United-States |

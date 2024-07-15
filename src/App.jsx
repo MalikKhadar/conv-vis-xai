@@ -9,17 +9,18 @@ import TutorialPage from './TutorialPage';
 import VisualizationRenderer from './VisualizationRenderer';
 import OpenTutorialButton from './OpenTutorialButton';
 import TestKey from './TestKey'
-import { useAddLog } from './Logger';
+import { useAddCustomData, useAddLog, useUploadLogs } from './Logger';
 
 function App() {
   const [finishedTutorial, setFinishedTutorial] = useState(false);
   const [visualizationState, setVisualizationState] = useState(0);
   const addLog = useAddLog();
+  const addCustomData = useAddCustomData();
+  const uploadLogs = useUploadLogs();
   const hasLoggedRef = useRef(false); // Create a ref to track if logging has been done
   const [apiKey, setApiKey] = useState('');
   const [chatActive, setChatActive] = useState(false);
   const [datapointPath, setDatapointPath] = useState('');
-  const [id, setId] = useState('');
   const [tutorialOnly, setTutorialOnly] = useState(false);
   const [isChatting, setIsChatting] = useState(false);
   const [datapointIndex, setDatapointIndex] = useState(0);
@@ -48,6 +49,7 @@ function App() {
       setIsChatting(true);
       newPath = '/src/assets/datapoints/chat/';
     }
+    addCustomData('chat', urlParams.has('chat'));
 
     if (Math.random() > 0.5) {
       newDatapointOrder = ["1", "0"];
@@ -56,18 +58,17 @@ function App() {
     const updatedPath = newPath + (newDatapointOrder[datapointIndex] || '');
 
     setDatapointOrder(newDatapointOrder);
-    console.log(updatedPath);
     setDatapointPath(updatedPath);
-    setId(urlParams.get("id"));
+    addCustomData('participantId', urlParams.get("id"));
     setTutorialOnly(urlParams.has('tutorialOnly'));
     setLoaded(true);
   };
 
   useEffect(() => {
-    // console.log("the datapointIndex effect has run");
     if (loaded) {
       if (datapointIndex >= 2) {
         setDone(true);
+        uploadLogs();
         return;
       }
 
@@ -140,7 +141,6 @@ function App() {
           <div style={{ flex: "1" }}>
             <QuizComponent
               datapointPath={datapointPath}
-              id={id}
               datapointIndex={datapointIndex}
               setDatapointIndex={setDatapointIndex}
               isChatting={isChatting}

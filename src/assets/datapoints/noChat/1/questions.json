@@ -1,36 +1,36 @@
 [
     {
-      "question": "Do you agree with the model's prediction? Why or why not?",
-      "options": [
-        "Yes",
-        "No"
-      ],
-      "explain": true
+        "question": "Do you agree with the model's prediction? Why or why not?",
+        "options": [
+            "Yes",
+            "No"
+        ],
+        "explain": true
     },
     {
-      "question": "Would the model make the same prediction given these modifications to the features? \nCapital loss = 0",
-      "options": [
-        "Yes",
-        "No"
-      ],
-      "explain": false
+        "question": "Would the model make the same prediction given these modifications to the features? \nCountry = United-States",
+        "options": [
+            "Yes",
+            "No"
+        ],
+        "explain": false
     },
     {
-    "question": "Would the model make the same prediction given these modifications to the features? \nOccupation = Prof-specialty\nEducation-Num = 14",
-      "options": [
-        "Yes",
-        "No"
-      ],
-      "explain": false
+        "question": "Would the model make the same prediction given these modifications to the features? \nEducation-Num = 14\nRace = White",
+        "options": [
+            "Yes",
+            "No"
+        ],
+        "explain": false
     },
     {
-      "question": "What is the most important feature for this prediction?",
-      "options": [
-        "Capital Loss",
-        "Workclass",
-        "Capital Gain",
-        "Relationship"
-      ],
-      "explain": false
+        "question": "What is the most important feature for this prediction?",
+        "options": [
+            "Capital Loss",
+            "Workclass",
+            "Marital Status",
+            "Relationship"
+        ],
+        "explain": false
     }
-  ]
+]

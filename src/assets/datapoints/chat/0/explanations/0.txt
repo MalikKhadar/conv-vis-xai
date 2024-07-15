@@ -1,8 +1,7 @@
 VISUALIZATION_NAME: Main data point
 
 EXPLANATION:
-This table displays the main data point, which was predicted to have made less than $50k according to US census data from 1995.
-Here's a layout of the table:
-|   Age | Workclass   |   Education-Num | Marital Status   | Occupation      | Relationship   | Race   | Sex    |   Capital Gain |   Capital Loss |   Hours per week | Country       |
-|------:|:------------|----------------:|:-----------------|:----------------|:---------------|:-------|:-------|---------------:|---------------:|-----------------:|:--------------|
-|    42 | Private     |              10 | Widowed          | Exec-managerial | Not-in-family  | White  | Female |              0 |              0 |               55 | United-States |
+This table displays the feature values for the main data point:
+|   Age | Workclass   |   Education-Num | Marital Status     | Occupation   | Relationship   | Race   | Sex    |   Capital Gain |   Capital Loss |   Hours per week | Country       |
+|------:|:------------|----------------:|:-------------------|:-------------|:---------------|:-------|:-------|---------------:|---------------:|-----------------:|:--------------|
+|    39 | Private     |              10 | Married-civ-spouse | Adm-clerical | Own-child      | Black  | Female |              0 |              0 |               50 | United-States |

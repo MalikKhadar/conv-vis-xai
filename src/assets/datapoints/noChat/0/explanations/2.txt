@@ -1,13 +1,11 @@
 VISUALIZATION_NAME: Similar data point table
 
-EXPLANATION:
-This table displays the main data point and five similar data points that had the same model prediction, meaning each data point was predicted as making less than $50k according to 1995 US census data.
-Here's a layout of the table:
-|   Age | Workclass   |   Education-Num | Marital Status   | Occupation      | Relationship   | Race   | Sex    |   Capital Gain |   Capital Loss |   Hours per week | Country       |
-|------:|:------------|----------------:|:-----------------|:----------------|:---------------|:-------|:-------|---------------:|---------------:|-----------------:|:--------------|
-|    42 | Private     |              10 | Widowed          | Exec-managerial | Not-in-family  | White  | Female |              0 |              0 |               55 | United-States |
-|    45 | Private     |              10 | Widowed          | Exec-managerial | Unmarried      | White  | Female |              0 |              0 |               55 | United-States |
-|    38 | Private     |              10 | Widowed          | Exec-managerial | Not-in-family  | White  | Female |              0 |              0 |               40 | United-States |
-|    36 | Local-gov   |              11 | Never-married    | Protective-serv | Not-in-family  | Black  | Female |              0 |              0 |               60 | United-States |
-|    53 | Private     |              10 | Widowed          | Exec-managerial | Not-in-family  | White  | Female |              0 |              0 |               54 | United-States |
-|    41 | Private     |              11 | Never-married    | Prof-specialty  | Not-in-family  | White  | Female |              0 |              0 |               60 | United-States |
+This table displays the main data point and five similar data points that had the same model prediction:
+| Age   | Workclass   | Education-Num   | Marital Status   | Occupation     | Relationship   | Race   | Sex   | Capital Gain   | Capital Loss   | Hours per week   | Country       |
+|:------|:------------|:----------------|:-----------------|:---------------|:---------------|:-------|:------|:---------------|:---------------|:-----------------|:--------------|
+| 59.0  | Private     | 13.0            | Never-married    | Craft-repair   | Not-in-family  | White  | Male  | 0.0            | 0.0            | 50.0             | United-States |
+| 54.0  | Local-gov   | -               | -                | Prof-specialty | -              | -      | -     | -              | -              | -                | -             |
+| -     | -           | -               | Divorced         | Sales          | -              | -      | -     | -              | -              | 55.0             | -             |
+| 56.0  | -           | 14.0            | -                | Sales          | -              | -      | -     | -              | -              | -                | -             |
+| -     | -           | 14.0            | Divorced         | Prof-specialty | -              | -      | -     | -              | -              | -                | -             |
+| 51.0  | -           | -               | Divorced         | Sales          | -              | -      | -     | -              | -              | -                | -             |

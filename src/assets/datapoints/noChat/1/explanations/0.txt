@@ -2,6 +2,6 @@ VISUALIZATION_NAME: Main data point
 
 EXPLANATION:
 This table displays the feature values for the main data point:
-|   Age | Workclass   |   Education-Num | Marital Status     | Occupation      | Relationship   | Race   | Sex   |   Capital Gain |   Capital Loss |   Hours per week | Country       |
-|------:|:------------|----------------:|:-------------------|:----------------|:---------------|:-------|:------|---------------:|---------------:|-----------------:|:--------------|
-|    51 | Federal-gov |              13 | Married-civ-spouse | Exec-managerial | Husband        | White  | Male  |              0 |           1902 |               40 | United-States |
+|   Age | Workclass   |   Education-Num | Marital Status     | Occupation     | Relationship   | Race               | Sex   |   Capital Gain |   Capital Loss |   Hours per week | Country   |
+|------:|:------------|----------------:|:-------------------|:---------------|:---------------|:-------------------|:------|---------------:|---------------:|-----------------:|:----------|
+|    36 | Private     |              13 | Married-civ-spouse | Prof-specialty | Husband        | Asian-Pac-Islander | Male  |              0 |              0 |               45 | ?         |

@@ -2,11 +2,10 @@ import React, { useState, useEffect } from 'react';
 import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
 import { Button } from '@chatscope/chat-ui-kit-react';
 import TextField from '@mui/material/TextField';
-import $ from 'jquery';
 import ConfidenceDropdown from './ConfidenceDropdown';
-import { useLogger } from './Logger';
+import { useAddCustomData, useLogger } from './Logger';
 
-const QuizComponent = ({ datapointPath, id, datapointIndex, setDatapointIndex, isChatting }) => {
+const QuizComponent = ({ datapointPath, datapointIndex, setDatapointIndex, isChatting }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [quizCompleted, setQuizCompleted] = useState(0);
   const [answers, setAnswers] = useState({});
@@ -16,6 +15,7 @@ const QuizComponent = ({ datapointPath, id, datapointIndex, setDatapointIndex, i
   const [indexMap, setIndexMap] = useState({});
   const [confidenceRating, setConfidenceRating] = useState("");
   const { addLog, logs } = useLogger();
+  const addCustomData = useAddCustomData();
 
   useEffect(() => {
     const loadQuestions = async () => {
@@ -81,34 +81,13 @@ const QuizComponent = ({ datapointPath, id, datapointIndex, setDatapointIndex, i
 
   useEffect(() => {
     if (quizCompleted) {
-      let data = {
-        participantId: id,
-      };
-      data[`datapoint`] = datapointPath.split('/').pop();
-      data[`chat`] = isChatting.toString();
+      let datapoint = datapointPath.split('/').pop();
 
       Object.keys(answers).forEach((key, index) => {
-        data[`q${parseInt(key) + 1}`] = answers[key][0];
-        data[`e${parseInt(key) + 1}`] = answers[key][1];
-        data[`c${parseInt(key) + 1}`] = answers[key][2]-1;
+        addCustomData(`q${datapoint}.${parseInt(key) + 1}`, answers[key][0]);
+        addCustomData(`e${datapoint}.${parseInt(key) + 1}`, answers[key][1]);
+        addCustomData(`c${datapoint}.${parseInt(key) + 1}`, answers[key][2]-1);
       });
-
-      data[`logs`] = logs.join('\n');
-
-      $.ajax({
-        url: "https://script.google.com/macros/s/AKfycbweLsnfsFu-Q59DRQwoGUi3bz1BmoYXGcNaLOqmWYF6OErfcd3-VLFmLe-2LtS7-rZP/exec",
-        type: "post",
-        data: data,
-      });
-
-      const chunks = datapointPath.split('/');
-    
-      // Get the last chunk and increment it
-      const lastChunk = chunks.pop(); // Remove and get the last chunk
-      const incrementedChunk = (parseInt(lastChunk, 10) + 1).toString();
-      
-      // Add the incremented chunk back to the array
-      chunks.push(incrementedChunk);
 
       setDatapointIndex(datapointIndex + 1);
     }
@@ -119,15 +98,6 @@ const QuizComponent = ({ datapointPath, id, datapointIndex, setDatapointIndex, i
   }
 
   const currentQuestion = shuffledQuestions[currentIndex];
-
-  // if (quizCompleted) {
-  //   return (
-  //     <div>
-  //       <h3 style={{ textAlign: "center" }}>Quiz complete</h3>
-  //       <p style={{ textAlign: "center" }}>Thank you for participating! You can exit the page</p>
-  //     </div>
-  //   );
-  // }
 
   return (
     <div style={{ display: 'flex', width: '100%', height: "100%" }}>
