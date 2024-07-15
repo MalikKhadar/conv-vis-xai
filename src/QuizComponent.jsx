@@ -35,13 +35,13 @@ const QuizComponent = ({ datapointPath, datapointIndex, setDatapointIndex, isCha
             }
             return array;
           };
-    
+
           const shuffled = shuffleArray([...questionsData]);
           const map = shuffled.reduce((acc, question, index) => {
             acc[index] = questionsData.findIndex(q => q.question === question.question);
             return acc;
           }, {});
-    
+
           setShuffledQuestions(shuffled);
           setIndexMap(map);
         }
@@ -86,7 +86,7 @@ const QuizComponent = ({ datapointPath, datapointIndex, setDatapointIndex, isCha
       Object.keys(answers).forEach((key, index) => {
         addCustomData(`q${datapoint}.${parseInt(key) + 1}`, answers[key][0]);
         addCustomData(`e${datapoint}.${parseInt(key) + 1}`, answers[key][1]);
-        addCustomData(`c${datapoint}.${parseInt(key) + 1}`, answers[key][2]-1);
+        addCustomData(`c${datapoint}.${parseInt(key) + 1}`, answers[key][2] - 1);
       });
 
       setDatapointIndex(datapointIndex + 1);
@@ -100,43 +100,49 @@ const QuizComponent = ({ datapointPath, datapointIndex, setDatapointIndex, isCha
   const currentQuestion = shuffledQuestions[currentIndex];
 
   return (
-    <div style={{ display: 'flex', width: '100%', height: "100%" }}>
-      <h3 style={{ whiteSpace: 'pre-wrap', fontWeight: 'normal', flex: '1' }}>
-        <b>Question {currentIndex + 1}/{shuffledQuestions.length}</b>: {currentQuestion.question}
-      </h3>
-      <div style={{ display: 'flex', flexDirection: 'column', width: '40%', height: "100%" }}>
-        <div style={{ height: '1em' }} />
-        {currentQuestion.options.map((option, index) => (
+    <div style={{ display: 'flex', flexDirection: 'column', width: "100%", height: "100%" }}>
+      <div style={{ display: 'flex', width: '100%' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', width: "100%", height: "100%" }}>
+          <h3 style={{ whiteSpace: 'pre-wrap', fontWeight: 'normal', flex: '1' }}>
+            <b>Question {currentIndex + 1}/{shuffledQuestions.length}</b>: {currentQuestion.question}
+          </h3>
+          {currentQuestion.options.map((option, index) => (
+            <Button
+              key={index}
+              border
+              onClick={() => handleOptionClick(option)}
+              style={{
+                margin: '2px',
+                backgroundColor: selectedOption === option ? '#c6e3fa' : 'white',
+                flex: "1"
+              }}
+            >
+              {option}
+            </Button>
+          ))}
+        </div>
+        <div style={{ width: "50px" }}></div>
+        <div style={{ display: 'flex', flexDirection: 'column', width: '100%', height: "100%" }}>
+          <div style={{ height: '1em' }} />
+          <TextField
+            multiline
+            placeholder={`Explain your reasoning${currentQuestion.explain ? ' (response required)' : ''}`}
+            onChange={(e) => setExplanation(e.target.value)}
+            value={explanation}
+            style={{ margin: '5px 2px', overflowY: 'auto' }}
+          />
+          <ConfidenceDropdown confidenceRating={confidenceRating} setConfidenceRating={setConfidenceRating} style={{paddingBottom: "10px"}}/>
+          <div style={{ flex: "10" }} />
           <Button
-            key={index}
             border
-            onClick={() => handleOptionClick(option)}
-            style={{
-              margin: '2px',
-              backgroundColor: selectedOption === option ? '#c6e3fa' : 'white',
-              flex: "1"
-            }}
+            onClick={handleSubmit}
+            disabled={!selectedOption || !confidenceRating || (currentQuestion.explain && explanation.trim().length < 10)}
           >
-            {option}
+            Submit
           </Button>
-        ))}
-        <TextField
-          multiline
-          placeholder={`Explain your reasoning${currentQuestion.explain ? ' (response required)' : ''}`}
-          onChange={(e) => setExplanation(e.target.value)}
-          value={explanation}
-          style={{ margin: '5px 2px', overflowY: 'auto', maxHeight: "10vh" }}
-        />
-        <div style={{ flex: "10" }} />
-        <ConfidenceDropdown confidenceRating={confidenceRating} setConfidenceRating={setConfidenceRating} />
-        <Button
-          border
-          onClick={handleSubmit}
-          disabled={!selectedOption || !confidenceRating || (currentQuestion.explain && explanation.trim().length < 10)}
-        >
-          Submit
-        </Button>
+        </div>
       </div>
+      <div style={{ height: "5px" }} />
     </div>
   );
 };
