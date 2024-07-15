@@ -98,6 +98,14 @@ const ChatComponent = ({ apiKey, visualizationState, datapointPath, chatActive }
     };
     fetchVisualizations();
     fetchExplanations();
+    setMessages([
+      {
+        message: metadata["firstMessage"],
+        sentTime: "just now",
+        direction: "incoming",
+        sender: "assistant"
+      }
+    ]);
   }, [datapointPath]);
 
   useEffect(() => {
