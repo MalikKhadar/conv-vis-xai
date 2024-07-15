@@ -1,1 +1,0 @@
-const a=[{Age:51,Workclass:" Federal-gov","Education-Num":13,"Marital Status":" Married-civ-spouse",Occupation:" Exec-managerial",Relationship:" Husband",Race:" White",Sex:" Male","Capital Gain":0,"Capital Loss":1902,"Hours per week":40,Country:" United-States"}];export{a as default};

@@ -1,0 +1,1 @@
+const a=[{Age:59,Workclass:" Private","Education-Num":13,"Marital Status":" Never-married",Occupation:" Craft-repair",Relationship:" Not-in-family",Race:" White",Sex:" Male","Capital Gain":0,"Capital Loss":0,"Hours per week":50,Country:" United-States"}];export{a as default};
