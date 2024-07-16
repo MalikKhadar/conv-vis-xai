@@ -245,7 +245,7 @@ const ChatComponent = ({ apiKey, visualizationState, datapointPath, chatActive }
       }
     }
     explainVisualization();
-  }, [visualizationState]);
+  }, [visualizationState, chatActive, visualizations]);
 
   return (
     <div>

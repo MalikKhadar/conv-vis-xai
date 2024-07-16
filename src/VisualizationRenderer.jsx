@@ -40,8 +40,8 @@ const VisualizationRenderer = ({ parentState, defaultMessage, datapointPath }) =
       );
     } else if (visualization.path.endsWith('.png')) {
       return (
-        <div key={index} style={{ display: "flex", flexFlow: "column", alignItems: "center", height: "100%" }}>
-          <img src={visualization.module} style={{ maxHeight: "60vh" }} />
+        <div key={index} style={{ display: "flex", flexFlow: "column", justifyContent: "center", width: "100%", height: "100%" }}>
+          <img src={visualization.module} style={{ maxHeight: "65vh", minHeight: "80%", maxWidth: "100%", alignSelf: "center" }} />
         </div>
       );
     } else {
@@ -50,7 +50,7 @@ const VisualizationRenderer = ({ parentState, defaultMessage, datapointPath }) =
   };
 
   return (
-    <div style={{ margin: "auto", textAlign: "center", height: "100%" }}>
+    <div style={{ display: "block", margin: "auto", height: "100%" }}>
       {visualizations[visState] ? (
         renderVisualization(visualizations[visState], visState)
       ) : (

@@ -25,7 +25,7 @@ const OpenTutorialButton = () => {
         border
         onClick={openTutorial}
       >
-        Open Tutorial
+        Reopen Tutorial
       </Button>
     </div>
   );

@@ -9,6 +9,7 @@ import TutorialPage from './TutorialPage';
 import VisualizationRenderer from './VisualizationRenderer';
 import OpenTutorialButton from './OpenTutorialButton';
 import TestKey from './TestKey'
+import NextDatapointMessage from './NextDatapointMessage';
 import { useAddCustomData, useAddLog, useUploadLogs } from './Logger';
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
   const [isChatting, setIsChatting] = useState(false);
   const [datapointIndex, setDatapointIndex] = useState(0);
   const [datapointOrder, setDatapointOrder] = useState(["0", "1"]);
+  const [openNextDatapointMessage, setOpenNextDatapointMessage] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [done, setDone] = useState(false);
 
@@ -72,6 +74,11 @@ function App() {
         return;
       }
 
+      if (datapointIndex > 0) {
+        setOpenNextDatapointMessage(true);
+      }
+      setVisualizationState(0);
+
       const queryString = window.location.search;
       const urlParams = new URLSearchParams(queryString);
 
@@ -115,37 +122,36 @@ function App() {
   // main attraction
   return (
     <div className="App" style={{ display: 'flex', gap: '5px', height: "100vh", margin: "auto" }}>
+      <NextDatapointMessage openNextDatapointMessage={openNextDatapointMessage} setOpenNextDatapointMessage={setOpenNextDatapointMessage}/>
       {isChatting ? <TestKey apiKey={apiKey} setApiKey={setApiKey} setChatActive={setChatActive} /> : null}
 
       <div style={{ display: 'flex', flexDirection: 'column', flex: "1", height: "100vh", minWidth: "15vw", overflowY: "hidden" }}>
-        <OpenTutorialButton />
-        <div style={{ height: "3vh" }} />
+        <div style={{ flex: "0" }}>
+          <PredictionDisplay datapointPath={datapointPath} />
+        </div>
         <ExplanationButtons visualizationState={visualizationState} setVisualizationState={setVisualizationState} style={{ flex: "1" }} datapointPath={datapointPath} />
+        <div style={{ height: "5vh" }} />
+        <OpenTutorialButton />
       </div>
 
       <div style={{ width: "1px", height: "100vh", backgroundColor: "lightgrey" }} />
 
-      <div style={{ flex: "3", display: "flex", flexDirection: "column", height: "100vh", overflow: "hidden" }}>
-        <div style={{ flex: "0 0 auto" }}>
-          <PredictionDisplay datapointPath={datapointPath} />
-        </div>
-        <div style={{ flex: "1 1 auto", display: 'flex', flexDirection: 'column', overflowY: "auto" }}>
+      <div style={{ flex: "3", display: "flex", flexDirection: "column", height: "100vh", justifyContent: "space-between" }}>
+        <div style={{ flex: "1 1 auto", overflowY: "auto", alignContent: "center" }}>
           <VisualizationRenderer
             parentState={visualizationState}
             datapointPath={datapointPath}
             defaultMessage={"Click on the explanations to the left to help understand the model's prediction"}
           />
+        </div>
 
-          <div style={{ height: "1px", width: "100%", marginTop: "5px", marginBottom: "5px", backgroundColor: "lightgrey" }} />
-
-          <div style={{ flex: "1" }}>
-            <QuizComponent
-              datapointPath={datapointPath}
-              datapointIndex={datapointIndex}
-              setDatapointIndex={setDatapointIndex}
-              isChatting={isChatting}
-            />
-          </div>
+        <div style={{ flex: "1" }}>
+          <QuizComponent
+            datapointPath={datapointPath}
+            datapointIndex={datapointIndex}
+            setDatapointIndex={setDatapointIndex}
+            isChatting={isChatting}
+          />
         </div>
       </div>
 

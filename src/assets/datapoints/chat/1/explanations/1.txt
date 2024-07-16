@@ -1,14 +1,1 @@
 VISUALIZATION_NAME: SHAP waterfall plot
-
-EXPLANATION
-In this plot, the features that contributed to this prediction from most to least significant were:
-Age: 53.0 | SHAP Value: 1.17
-Marital Status:  Married-civ-spouse | SHAP Value: 0.9
-Hours per week: 50.0 | SHAP Value: 0.88
-Occupation:  Other-service | SHAP Value: -0.56
-Country:  Germany | SHAP Value: 0.56
-Relationship:  Husband | SHAP Value: 0.47
-Education-Num: 9.0 | SHAP Value: -0.22
-Capital Gain: 0.0 | SHAP Value: -0.21
-Capital Loss: 0.0 | SHAP Value: 0.1
-3 other features: SHAP Value: 0.18

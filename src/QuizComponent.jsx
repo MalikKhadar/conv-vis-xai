@@ -100,7 +100,7 @@ const QuizComponent = ({ datapointPath, datapointIndex, setDatapointIndex, isCha
   const currentQuestion = shuffledQuestions[currentIndex];
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', width: "100%", height: "100%" }}>
+    <div style={{ display: 'flex', flexDirection: 'column', width: "100%", height: "100%", justifyContent: "flex-end" }}>
       <div style={{ display: 'flex', width: '100%' }}>
         <div style={{ display: 'flex', flexDirection: 'column', width: "100%", height: "100%" }}>
           <h3 style={{ whiteSpace: 'pre-wrap', fontWeight: 'normal', flex: '1' }}>

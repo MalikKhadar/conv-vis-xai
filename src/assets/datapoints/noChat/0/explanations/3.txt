@@ -1,11 +1,1 @@
 VISUALIZATION_NAME: Counterfactual data point table
-
-This table displays the main data point and five similar data points that had the opposite model prediction:
-|   Age | Workclass   | Education-Num   | Marital Status   | Occupation      | Relationship   | Race   | Sex   | Capital Gain   | Capital Loss   | Hours per week   | Country       |
-|------:|:------------|:----------------|:-----------------|:----------------|:---------------|:-------|:------|:---------------|:---------------|:-----------------|:--------------|
-|    59 | Private     | 13.0            | Never-married    | Craft-repair    | Not-in-family  | White  | Male  | 0.0            | 0.0            | 50.0             | United-States |
-|    47 | -           | -               | -                | Sales           | -              | Black  | -     | -              | -              | 60.0             | -             |
-|    51 | -           | -               | -                | Sales           | -              | -      | -     | -              | -              | 55.0             | -             |
-|    46 | Local-gov   | -               | Divorced         | Protective-serv | -              | Black  | -     | -              | -              | -                | -             |
-|    54 | -           | -               | -                | Exec-managerial | -              | -      | -     | -              | -              | -                | -             |
-|    50 | -           | -               | -                | Exec-managerial | -              | -      | -     | -              | -              | -                | -             |

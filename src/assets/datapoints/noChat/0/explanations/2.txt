@@ -1,11 +1,1 @@
 VISUALIZATION_NAME: Similar data point table
-
-This table displays the main data point and five similar data points that had the same model prediction:
-| Age   | Workclass   | Education-Num   | Marital Status   | Occupation     | Relationship   | Race   | Sex   | Capital Gain   | Capital Loss   | Hours per week   | Country       |
-|:------|:------------|:----------------|:-----------------|:---------------|:---------------|:-------|:------|:---------------|:---------------|:-----------------|:--------------|
-| 59.0  | Private     | 13.0            | Never-married    | Craft-repair   | Not-in-family  | White  | Male  | 0.0            | 0.0            | 50.0             | United-States |
-| 54.0  | Local-gov   | -               | -                | Prof-specialty | -              | -      | -     | -              | -              | -                | -             |
-| -     | -           | -               | Divorced         | Sales          | -              | -      | -     | -              | -              | 55.0             | -             |
-| 56.0  | -           | 14.0            | -                | Sales          | -              | -      | -     | -              | -              | -                | -             |
-| -     | -           | 14.0            | Divorced         | Prof-specialty | -              | -      | -     | -              | -              | -                | -             |
-| 51.0  | -           | -               | Divorced         | Sales          | -              | -      | -     | -              | -              | -                | -             |
