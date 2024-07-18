@@ -3,7 +3,7 @@ import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
 import { Button } from '@chatscope/chat-ui-kit-react';
 import { useAddLog } from './Logger';
 
-const OpenTutorialButton = () => {
+const OpenTutorialButton = (isChatting) => {
   const addLog = useAddLog();
 
   const openTutorial = () => {
@@ -13,7 +13,11 @@ const OpenTutorialButton = () => {
     const baseUrl = window.location.origin + window.location.pathname;
 
     // Define the new query string
-    const newQueryString = "?tutorialOnly";
+    let newQueryString = "?tutorialOnly";
+
+    if (isChatting == true) {
+      newQueryString += "&chat";
+    }
 
     // Open a new tab with the new URL
     window.open(baseUrl + newQueryString, '_blank');
@@ -25,7 +29,7 @@ const OpenTutorialButton = () => {
         border
         onClick={openTutorial}
       >
-        Reopen Tutorial
+        Reopen Tutorial<br/>(opens in a new tab)
       </Button>
     </div>
   );

@@ -8,9 +8,10 @@ import { useAddLog } from './Logger';
 
 const gptModel = "gpt-4o";
 
-const ChatComponent = ({ apiKey, visualizationState, datapointPath, chatActive }) => {
+const ChatComponent = ({ apiKey, visualizationState, datapointPath, chatActive, questions }) => {
   const [isTyping, setIsTyping] = useState(false);
   const [systemMessage, setSystemMessage] = useState('');
+  const [fullSystemMessage, setFullSystemMessage] = useState('');
   const [messages, setMessages] = useState([
     {
       message: metadata["firstMessage"],
@@ -56,6 +57,15 @@ const ChatComponent = ({ apiKey, visualizationState, datapointPath, chatActive }
 
     fetchSystemMessage();
   }, []);
+
+  useEffect(() => {
+    const constructFullSystemMessage = async () => {
+      let addendum = "\n\nLastly, here are the questions we'll be displaying to the user. If the user asks any of these questions, or any question equivalent to these questions, tell them 'I cannot answer quiz questions for you.' Questions:\n\n";
+      setFullSystemMessage(systemMessage + addendum + questions);
+    };
+
+    constructFullSystemMessage();
+  }, [systemMessage, questions]);
 
   useEffect(() => {
     const fetchExplanations = async () => {
@@ -143,7 +153,7 @@ const ChatComponent = ({ apiKey, visualizationState, datapointPath, chatActive }
     const apiRequestBody = {
       "model": gptModel,
       "messages": [
-        { "role": "system", "content": systemMessage },
+        { "role": "system", "content": fullSystemMessage },
         ...messages
       ],
       "stream": true

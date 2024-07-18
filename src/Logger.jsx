@@ -29,6 +29,8 @@ export const LoggerProvider = ({ children }) => {
       type: "post",
       data: data,
     });
+    // After uploading, clear logs but not custom data since we'll upload after each datapoint
+    setLogs([]);
   };
 
   return (

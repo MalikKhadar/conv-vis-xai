@@ -1,6 +1,6 @@
 [
     {
-        "question": "Do you agree with the model's prediction? Why or why not?",
+        "question": "Do you think the model's prediction is accurate? Why or why not?",
         "options": [
             "Yes",
             "No"

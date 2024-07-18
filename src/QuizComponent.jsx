@@ -5,7 +5,7 @@ import TextField from '@mui/material/TextField';
 import ConfidenceDropdown from './ConfidenceDropdown';
 import { useAddCustomData, useLogger } from './Logger';
 
-const QuizComponent = ({ datapointPath, datapointIndex, setDatapointIndex, isChatting }) => {
+const QuizComponent = ({ datapointPath, datapointIndex, setDatapointIndex, setQuestions }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [quizCompleted, setQuizCompleted] = useState(0);
   const [answers, setAnswers] = useState({});
@@ -44,6 +44,11 @@ const QuizComponent = ({ datapointPath, datapointIndex, setDatapointIndex, isCha
 
           setShuffledQuestions(shuffled);
           setIndexMap(map);
+
+          // Extract question texts and format as JSON-like string
+          const questionTexts = questionsData.map(q => q.question);
+          // use setQuestions to transmit questions to system message in ChatComponent
+          setQuestions(JSON.stringify(questionTexts, null, 2));
         }
       } else {
         console.error(`No questions found for path: ${datapointPath}`);
@@ -81,12 +86,10 @@ const QuizComponent = ({ datapointPath, datapointIndex, setDatapointIndex, isCha
 
   useEffect(() => {
     if (quizCompleted) {
-      let datapoint = datapointPath.split('/').pop();
-
       Object.keys(answers).forEach((key, index) => {
-        addCustomData(`q${datapoint}.${parseInt(key) + 1}`, answers[key][0]);
-        addCustomData(`e${datapoint}.${parseInt(key) + 1}`, answers[key][1]);
-        addCustomData(`c${datapoint}.${parseInt(key) + 1}`, answers[key][2] - 1);
+        addCustomData(`q${parseInt(key) + 1}`, answers[key][0]);
+        addCustomData(`e${parseInt(key) + 1}`, answers[key][1]);
+        addCustomData(`c${parseInt(key) + 1}`, answers[key][2] - 1);
       });
 
       setDatapointIndex(datapointIndex + 1);
@@ -131,7 +134,7 @@ const QuizComponent = ({ datapointPath, datapointIndex, setDatapointIndex, isCha
             value={explanation}
             style={{ margin: '5px 2px', overflowY: 'auto' }}
           />
-          <ConfidenceDropdown confidenceRating={confidenceRating} setConfidenceRating={setConfidenceRating} style={{paddingBottom: "10px"}}/>
+          <ConfidenceDropdown confidenceRating={confidenceRating} setConfidenceRating={setConfidenceRating} style={{ paddingBottom: "10px" }} />
           <div style={{ flex: "10" }} />
           <Button
             border

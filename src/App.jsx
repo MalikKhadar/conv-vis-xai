@@ -24,6 +24,7 @@ function App() {
   const [datapointPath, setDatapointPath] = useState('');
   const [tutorialOnly, setTutorialOnly] = useState(false);
   const [isChatting, setIsChatting] = useState(false);
+  const [questions, setQuestions] = useState([])
   const [datapointIndex, setDatapointIndex] = useState(0);
   const [datapointOrder, setDatapointOrder] = useState(["0", "1"]);
   const [openNextDatapointMessage, setOpenNextDatapointMessage] = useState(false);
@@ -44,33 +45,36 @@ function App() {
     const urlParams = new URLSearchParams(queryString);
 
     // load datapoint paths
-    let newPath = '/src/assets/datapoints/noChat/';
-    let newDatapointOrder = ["0", "1"];
+    let correctDatapoint = '/src/assets/datapoints/correct/' + (Math.random() < 0.5 ? '0' : '1');
+    let incorrectDatapoint = '/src/assets/datapoints/incorrect/' + (Math.random() < 0.5 ? '0' : '1');
+
+    let newDatapointOrder = [correctDatapoint, incorrectDatapoint];
+
+    if (Math.random() > 0.5) {
+      newDatapointOrder = [incorrectDatapoint, correctDatapoint];
+    }
 
     if (urlParams.has('chat')) {
       setIsChatting(true);
-      newPath = '/src/assets/datapoints/chat/';
     }
     addCustomData('chat', urlParams.has('chat'));
 
-    if (Math.random() > 0.5) {
-      newDatapointOrder = ["1", "0"];
-    }
-
-    const updatedPath = newPath + (newDatapointOrder[datapointIndex] || '');
+    const newDatapointPath = newDatapointOrder[datapointIndex];
 
     setDatapointOrder(newDatapointOrder);
-    setDatapointPath(updatedPath);
+    setDatapointPath(newDatapointPath);
     addCustomData('participantId', urlParams.get("id"));
+    addCustomData('datapoint', newDatapointPath);
     setTutorialOnly(urlParams.has('tutorialOnly'));
     setLoaded(true);
   };
 
   useEffect(() => {
     if (loaded) {
+      uploadLogs();
+
       if (datapointIndex >= 2) {
         setDone(true);
-        uploadLogs();
         return;
       }
 
@@ -79,18 +83,8 @@ function App() {
       }
       setVisualizationState(0);
 
-      const queryString = window.location.search;
-      const urlParams = new URLSearchParams(queryString);
-
-      let newPath = '/src/assets/datapoints/noChat/';
-
-      if (urlParams.has('chat')) {
-        setIsChatting(true);
-        newPath = '/src/assets/datapoints/chat/';
-      }
-
-      const updatedPath = newPath + (datapointOrder[datapointIndex] || '');
-      setDatapointPath(updatedPath);
+      addCustomData('datapoint', datapointOrder[datapointIndex]);
+      setDatapointPath(datapointOrder[datapointIndex]);
     }
   }, [datapointIndex]);
 
@@ -101,7 +95,7 @@ function App() {
 
   if (done) {
     return (
-      <p style={{ textAlign: "center" }}>This segment of the study is complete. Please return to Qualtrics to finish this study (you may exit out of this page)</p>
+      <p style={{ textAlign: "center" }}>Please return to the Qualtrics tab to finish this study<br />(You may exit out of this tab)</p>
     )
   }
 
@@ -111,7 +105,10 @@ function App() {
       <div>
         <TutorialPage />
         {!tutorialOnly ?
-          <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+          <div style={{ display: "flex", flexFlow: "column", justifyContent: "center", alignItems: "center" }}>
+            <div><b>If you need help:</b> This tutorial will be available by clicking a "Reopen Tutorial" button.</div>
+            <b>Click the "Begin" button below to load the interface</b>
+            <br />
             <button onClick={handleFinishTutorial} style={{ marginBottom: "10px" }}>Begin</button>
           </div>
           : null}
@@ -122,7 +119,7 @@ function App() {
   // main attraction
   return (
     <div className="App" style={{ display: 'flex', gap: '5px', height: "100vh", margin: "auto" }}>
-      <NextDatapointMessage openNextDatapointMessage={openNextDatapointMessage} setOpenNextDatapointMessage={setOpenNextDatapointMessage}/>
+      <NextDatapointMessage openNextDatapointMessage={openNextDatapointMessage} setOpenNextDatapointMessage={setOpenNextDatapointMessage} />
       {isChatting ? <TestKey apiKey={apiKey} setApiKey={setApiKey} setChatActive={setChatActive} /> : null}
 
       <div style={{ display: 'flex', flexDirection: 'column', flex: "1", height: "100vh", minWidth: "15vw", overflowY: "hidden" }}>
@@ -131,7 +128,7 @@ function App() {
         </div>
         <ExplanationButtons visualizationState={visualizationState} setVisualizationState={setVisualizationState} style={{ flex: "1" }} datapointPath={datapointPath} />
         <div style={{ height: "5vh" }} />
-        <OpenTutorialButton />
+        <OpenTutorialButton isChatting={isChatting} />
       </div>
 
       <div style={{ width: "1px", height: "100vh", backgroundColor: "lightgrey" }} />
@@ -150,7 +147,7 @@ function App() {
             datapointPath={datapointPath}
             datapointIndex={datapointIndex}
             setDatapointIndex={setDatapointIndex}
-            isChatting={isChatting}
+            setQuestions={setQuestions}
           />
         </div>
       </div>
@@ -161,6 +158,7 @@ function App() {
           visualizationState={visualizationState}
           datapointPath={datapointPath}
           chatActive={chatActive}
+          questions={questions}
         />
         : <div />}
     </div>

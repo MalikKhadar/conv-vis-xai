@@ -1,6 +1,6 @@
 [
     {
-        "question": "Do you agree with the model's prediction? Why or why not?",
+        "question": "Do you think the model's prediction is accurate? Why or why not?",
         "options": [
             "Yes",
             "No"
@@ -8,7 +8,7 @@
         "explain": true
     },
     {
-        "question": "Would the model make the same prediction given these modifications to the features? \nCountry = United-States",
+        "question": "Would the model make the same prediction given these modifications to the features? \nCountry = United-States\nEducation-Num = 10",
         "options": [
             "Yes",
             "No"
@@ -16,7 +16,7 @@
         "explain": false
     },
     {
-        "question": "Would the model make the same prediction given these modifications to the features? \nEducation-Num = 14\nRace = White",
+        "question": "Would the model make the same prediction given these modifications to the features? \nCountry = England",
         "options": [
             "Yes",
             "No"
@@ -27,9 +27,9 @@
         "question": "What is the most important feature for this prediction?",
         "options": [
             "Capital Loss",
-            "Workclass",
-            "Marital Status",
-            "Relationship"
+            "Occupation",
+            "Capital Gain",
+            "Age"
         ],
         "explain": false
     }

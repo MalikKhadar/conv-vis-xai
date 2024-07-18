@@ -1,11 +1,11 @@
 import React from 'react';
+import { useState, useEffect } from 'react'
 import { styled } from '@mui/material/styles';
-import ComparisonTable from './ComparisonTable';
 import ImageRow from './ImageRow';
-import more from "./assets/tutorial/more.json";
-import less from "./assets/tutorial/less.json";
-import similar from "./assets/tutorial/similar.json";
-import counter from "./assets/tutorial/counter.json";
+import more from "./assets/tutorial/more.png";
+import less from "./assets/tutorial/less.png";
+import similar from "./assets/tutorial/similar.png";
+import counter from "./assets/tutorial/counter.png";
 import waterfall from "./assets/tutorial/waterfall.png";
 import bar from "./assets/tutorial/bar.png";
 import age from "./assets/tutorial/age.png";
@@ -20,6 +20,8 @@ import gain from "./assets/tutorial/gain.png";
 import loss from "./assets/tutorial/loss.png";
 import hours from "./assets/tutorial/hours.png";
 import country from "./assets/tutorial/country.png";
+import baseline from "./assets/tutorial/baseline.png";
+import chat from "./assets/tutorial/chat.png";
 
 const featureImages = [
   age,
@@ -67,7 +69,9 @@ const StyledListItem = styled('li')({
   marginBottom: '5px',
 });
 
-const TutorialPage = (isChatting) => {
+const TutorialPage = () => {
+  const [isChatting, setIsChatting] = useState(false);
+    
   const featureDescriptions = {
     age: 'age of the individual in years',
     workclass: 'type of employment the individual has',
@@ -83,18 +87,27 @@ const TutorialPage = (isChatting) => {
     'native-country': 'native country of the individual',
   };
 
+  useEffect(() => {
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+
+      if (urlParams.has('chat')) {
+        setIsChatting(true);
+      }
+  }, []);
+
   return (
     <StyledDiv>
       <StyledHeader>Introduction:</StyledHeader>
       <StyledParagraph>
-        In this study, you will answer questions about a machine learning model trained on the UCI Census income dataset. This tutorial provides information on the dataset, the model, and the types of visualizations that you will use to interpret the model. You may reopen this tutorial at any time.
+        In this study, you will answer questions about a machine learning model trained on the UCI Census income dataset. This tutorial provides information on the dataset, the model, and the types of visualizations that you will use to interpret the model. You can access this tutorial at any time from the study interface.
       </StyledParagraph>
 
       <StyledHeader>General Dataset Information:</StyledHeader>
       <StyledParagraph>
-        <b>UCI Census Income Dataset:</b> This dataset is extracted from 1994 census data. The prediction task is to determine whether a person's income exceeds $50k a year. 24.2% of data points in the dataset actually made more than $50k.
+        <b>UCI Census Income Dataset:</b> This dataset is extracted from 1994 census data. The prediction task is to determine whether a person's income exceeds $50k a year. 24.2% of data points in the dataset actually made more than $50k. If you would like to learn more about the dataset, here is <a href="https://archive.ics.uci.edu/dataset/20/census+income" target="_blank">a link to its webpage</a> (opens in a new tab).
       </StyledParagraph>
-      <StyledSub> 
+      <StyledSub>
         <b>Features:</b>
         <StyledList>
           {Object.keys(featureDescriptions).map((feature, index) => (
@@ -102,55 +115,55 @@ const TutorialPage = (isChatting) => {
           ))}
         </StyledList>
       </StyledSub>
+      <StyledHeader>Model details:</StyledHeader>
       <StyledParagraph>
-        <b>Model details:</b> For this task, the model predicted that 21.2% of data points made more than $50k. The accuracy of the model on its training set is 90.1%, andd the accuracy of the model on its test set is 87.3%
+        For this task, the model predicted that 21.2% of data points made more than $50k. The accuracy of the model on its training set is 90.1%, and the accuracy of the model on its test set is 87.3%
       </StyledParagraph>
 
-      <StyledHeader>Examples of Model Predictions:</StyledHeader>
       <StyledSub>
         <StyledParagraph>
-          <b>Positive Prediction Examples:</b> Two tabular examples where the model predicts that an individual makes <b>over $50k</b>:
+          <b>Positive Prediction Example:</b> Tabular example where the model predicts that an individual makes <b>over $50k</b>:
         </StyledParagraph>
-        <ComparisonTable tableData={more} />
-      </StyledSub>
-      <StyledSub>
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: "-300px" }}>
+          <img src={more} />
+        </div>
         <StyledParagraph>
-          <b>Negative Prediction Examples:</b> Two tabular examples where the model predicts that an individual makes <b>less than $50k</b>:
+          <b>Negative Prediction Example:</b> Tabular example where the model predicts that an individual makes <b>less than $50k</b>:
         </StyledParagraph>
-        <ComparisonTable tableData={less} />
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: "-300px" }}>
+          <img src={less} />
+        </div>
       </StyledSub>
 
-      <StyledHeader>How to Interpret Tables:</StyledHeader>
+      <StyledHeader>Explanation details:</StyledHeader>
       <StyledParagraph>
-        <b>Significance of First Row:</b> The first row represents the <b>main data point</b>.
-      </StyledParagraph>
-      <StyledParagraph>
-        <b>Dahes "-":</b> Dashes indicate that a data point has the same value as the main data point in that column.
+        Below, we describe the three main types of explanations you'll receive about the model's reasoning and how to interpret these.
       </StyledParagraph>
       <StyledSub>
         <StyledParagraph>
           <b>Similar Data Points Table:</b> Shows data points with similar feature values and the <b>same</b> prediction outcome as the main data point.
         </StyledParagraph>
-        <ComparisonTable tableData={similar} />
-      </StyledSub>
-      <StyledSub>
+        <div>
+          <StyledList>
+            <StyledListItem><b>Significance of First Row:</b> The first row represents the <b>main data point</b>.</StyledListItem>
+            <StyledListItem><b>Dashes "-":</b> Dashes indicate that a data point has the same value as the main data point for that column.</StyledListItem>
+          </StyledList>
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: "-110px" }}>
+          <img src={similar} />
+        </div>
         <StyledParagraph>
           <b>Counterfactual Data Points Table:</b> Shows data points with similar feature values but the <b>opposite</b> prediction outcome as the main data point:
         </StyledParagraph>
-        <ComparisonTable tableData={counter} />
-      </StyledSub>
-
-      <StyledHeader>How to Interpret the Waterfall Plot:</StyledHeader>
-      <StyledParagraph>
-        <b>What are SHAP Values?:</b> SHAP (SHapley Additive exPlanations) values are used to explain the output of machine learning models by showing the contribution of each feature to the prediction.
-      </StyledParagraph>
-      <StyledParagraph>
-        <b>Importance:</b> They provide a way to understand how each feature impacts the model's prediction, making the model more interpretable.
-      </StyledParagraph>
-      <StyledParagraph>
-        <b>Note:</b> SHAP values depend on the values of multiple features, so the same feature value can result in different SHAP values between data points.
-      </StyledParagraph>
-      <StyledSub>
+        <div>
+          <StyledList>
+            <StyledListItem><b>Significance of First Row:</b> The first row represents the <b>main data point</b>.</StyledListItem>
+            <StyledListItem><b>Dashes "-":</b> Dashes indicate that a data point has the same value as the main data point for that column.</StyledListItem>
+          </StyledList>
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: "-80px" }}>
+          <img src={counter} />
+        </div>
         <StyledParagraph>
           <b>SHAP Waterfall Plot:</b> Visualize the impact of each feature on the main data point's prediction.
         </StyledParagraph>
@@ -159,41 +172,79 @@ const TutorialPage = (isChatting) => {
             <StyledListItem><b>Threshold of Classification at 0:</b> A decision threshold that determines the classification outcome.</StyledListItem>
             <StyledListItem><b>Expected Value:</b> The baseline value if no features are considered.</StyledListItem>
             <StyledListItem><b>Feature Contributions:</b> Red bars indicate features that push the prediction higher, while blue bars indicate features that push it lower.</StyledListItem>
+            <StyledListItem><b>Explanation:</b> This plot explains why an individual was classified as making <b>more than $50k</b>. Features like 'marital status' and 'age' contributed <b>positively</b>, while 'education num' and 'capital gain' contributed <b>negatively</b>.</StyledListItem>
           </StyledList>
         </div>
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           <img src={waterfall} />
         </div>
-        <StyledParagraph>
-          <b>Explanation:</b> This plot explains why an individual was classified as making <b>more than $50k</b>. Features like 'marital status' and 'age' contributed <b>positively</b>, while 'education num' and 'capital gain' contributed <b>negatively</b>.
-        </StyledParagraph>
       </StyledSub>
 
-      <StyledHeader>Global Explanations:</StyledHeader>
+      <StyledHeader>Other Global Explanations of Interest:</StyledHeader>
       <StyledParagraph>
         Global explanations will help you understand how features influence the model's predictions across all datapoints
       </StyledParagraph>
       <StyledSub>
         <StyledParagraph>
-          <b>Global bar plot:</b> The global importance of each feature is taken to be the mean absolute value for that feature over all the given samples
+          <b>Global bar plot:</b> The global importance of each feature is taken to be the mean absolute SHAP value for that feature over all the given samples
         </StyledParagraph>
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           <img src={bar} />
         </div>
-      </StyledSub>
-      <StyledParagraph>
-        <b>Scatter plots:</b> These show the effect a single feature has on the predictions made by the model. Each dot is a single prediction from the dataset, the x-axis is the value of the feature, and the y-axis is the SHAP value for that feature which represents how much knowing that feature's value changes the output of the model for that sample's prediction. The light grey area at the bottom of the plot is a histogram showing the distribution of data values.
-      </StyledParagraph>
-      <StyledSub>
+        <StyledParagraph>
+          <b>Scatter plots:</b> These show the effect a single feature has on the predictions made by the model.
+        </StyledParagraph>
+        <div>
+          <StyledList>
+            <StyledListItem><b>Dots:</b> Each dot is a single prediction from the dataset, the x-axis is the value of the feature, and the y-axis is the SHAP value for that feature which represents how much knowing that feature's value changes the output of the model for that sample's prediction.</StyledListItem>
+            <StyledListItem><b>Grey bars:</b> The light grey area at the bottom of the plot is a histogram showing the distribution of data values.</StyledListItem>
+          </StyledList>
+        </div>
         <ImageRow images={featureImages} />
       </StyledSub>
 
+      <StyledHeader>Using the Interface:</StyledHeader>
       <StyledParagraph>
-        <b>If you need help:</b> This tutorial will be available by clicking an "open tutorial" button.
+        Global explanations will help you understand how features influence the model's predictions across all datapoints
       </StyledParagraph>
-      <StyledParagraph>
-        <b>Click the "Begin" button below to get started</b>
-      </StyledParagraph>
+      <StyledSub>
+        {!isChatting ?
+          <div>
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+              <img src={baseline} style={{ maxHeight: '70%', maxWidth: '70%' }} />
+            </div>
+            <StyledParagraph>
+              The interface presents multiple explanations to help you understand the model’s prediction, allowing you to answer a series of questions for each data point. There are <b>4 components</b> in the interface:
+            </StyledParagraph>
+            <div>
+              <StyledList>
+                <StyledListItem><b>1:</b> The prediction on the main data point, stating whether the model predicted that it made more or less than $50k.</StyledListItem>
+                <StyledListItem><b>2:</b> A list of explanations. These can be clicked to change the current explanation displayed in 3. The current explanation is highlighted in this list.</StyledListItem>
+                <StyledListItem><b>3:</b> The current explanation.</StyledListItem>
+                <StyledListItem><b>4:</b> The multiple choice quiz. You will use information from the explanations to answer these questions. Select one of the answers below the question text, explain why you selected it in the “Explain your reasoning” field, select an option from the “Confidence in your answer” dropdown, and then click the “Submit” button for each question.</StyledListItem>
+              </StyledList>
+            </div>
+          </div>
+          :
+          <div>
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+              <img src={chat} style={{ maxHeight: '70%', maxWidth: '70%' }} />
+            </div>
+            <StyledParagraph>
+              The interface presents multiple explanations and a chat assistant to help you understand the model’s prediction, allowing you to answer a series of questions for each data point. Once you’ve entered your GPT API key, an interface with the following <b>5 components</b> will appear:
+            </StyledParagraph>
+            <div>
+              <StyledList>
+                <StyledListItem><b>1:</b> The prediction on the main data point, stating whether the model predicted that it made more or less than $50k.</StyledListItem>
+                <StyledListItem><b>2:</b> A list of explanations. These can be clicked to change the current explanation displayed in 3. The current explanation is highlighted in this list.</StyledListItem>
+                <StyledListItem><b>3:</b> The current explanation.</StyledListItem>
+                <StyledListItem><b>4:</b> The multiple choice quiz. You will use information from the explanations to answer these questions. Select one of the answers below the question text, explain why you selected it in the “Explain your reasoning” field, select an option from the “Confidence in your answer” dropdown, and then click the “Submit” button for each question.</StyledListItem>
+                <StyledListItem><b>5:</b> The chat assistant. It can answer questions about the current explanation and the XAI interpretation contents of this tutorial. It will not answer any other questions, nor will it answer questions from 4.</StyledListItem>
+              </StyledList>
+            </div>
+          </div>
+        }
+      </StyledSub>
     </StyledDiv >
   );
 }
