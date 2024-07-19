@@ -44,9 +44,10 @@ function App() {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
 
+    const datapointAllocation = urlParams.get("d");
     // load datapoint paths
-    let correctDatapoint = '/src/assets/datapoints/correct/' + (Math.random() < 0.5 ? '0' : '1');
-    let incorrectDatapoint = '/src/assets/datapoints/incorrect/' + (Math.random() < 0.5 ? '0' : '1');
+    let correctDatapoint = '/src/assets/datapoints/correct/' + datapointAllocation.charAt(0);
+    let incorrectDatapoint = '/src/assets/datapoints/incorrect/' + datapointAllocation.charAt(1);
 
     let newDatapointOrder = [correctDatapoint, incorrectDatapoint];
 
