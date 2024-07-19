@@ -8,7 +8,7 @@
         "explain": true
     },
     {
-        "question": "Would the model make the same prediction given these modifications to the features? \nCountry = United-States",
+        "question": "Would the model make the same prediction given these modifications to the features? \nSex = Male",
         "options": [
             "Yes",
             "No"
@@ -16,7 +16,7 @@
         "explain": false
     },
     {
-        "question": "Would the model make the same prediction given these modifications to the features? \nEducation-Num = 14\nRace = White",
+        "question": "Would the model make the same prediction given these modifications to the features? \nSex = Male\nRace = Asian-Pac-Islander",
         "options": [
             "Yes",
             "No"
@@ -26,10 +26,10 @@
     {
         "question": "What is the most important feature for this prediction?",
         "options": [
-            "Capital Loss",
-            "Workclass",
+            "Relationship",
             "Marital Status",
-            "Relationship"
+            "Sex",
+            "Race"
         ],
         "explain": false
     }
