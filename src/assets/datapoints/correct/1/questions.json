@@ -8,7 +8,7 @@
         "explain": true
     },
     {
-        "question": "Would the model make the same prediction given these modifications to the features? \nCountry = United-States\nEducation-Num = 10",
+        "question": "Would the model make the same prediction given these modifications to the features? \nCountry = United-States\nEducation = Some-college",
         "options": [
             "Yes",
             "No"
