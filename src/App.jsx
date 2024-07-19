@@ -95,7 +95,7 @@ function App() {
 
   if (done) {
     return (
-      <p style={{ textAlign: "center" }}>Please return to the Qualtrics tab to finish this study<br />(You may exit out of this tab)</p>
+      <p style={{ textAlign: "center" }}>Please return to the Qualtrics and enter the following code: {isChatting ? "gopher" : "continue"}<br />(You may exit out of this tab)</p>
     )
   }
 

@@ -4,7 +4,7 @@ The dataset being used for this task is a modified version of the census income 
 {
     age: 'age of the individual in years',
     workclass: 'type of employment the individual has',
-    'education-num': 'corresponds to the individual\'s level of education',
+    'education': 'corresponds to the individual\'s level of education',
     'marital-status': 'marital status of the individual',
     occupation: 'type of occupation the individual is engaged in',
     relationship: 'relationship status of the individual',
@@ -15,6 +15,25 @@ The dataset being used for this task is a modified version of the census income 
     'hours-per-week': 'number of hours worked per week',
     'native-country': 'native country of the individual'
 }
+
+education levels, listed from lowest to highest: [
+  "Preschool",
+  "1st-4th",
+  "5th-6th",
+  "7th-8th",
+  "9th",
+  "10th",
+  "11th",
+  "12th",
+  "HS-grad (High school graduate)",
+  "Some-college",
+  "Assoc-voc (Associate - vocational)",
+  "Assoc-acdm (Associate - academic)",
+  "Bachelors",
+  "Masters",
+  "Prof-school (Professional school)",
+  "Doctorate"
+]
 
 In this task, the model predicted that 21.2% of data points made more than $50k. The accuracy of the model on its training set is 90.1%, and the accuracy of the model on its test set is 87.3%.
 

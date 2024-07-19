@@ -71,11 +71,11 @@ const StyledListItem = styled('li')({
 
 const TutorialPage = () => {
   const [isChatting, setIsChatting] = useState(false);
-    
+
   const featureDescriptions = {
     age: 'age of the individual in years',
     workclass: 'type of employment the individual has',
-    'education-num': 'corresponds to the individual\'s level of education',
+    'education': 'the highest level of education completed by the individual',
     'marital-status': 'marital status of the individual',
     occupation: 'type of occupation the individual is engaged in',
     relationship: 'relationship status of the individual',
@@ -87,20 +87,42 @@ const TutorialPage = () => {
     'native-country': 'native country of the individual',
   };
 
-  useEffect(() => {
-      const queryString = window.location.search;
-      const urlParams = new URLSearchParams(queryString);
+  const ordinalEducations = [
+    "Preschool",
+    "1st-4th",
+    "5th-6th",
+    "7th-8th",
+    "9th",
+    "10th",
+    "11th",
+    "12th",
+    "HS-grad (High school graduate)",
+    "Some-college",
+    "Assoc-voc (Associate - vocational)",
+    "Assoc-acdm (Associate - academic)",
+    "Bachelors",
+    "Masters",
+    "Prof-school (Professional school)",
+    "Doctorate"
+  ];
 
-      if (urlParams.has('chat')) {
-        setIsChatting(true);
-      }
-  }, []);
+  useEffect(() => {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+
+    if (urlParams.has('chat')) {
+      setIsChatting(true);
+    }
+  },
+    []);
 
   return (
     <StyledDiv>
       <StyledHeader>Introduction:</StyledHeader>
       <StyledParagraph>
-        In this study, you will answer questions about a machine learning model trained on the UCI Census income dataset. This tutorial provides information on the dataset, the model, and the types of visualizations that you will use to interpret the model. You can access this tutorial at any time from the study interface.
+        In this study,
+        you will answer questions about a machine learning model trained on the UCI Census income dataset. This tutorial provides information on the dataset,
+        the model, and the types of visualizations that you will use to interpret the model. You can access this tutorial at any time from the study interface.
       </StyledParagraph>
 
       <StyledHeader>General Dataset Information:</StyledHeader>
@@ -115,6 +137,15 @@ const TutorialPage = () => {
           ))}
         </StyledList>
       </StyledSub>
+      <StyledSub>
+        <b>Education levels, ranked from lowest to highest:</b>
+        <StyledList>
+          {ordinalEducations.map((level, index) => (
+            <StyledListItem key={index}>{level}</StyledListItem>
+          ))}
+        </StyledList>
+      </StyledSub>
+
       <StyledHeader>Model details:</StyledHeader>
       <StyledParagraph>
         For this task, the model predicted that 21.2% of data points made more than $50k. The accuracy of the model on its training set is 90.1%, and the accuracy of the model on its test set is 87.3%
