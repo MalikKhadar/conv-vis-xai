@@ -121,13 +121,12 @@ const TutorialPage = () => {
       <StyledHeader>Introduction:</StyledHeader>
       <StyledParagraph>
         In this study,
-        you will answer questions about a machine learning model trained on the UCI Census income dataset. This tutorial provides information on the dataset,
-        the model, and the types of visualizations that you will use to interpret the model. You can access this tutorial at any time from the study interface.
+        you will use an interface to answer questions about a machine learning model trained on the UCI Census income dataset. This tutorial describes the dataset, the model, the interface, and the visualizations presented in the interface. You can access this tutorial at any time from the interface.
       </StyledParagraph>
 
       <StyledHeader>General Dataset Information:</StyledHeader>
       <StyledParagraph>
-        <b>UCI Census Income Dataset:</b> This dataset is extracted from 1994 census data. The prediction task is to determine whether a person's income exceeds $50k a year. 24.2% of data points in the dataset actually made more than $50k. If you would like to learn more about the dataset, here is <a href="https://archive.ics.uci.edu/dataset/20/census+income" target="_blank">a link to its webpage</a> (opens in a new tab).
+        <b>UCI Census Income Dataset:</b> This dataset is extracted from 1994 census data. The prediction task is to determine whether a person's income exceeds $50k a year. 24.2% of data points in the dataset actually made more than $50k. Many feature values are abbreviated and will remain unexplained.
       </StyledParagraph>
       <StyledSub>
         <b>Features:</b>
@@ -153,17 +152,62 @@ const TutorialPage = () => {
 
       <StyledSub>
         <StyledParagraph>
-          <b>Positive Prediction Example:</b> Tabular example where the model predicts that an individual makes <b>over $50k</b>:
+          <b>Positive Prediction Example:</b> The model predicts that this data point makes <b>over $50k</b>:
         </StyledParagraph>
         <div style={{ display: 'flex', justifyContent: 'center', marginBottom: "-300px" }}>
           <img src={more} />
         </div>
         <StyledParagraph>
-          <b>Negative Prediction Example:</b> Tabular example where the model predicts that an individual makes <b>less than $50k</b>:
+          <b>Negative Prediction Example:</b> The model predicts that this data point makes <b>less than $50k</b>:
         </StyledParagraph>
         <div style={{ display: 'flex', justifyContent: 'center', marginBottom: "-300px" }}>
           <img src={less} />
         </div>
+      </StyledSub>
+
+      <StyledHeader>Using the Interface:</StyledHeader>
+      <StyledParagraph>
+        You will use the following interface to answer sets of 4 questions about two data points, one after the other.
+      </StyledParagraph>
+      <StyledSub>
+        {!isChatting ?
+          <div>
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+              <img src={baseline} style={{ maxHeight: '70%', maxWidth: '70%' }} />
+            </div>
+            <StyledParagraph>
+              The interface presents multiple explanations to help you understand the model’s prediction, allowing you to answer a series of questions for each data point. There are <b>5 components</b> in the interface:
+            </StyledParagraph>
+            <div>
+              <StyledList>
+                <StyledListItem><b>1:</b> The prediction on the main data point, stating whether the model predicted that it made more or less than $50k.</StyledListItem>
+                <StyledListItem><b>2:</b> The multiple choice quiz. You will use information from the explanations to answer these questions. Select one of the answers below the question text, explain why you selected it in the “Explain your reasoning” field, select an option from the “Confidence in your answer” dropdown, and then click the “Submit” button for each question.</StyledListItem>
+                <StyledListItem><b>3:</b> The current explanation.</StyledListItem>
+                <StyledListItem><b>4:</b> The list of explanations. These can be clicked to change the current explanation. The current explanation is highlighted in this list.</StyledListItem>
+                <StyledListItem><b>5:</b> The reopen tutorial button.</StyledListItem>
+              </StyledList>
+            </div>
+          </div>
+          :
+          <div>
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+              <img src={chat} style={{ maxHeight: '70%', maxWidth: '70%' }} />
+            </div>
+            <StyledParagraph>
+              The interface presents multiple explanations and a chat assistant to help you understand the model’s prediction, allowing you to answer a series of questions for each data point. Once you’ve entered your GPT API key, an interface with the following <b>6 components</b> will appear:
+            </StyledParagraph>
+            <div>
+              <StyledList>
+                <StyledListItem><b>1:</b> The prediction on the main data point, stating whether the model predicted that it made more or less than $50k.</StyledListItem>
+                <StyledListItem><b>2:</b> The multiple choice quiz. You will use information from the explanations to answer these questions. Select one of the answers below the question text, explain why you selected it in the “Explain your reasoning” field, select an option from the “Confidence in your answer” dropdown, and then click the “Submit” button for each question.</StyledListItem>
+                <StyledListItem><b>3:</b> The current explanation.</StyledListItem>
+                <StyledListItem><b>4:</b> The chat assistant. It can answer questions about the current explanation and the XAI interpretation contents of this tutorial. It will not answer any other questions, nor will it answer quiz questions.</StyledListItem>
+                <StyledListItem><b>5:</b> The list of explanations. These can be clicked to change the current explanation. The current explanation is highlighted in this list.</StyledListItem>
+                <StyledListItem><b>6:</b> The reopen tutorial button.</StyledListItem>
+              </StyledList>
+            </div>
+          </div>
+        }
       </StyledSub>
 
       <StyledHeader>Explanation details:</StyledHeader>
@@ -211,9 +255,9 @@ const TutorialPage = () => {
         </div>
       </StyledSub>
 
-      <StyledHeader>Other Global Explanations of Interest:</StyledHeader>
+      <StyledHeader>Other Global Explanations of Interest (optional):</StyledHeader>
       <StyledParagraph>
-        Global explanations will help you understand how features influence the model's predictions across all datapoints
+        Global explanations help you understand how features influence the model's predictions across all datapoints. These visualizations won't be presented in the interface, but can help give a more general understanding of the model.
       </StyledParagraph>
       <StyledSub>
         <StyledParagraph>
@@ -232,51 +276,6 @@ const TutorialPage = () => {
           </StyledList>
         </div>
         <ImageRow images={featureImages} />
-      </StyledSub>
-
-      <StyledHeader>Using the Interface:</StyledHeader>
-      <StyledParagraph>
-        You will use the following interface to answer sets of 4 questions about two data points, one after the other.
-      </StyledParagraph>
-      <StyledSub>
-        {!isChatting ?
-          <div>
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
-              <img src={baseline} style={{ maxHeight: '70%', maxWidth: '70%' }} />
-            </div>
-            <StyledParagraph>
-              The interface presents multiple explanations to help you understand the model’s prediction, allowing you to answer a series of questions for each data point. There are <b>4 components</b> in the interface:
-            </StyledParagraph>
-            <div>
-              <StyledList>
-                <StyledListItem><b>1:</b> The prediction on the main data point, stating whether the model predicted that it made more or less than $50k.</StyledListItem>
-                <StyledListItem><b>2:</b> The multiple choice quiz. You will use information from the explanations to answer these questions. Select one of the answers below the question text, explain why you selected it in the “Explain your reasoning” field, select an option from the “Confidence in your answer” dropdown, and then click the “Submit” button for each question.</StyledListItem>
-                <StyledListItem><b>3:</b> The current explanation.</StyledListItem>
-                <StyledListItem><b>4:</b> The list of explanations. These can be clicked to change the current explanation. The current explanation is highlighted in this list.</StyledListItem>
-                <StyledListItem><b>5:</b> The reopen tutorial button.</StyledListItem>
-              </StyledList>
-            </div>
-          </div>
-          :
-          <div>
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
-              <img src={chat} style={{ maxHeight: '70%', maxWidth: '70%' }} />
-            </div>
-            <StyledParagraph>
-              The interface presents multiple explanations and a chat assistant to help you understand the model’s prediction, allowing you to answer a series of questions for each data point. Once you’ve entered your GPT API key, an interface with the following <b>5 components</b> will appear:
-            </StyledParagraph>
-            <div>
-              <StyledList>
-                <StyledListItem><b>1:</b> The prediction on the main data point, stating whether the model predicted that it made more or less than $50k.</StyledListItem>
-                <StyledListItem><b>2:</b> The multiple choice quiz. You will use information from the explanations to answer these questions. Select one of the answers below the question text, explain why you selected it in the “Explain your reasoning” field, select an option from the “Confidence in your answer” dropdown, and then click the “Submit” button for each question.</StyledListItem>
-                <StyledListItem><b>3:</b> The current explanation.</StyledListItem>
-                <StyledListItem><b>4:</b> The chat assistant. It can answer questions about the current explanation and the XAI interpretation contents of this tutorial. It will not answer any other questions, nor will it answer quiz questions.</StyledListItem>
-                <StyledListItem><b>5:</b> The list of explanations. These can be clicked to change the current explanation. The current explanation is highlighted in this list.</StyledListItem>
-                <StyledListItem><b>6:</b> The reopen tutorial button.</StyledListItem>
-              </StyledList>
-            </div>
-          </div>
-        }
       </StyledSub>
     </StyledDiv >
   );
