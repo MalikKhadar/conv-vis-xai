@@ -13,7 +13,7 @@ const OpenTutorialButton = (isChatting) => {
     const baseUrl = window.location.origin + window.location.pathname;
 
     // Define the new query string
-    let newQueryString = "?tutorialOnly";
+    let newQueryString = "?tutorialOnly&d=00";
 
     if (isChatting == true) {
       newQueryString += "&chat";

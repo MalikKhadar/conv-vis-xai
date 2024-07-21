@@ -200,10 +200,10 @@ const TutorialPage = () => {
         </StyledParagraph>
         <div>
           <StyledList>
-            <StyledListItem><b>Threshold of Classification at 0:</b> A decision threshold that determines the classification outcome.</StyledListItem>
+            <StyledListItem><b>Threshold of Classification at 0:</b> A decision threshold that determines the classification outcome. Negative values indicate a prediction of less than $50k, and nonnegative values indicate a perdiction of more than $50k.</StyledListItem>
             <StyledListItem><b>Expected Value:</b> The baseline value if no features are considered.</StyledListItem>
             <StyledListItem><b>Feature Contributions:</b> Red bars indicate features that push the prediction higher, while blue bars indicate features that push it lower.</StyledListItem>
-            <StyledListItem><b>Explanation:</b> This plot explains why an individual was classified as making <b>more than $50k</b>. Features like 'marital status' and 'age' contributed <b>positively</b>, while 'education num' and 'capital gain' contributed <b>negatively</b>.</StyledListItem>
+            <StyledListItem><b>Note:</b> The same feature value can have different SHAP values for different data points (so an age of 47 doesn't always result in +0.94).</StyledListItem>
           </StyledList>
         </div>
         <div style={{ display: 'flex', justifyContent: 'center' }}>
@@ -236,7 +236,7 @@ const TutorialPage = () => {
 
       <StyledHeader>Using the Interface:</StyledHeader>
       <StyledParagraph>
-        Global explanations will help you understand how features influence the model's predictions across all datapoints
+        You will use the following interface to answer sets of 4 questions about two data points, one after the other.
       </StyledParagraph>
       <StyledSub>
         {!isChatting ?
@@ -250,9 +250,10 @@ const TutorialPage = () => {
             <div>
               <StyledList>
                 <StyledListItem><b>1:</b> The prediction on the main data point, stating whether the model predicted that it made more or less than $50k.</StyledListItem>
-                <StyledListItem><b>2:</b> A list of explanations. These can be clicked to change the current explanation displayed in 3. The current explanation is highlighted in this list.</StyledListItem>
+                <StyledListItem><b>2:</b> The multiple choice quiz. You will use information from the explanations to answer these questions. Select one of the answers below the question text, explain why you selected it in the “Explain your reasoning” field, select an option from the “Confidence in your answer” dropdown, and then click the “Submit” button for each question.</StyledListItem>
                 <StyledListItem><b>3:</b> The current explanation.</StyledListItem>
-                <StyledListItem><b>4:</b> The multiple choice quiz. You will use information from the explanations to answer these questions. Select one of the answers below the question text, explain why you selected it in the “Explain your reasoning” field, select an option from the “Confidence in your answer” dropdown, and then click the “Submit” button for each question.</StyledListItem>
+                <StyledListItem><b>4:</b> The list of explanations. These can be clicked to change the current explanation. The current explanation is highlighted in this list.</StyledListItem>
+                <StyledListItem><b>5:</b> The reopen tutorial button.</StyledListItem>
               </StyledList>
             </div>
           </div>
@@ -267,10 +268,11 @@ const TutorialPage = () => {
             <div>
               <StyledList>
                 <StyledListItem><b>1:</b> The prediction on the main data point, stating whether the model predicted that it made more or less than $50k.</StyledListItem>
-                <StyledListItem><b>2:</b> A list of explanations. These can be clicked to change the current explanation displayed in 3. The current explanation is highlighted in this list.</StyledListItem>
+                <StyledListItem><b>2:</b> The multiple choice quiz. You will use information from the explanations to answer these questions. Select one of the answers below the question text, explain why you selected it in the “Explain your reasoning” field, select an option from the “Confidence in your answer” dropdown, and then click the “Submit” button for each question.</StyledListItem>
                 <StyledListItem><b>3:</b> The current explanation.</StyledListItem>
-                <StyledListItem><b>4:</b> The multiple choice quiz. You will use information from the explanations to answer these questions. Select one of the answers below the question text, explain why you selected it in the “Explain your reasoning” field, select an option from the “Confidence in your answer” dropdown, and then click the “Submit” button for each question.</StyledListItem>
-                <StyledListItem><b>5:</b> The chat assistant. It can answer questions about the current explanation and the XAI interpretation contents of this tutorial. It will not answer any other questions, nor will it answer questions from 4.</StyledListItem>
+                <StyledListItem><b>4:</b> The chat assistant. It can answer questions about the current explanation and the XAI interpretation contents of this tutorial. It will not answer any other questions, nor will it answer quiz questions.</StyledListItem>
+                <StyledListItem><b>5:</b> The list of explanations. These can be clicked to change the current explanation. The current explanation is highlighted in this list.</StyledListItem>
+                <StyledListItem><b>6:</b> The reopen tutorial button.</StyledListItem>
               </StyledList>
             </div>
           </div>
