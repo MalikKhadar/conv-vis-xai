@@ -147,7 +147,7 @@ const TutorialPage = () => {
 
       <StyledHeader>Model details:</StyledHeader>
       <StyledParagraph>
-        For this task, the model predicted that 21.2% of data points made more than $50k. The accuracy of the model on its training set is 90.1%, and the accuracy of the model on its test set is 87.3%
+        For this task, the model predicted that 21.2% of data points made more than $50k. The accuracy of the model on its training set is 90.1%, and the accuracy of the model on its test set is 87.3%. Below, you'll find two examples of data points and predictions that the model made on them (these data points won't be used in the interface)
       </StyledParagraph>
 
       <StyledSub>
@@ -212,11 +212,11 @@ const TutorialPage = () => {
 
       <StyledHeader>Explanation details:</StyledHeader>
       <StyledParagraph>
-        Below, we describe the three main types of explanations you'll receive about the model's reasoning and how to interpret these.
+        Below, we describe the three main types of explanations you'll receive about the model's reasoning and how to interpret them.
       </StyledParagraph>
       <StyledSub>
         <StyledParagraph>
-          <b>Similar Data Points Table:</b> Shows data points with similar feature values and the <b>same</b> prediction outcome as the main data point.
+          <b>Similar Data Points Table:</b> Shows data points with similar feature values and the <b>same</b> prediction outcome as the main data point (the data point that the quiz asks about).
         </StyledParagraph>
         <div>
           <StyledList>
@@ -232,8 +232,7 @@ const TutorialPage = () => {
         </StyledParagraph>
         <div>
           <StyledList>
-            <StyledListItem><b>Significance of First Row:</b> The first row represents the <b>main data point</b>.</StyledListItem>
-            <StyledListItem><b>Dashes "-":</b> Dashes indicate that a data point has the same value as the main data point for that column.</StyledListItem>
+            <StyledListItem>It's interpreted similarly to the Similar Data Points Table.</StyledListItem>
           </StyledList>
         </div>
         <div style={{ display: 'flex', justifyContent: 'center', marginBottom: "-80px" }}>
@@ -244,7 +243,7 @@ const TutorialPage = () => {
         </StyledParagraph>
         <div>
           <StyledList>
-            <StyledListItem><b>Threshold of Classification at 0:</b> A decision threshold that determines the classification outcome. Negative values indicate a prediction of less than $50k, and nonnegative values indicate a perdiction of more than $50k.</StyledListItem>
+            <StyledListItem><b>Threshold of Classification at 0:</b> A decision threshold that determines the classification outcome. Negative values indicate a prediction of less than $50k, and nonnegative values indicate a prediction of more than $50k.</StyledListItem>
             <StyledListItem><b>Expected Value:</b> The baseline value if no features are considered.</StyledListItem>
             <StyledListItem><b>Feature Contributions:</b> Red bars indicate features that push the prediction higher, while blue bars indicate features that push it lower.</StyledListItem>
             <StyledListItem><b>Note:</b> The same feature value can have different SHAP values for different data points (so an age of 47 doesn't always result in +0.94).</StyledListItem>
