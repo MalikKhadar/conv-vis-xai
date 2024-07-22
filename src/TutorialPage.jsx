@@ -126,7 +126,7 @@ const TutorialPage = () => {
 
       <StyledHeader>General Dataset Information:</StyledHeader>
       <StyledParagraph>
-        <b>UCI Census Income Dataset:</b> This dataset is extracted from 1994 census data. The prediction task is to determine whether a person's income exceeds $50k a year. 24.2% of data points in the dataset actually made more than $50k. Many feature values are abbreviated and will remain unexplained.
+        <b>UCI Census Income Dataset:</b> This dataset is extracted from 1994 census data. The prediction task is to determine whether a person's income exceeds $50k a year. 24.2% of data points in the dataset actually made more than $50k.
       </StyledParagraph>
       <StyledSub>
         <b>Features:</b>
