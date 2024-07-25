@@ -133,8 +133,14 @@ const ChatComponent = ({ apiKey, setVisualizationState, visualizationState, data
   }, [sendMessage]);
 
   const handleSend = async (message) => {
+    const base64 = await encodeImage(visualizations[visualizationState].path);
+
     const newMessage = {
       message,
+      content: [
+        { type: "text", text: "'''" + explanations[visualizationState] + "'''" + message },
+        { type: "image_url", image_url: { url: "data:image/png;base64," + base64 } }
+      ],
       direction: 'outgoing',
       sender: "user"
     };
@@ -144,7 +150,13 @@ const ChatComponent = ({ apiKey, setVisualizationState, visualizationState, data
 
     // setIsTyping(true);
     try {
-      setApiMessages([...apiMessages, { role: "user", content: message }]);
+      setApiMessages([...apiMessages, { 
+        role: "user", 
+        content: [
+          { type: "text", text: "'''" + explanations[visualizationState] + "'''" + message },
+          { type: "image_url", image_url: { url: "data:image/png;base64," + base64 } }
+        ], 
+      }]);
       setSendMessage(sendMessage + 1);
     } catch (error) {
       console.error("Error in handleSend:", error);
@@ -233,7 +245,7 @@ const ChatComponent = ({ apiKey, setVisualizationState, visualizationState, data
   //     if (!chatActive) {
   //       return;
   //     }
-      // setIsTyping(true);
+  // setIsTyping(true);
   //     try {
   //       if (visualizations[visualizationState].path.endsWith('.png')) {
   //         const base64 = await encodeImage(visualizations[visualizationState].path);
@@ -264,7 +276,7 @@ const ChatComponent = ({ apiKey, setVisualizationState, visualizationState, data
     function sleep(ms) {
       return new Promise(resolve => setTimeout(resolve, ms));
     }
-    
+
     const scrollDown = async () => {
       await sleep(20);
       msgListRef.current?.scrollToBottom("auto");
