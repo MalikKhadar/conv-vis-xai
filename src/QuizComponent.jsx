@@ -104,46 +104,41 @@ const QuizComponent = ({ datapointPath, datapointIndex, setDatapointIndex, setQu
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', width: "100%", height: "100%", justifyContent: "flex-end" }}>
-      <div style={{ display: 'flex', width: '100%' }}>
-        <div style={{ display: 'flex', flexDirection: 'column', width: "100%", height: "100%" }}>
-          <h3 style={{ whiteSpace: 'pre-wrap', fontWeight: 'normal', flex: '1' }}>
-            <b>Question {currentIndex + 1}/{shuffledQuestions.length}</b>: {currentQuestion.question}
-          </h3>
-          {currentQuestion.options.map((option, index) => (
-            <Button
-              key={index}
-              border
-              onClick={() => handleOptionClick(option)}
-              style={{
-                margin: '2px',
-                backgroundColor: selectedOption === option ? '#c6e3fa' : 'white',
-                flex: "1"
-              }}
-            >
-              {option}
-            </Button>
-          ))}
-        </div>
-        <div style={{ width: "50px" }}></div>
-        <div style={{ display: 'flex', flexDirection: 'column', width: '100%', height: "100%" }}>
-          <div style={{ height: '1em' }} />
-          <TextField
-            multiline
-            placeholder={`Explain your reasoning${currentQuestion.explain ? ' (response required)' : ''}`}
-            onChange={(e) => setExplanation(e.target.value)}
-            value={explanation}
-            style={{ margin: '5px 2px', overflowY: 'auto' }}
-          />
-          <ConfidenceDropdown confidenceRating={confidenceRating} setConfidenceRating={setConfidenceRating} style={{ paddingBottom: "10px" }} />
-          <div style={{ flex: "10" }} />
+      <div style={{ display: 'flex', flexDirection: 'column', width: "100%", height: "100%" }}>
+        <h3 style={{ whiteSpace: 'pre-wrap', fontWeight: 'normal', flex: '1' }}>
+          <b>Question {currentIndex + 1}/{shuffledQuestions.length}</b>: {currentQuestion.question}
+        </h3>
+        {currentQuestion.options.map((option, index) => (
           <Button
+            key={index}
             border
-            onClick={handleSubmit}
-            disabled={!selectedOption || !confidenceRating || (currentQuestion.explain && explanation.trim().length < 10)}
+            onClick={() => handleOptionClick(option)}
+            style={{
+              margin: '2px',
+              backgroundColor: selectedOption === option ? '#c6e3fa' : 'white',
+              flex: "1"
+            }}
           >
-            Submit
+            {option}
           </Button>
-        </div>
+        ))}
+        <div style={{ height: '1em' }} />
+        <TextField
+          multiline
+          placeholder={`Explain your reasoning${currentQuestion.explain ? ' (response required)' : ''}`}
+          onChange={(e) => setExplanation(e.target.value)}
+          value={explanation}
+          style={{ margin: '5px 2px', overflowY: 'auto' }}
+        />
+        <ConfidenceDropdown confidenceRating={confidenceRating} setConfidenceRating={setConfidenceRating} style={{ paddingBottom: "10px" }} />
+        <div style={{ flex: "10" }} />
+        <Button
+          border
+          onClick={handleSubmit}
+          disabled={!selectedOption || !confidenceRating || (currentQuestion.explain && explanation.trim().length < 10)}
+        >
+          Submit
+        </Button>
       </div>
       <div style={{ height: "5px" }} />
     </div>

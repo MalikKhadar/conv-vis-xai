@@ -5,7 +5,7 @@ import { useAddLog } from './Logger';
 
 const notes = import.meta.glob('/src/assets/datapoints/**/visualizations/notes.json');
 
-const ExplanationButtons = ({ datapointPath, setVisualizationState, visualizationState }) => {
+const QuickReplies = ({ datapointPath, setVisualizationState, visualizationState }) => {
   const [noteMap, setNoteMap] = useState({});
   const addLog = useAddLog();
 
@@ -23,22 +23,19 @@ const ExplanationButtons = ({ datapointPath, setVisualizationState, visualizatio
   }, [datapointPath]);
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", maxHeight: "100%" }}>
-      <h3 style={{ textAlign: "center", fontWeight: "normal" }}>Click to view explanations</h3>
-      <div style={{ display: "flex", maxHeight: "100%" }}>
-        {Object.keys(noteMap).map((key, index) => (
-          <Button
-            key={index}
-            border
-            onClick={() => { setVisualizationState(index); addLog('Viewing visualization ' + index.toString()) }}
-            style={{ flex: "1", backgroundColor: index == visualizationState ? '#c6e3fa' : "white" }}
-          >
-            {noteMap[key].name}
-          </Button>
-        ))}
-      </div>
+    <div style={{ display: "flex", flexDirection: "column", maxWidth: "40%" }}>
+      {Object.keys(noteMap).map((key, index) => (
+        <Button
+          key={index}
+          border
+          onClick={() => {setVisualizationState(index); addLog('Viewing visualization ' + index.toString())}}
+          style={{ flex: "1", fontSize: "20px", backgroundColor: index == visualizationState ? '#c6e3fa' : "white" }}
+        >
+          {noteMap[key].name}
+        </Button>
+      ))}
     </div>
   );
 };
 
-export default ExplanationButtons;
+export default QuickReplies;

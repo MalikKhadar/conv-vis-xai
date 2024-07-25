@@ -1,11 +1,29 @@
 .cs-message--outgoing .cs-message__content {
     background-color: white !important;
 }
-  
+
 .cs-message-input__content-editor {
     background-color: white !important;
 }
 
 .cs-message-input__content-editor-wrapper {
     background-color: white !important;
+}
+
+.cs-message__html-content {
+    font-size: 18px;
+}
+
+.cs-main-container {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    overflow: auto;
+    border: solid 3px #d1dbe3;
+    box-sizing: border-box;
+    color: rgba(0, 0, 0, .87);
+    background-color: #fff;
+    font-size: 1rem;
+    border-radius: 25px;
 }

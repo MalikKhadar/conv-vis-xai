@@ -4,11 +4,12 @@ import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
 import { MainContainer, ChatContainer, MessageList, Message, MessageInput, TypingIndicator } from '@chatscope/chat-ui-kit-react';
 import metadata from './assets/metadata.json';
 import './ChatComponent.css'; // Import the custom CSS file
+import QuickReplies from './QuickReplies';
 import { useAddLog } from './Logger';
 
 const gptModel = "gpt-4o";
 
-const ChatComponent = ({ apiKey, visualizationState, datapointPath, chatActive, questions }) => {
+const ChatComponent = ({ apiKey, setVisualizationState, visualizationState, datapointPath, chatActive, questions }) => {
   const [isTyping, setIsTyping] = useState(false);
   const [systemMessage, setSystemMessage] = useState('');
   const [fullSystemMessage, setFullSystemMessage] = useState('');
@@ -26,6 +27,8 @@ const ChatComponent = ({ apiKey, visualizationState, datapointPath, chatActive, 
   const [sendMessage, setSendMessage] = useState(0);
   const [explanations, setExplanations] = useState([]);
   const [visualizations, setVisualizations] = useState([]);
+  const [clickedReply, setClickedReply] = useState(false);
+  const msgListRef = useRef(null);
   const addLog = useAddLog();
 
   useEffect(() => {
@@ -139,13 +142,13 @@ const ChatComponent = ({ apiKey, visualizationState, datapointPath, chatActive, 
 
     setMessages(messages => [...messages, newMessage]);
 
-    setIsTyping(true);
+    // setIsTyping(true);
     try {
       setApiMessages([...apiMessages, { role: "user", content: message }]);
       setSendMessage(sendMessage + 1);
     } catch (error) {
       console.error("Error in handleSend:", error);
-      setIsTyping(false);
+      // setIsTyping(false);
     }
   };
 
@@ -197,7 +200,7 @@ const ChatComponent = ({ apiKey, visualizationState, datapointPath, chatActive, 
     } catch (error) {
       console.error("Error while processing response:", error);
     }
-    setIsTyping(false);
+    // setIsTyping(false);
   };
 
   const encodeImage = async (imagePath) => {
@@ -225,48 +228,88 @@ const ChatComponent = ({ apiKey, visualizationState, datapointPath, chatActive, 
     }
   };
 
-  useEffect(() => {
-    const explainVisualization = async () => {
-      if (!chatActive) {
-        return;
-      }
-      setIsTyping(true);
-      try {
-        if (visualizations[visualizationState].path.endsWith('.png')) {
-          const base64 = await encodeImage(visualizations[visualizationState].path);
+  // useEffect(() => {
+  //   const explainVisualization = async () => {
+  //     if (!chatActive) {
+  //       return;
+  //     }
+      // setIsTyping(true);
+  //     try {
+  //       if (visualizations[visualizationState].path.endsWith('.png')) {
+  //         const base64 = await encodeImage(visualizations[visualizationState].path);
 
-          setApiMessages([...apiMessages, {
-            role: "user",
-            content: [
-              { type: "text", text: "'''" + explanations[visualizationState] + "'''" },
-              { type: "image_url", image_url: { url: "data:image/png;base64," + base64 } }
-            ]
-          }]);
-        } else {
-          setApiMessages([...apiMessages, {
-            role: "system",
-            content: "'''" + explanations[visualizationState] + "'''"
-          }]);
-        }
-        setSendMessage(sendMessage + 1);
-      } catch (error) {
-        console.error("Error in explainVisualization:", error);
-        setIsTyping(false);
-      }
+  //         setApiMessages([...apiMessages, {
+  //           role: "user",
+  //           content: [
+  //             { type: "text", text: "'''" + explanations[visualizationState] + "'''" },
+  //             { type: "image_url", image_url: { url: "data:image/png;base64," + base64 } }
+  //           ]
+  //         }]);
+  //       } else {
+  //         setApiMessages([...apiMessages, {
+  //           role: "system",
+  //           content: "'''" + explanations[visualizationState] + "'''"
+  //         }]);
+  //       }
+  //       setSendMessage(sendMessage + 1);
+  //     } catch (error) {
+  //       console.error("Error in explainVisualization:", error);
+  //       setIsTyping(false);
+  //     }
+  //   }
+  //   explainVisualization();
+  // }, [visualizationState, chatActive, visualizations]);
+
+  useEffect(() => {
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
     }
-    explainVisualization();
-  }, [visualizationState, chatActive, visualizations]);
+    
+    const scrollDown = async () => {
+      await sleep(20);
+      msgListRef.current?.scrollToBottom("auto");
+    }
+    scrollDown();
+  }, [messages])
+
+  useEffect(() => {
+    const showVisualization = async () => {
+      // if (!chatActive) {
+      //   return;
+      // }
+      setMessages([...messages, {
+        payload: {
+          src: visualizations[visualizationState].module
+        },
+        type: 'image',
+        direction: 'incoming',
+        sender: "assistant"
+      }]);
+      setClickedReply(!clickedReply);
+    }
+    showVisualization();
+  }, [visualizationState, visualizations]);
 
   return (
-    <div>
-      <MainContainer style={{width: "22vw"}}>
+    <div style={{ width: "100%", height: "100%" }}>
+      <MainContainer style={{ width: "100%", height: "100%" }}>
         <ChatContainer>
           <MessageList
             scrollBehavior="auto"
+            ref={msgListRef}
             typingIndicator={isTyping ? <TypingIndicator content="ExplainoBot is typing" /> : null}
           >
             {messages.map((message, i) => (
-              <Message key={i} model={message} />
+              <div key={i}>
+                <Message model={message} />
+                {i === messages.length - 1 && (
+                  <QuickReplies
+                    datapointPath={datapointPath}
+                    setVisualizationState={setVisualizationState}
+                    visualizationState={visualizationState}
+                  />
+                )}
+              </div>
             ))}
           </MessageList>
           <MessageInput placeholder="Type message here" onSend={handleSend} />

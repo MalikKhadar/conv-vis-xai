@@ -41,7 +41,7 @@ const VisualizationRenderer = ({ parentState, defaultMessage, datapointPath }) =
     } else if (visualization.path.endsWith('.png')) {
       return (
         <div key={index} style={{ display: "flex", flexFlow: "column", justifyContent: "center", width: "100%", height: "100%" }}>
-          <img src={visualization.module} style={{ maxHeight: "65vh", minHeight: "80%", maxWidth: "100%", alignSelf: "center" }} />
+          <img src={visualization.module} style={{ maxHeight: "100%", minWidth: "90%", maxWidth: "100%", alignSelf: "center" }} />
         </div>
       );
     } else {

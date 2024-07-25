@@ -119,31 +119,15 @@ function App() {
 
   // main attraction
   return (
-    <div className="App" style={{ display: 'flex', gap: '5px', height: "100vh", margin: "auto" }}>
+    <div className="App" style={{ display: 'flex', gap: '5px', height: "100vh", margin: "auto", boxSizing: "border-box", padding: "10px" }}>
       <NextDatapointMessage openNextDatapointMessage={openNextDatapointMessage} setOpenNextDatapointMessage={setOpenNextDatapointMessage} />
       {isChatting ? <TestKey apiKey={apiKey} setApiKey={setApiKey} setChatActive={setChatActive} /> : null}
 
-      <div style={{ display: 'flex', flexDirection: 'column', flex: "1", height: "100vh", minWidth: "15vw", overflowY: "hidden" }}>
-        <div style={{ flex: "0" }}>
+      <div style={{ display: 'flex', flexDirection: 'column', flex: "1", height: "100%", minWidth: "15vw", overflowY: "hidden" }}>
+        <div style={{ flex: "1" }}>
           <PredictionDisplay datapointPath={datapointPath} />
         </div>
-        <ExplanationButtons visualizationState={visualizationState} setVisualizationState={setVisualizationState} style={{ flex: "1" }} datapointPath={datapointPath} />
-        <div style={{ height: "5vh" }} />
-        <OpenTutorialButton isChatting={isChatting} />
-      </div>
-
-      <div style={{ width: "1px", height: "100vh", backgroundColor: "lightgrey" }} />
-
-      <div style={{ flex: "3", display: "flex", flexDirection: "column", height: "100vh", justifyContent: "space-between" }}>
-        <div style={{ flex: "1 1 auto", overflowY: "auto", alignContent: "center" }}>
-          <VisualizationRenderer
-            parentState={visualizationState}
-            datapointPath={datapointPath}
-            defaultMessage={"Click on the explanations to the left to help understand the model's prediction"}
-          />
-        </div>
-
-        <div style={{ flex: "1" }}>
+        <div style={{ flex: "2" }}>
           <QuizComponent
             datapointPath={datapointPath}
             datapointIndex={datapointIndex}
@@ -151,16 +135,38 @@ function App() {
             setQuestions={setQuestions}
           />
         </div>
+        <div style={{ flex: "1", alignContent: "end" }}>
+          <OpenTutorialButton isChatting={isChatting} />
+        </div>
       </div>
 
+      {!isChatting ?
+        <>
+          <div style={{ width: "1px", height: "100%", backgroundColor: "lightgrey" }} />
+          <div style={{ flex: "3", display: "flex", flexDirection: "column", height: "100%", justifyContent: "space-between" }}>
+            <div style={{ flex: "1 1 auto", overflowY: "auto", alignContent: "center" }}>
+              <VisualizationRenderer
+                parentState={visualizationState}
+                datapointPath={datapointPath}
+                defaultMessage={"Click on the explanations to the left to help understand the model's prediction"}
+              />
+            </div>
+            <ExplanationButtons visualizationState={visualizationState} setVisualizationState={setVisualizationState} datapointPath={datapointPath} />
+          </div>
+        </>
+        : null}
+
       {isChatting ?
-        <ChatComponent
-          apiKey={apiKey}
-          visualizationState={visualizationState}
-          datapointPath={datapointPath}
-          chatActive={chatActive}
-          questions={questions}
-        />
+        <div style={{ flex: "3", height: "100%", maxWidth: "100%" }}>
+          <ChatComponent
+            apiKey={apiKey}
+            setVisualizationState={setVisualizationState}
+            visualizationState={visualizationState}
+            datapointPath={datapointPath}
+            chatActive={chatActive}
+            questions={questions}
+          />
+        </div>
         : <div />}
     </div>
   );
