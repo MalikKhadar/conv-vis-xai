@@ -1,0 +1,36 @@
+[
+    {
+        "question": "Do you think the model's prediction is accurate? Why or why not?",
+        "options": [
+            "Yes",
+            "No"
+        ],
+        "explain": true
+    },
+    {
+        "question": "Would the model make the same prediction given these modifications to the features? \nRace = Black\nOccupation = Sales",
+        "options": [
+            "Yes",
+            "No"
+        ],
+        "explain": false
+    },
+    {
+        "question": "Would the model make the same prediction given these modifications to the features? \nOccupation = Exec-managerial",
+        "options": [
+            "Yes",
+            "No"
+        ],
+        "explain": false
+    },
+    {
+        "question": "What is the most important feature for this prediction?",
+        "options": [
+            "Age",
+            "Hours per week",
+            "Sex",
+            "Occupation"
+        ],
+        "explain": false
+    }
+]

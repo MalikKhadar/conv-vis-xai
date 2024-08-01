@@ -4,13 +4,12 @@ import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
 import { MainContainer, ChatContainer, MessageList, Message, MessageInput, TypingIndicator } from '@chatscope/chat-ui-kit-react';
 import metadata from './assets/metadata.json';
 import './ChatComponent.css'; // Import the custom CSS file
-import QuickReplies from './QuickReplies';
+import ExplanationButtons from './ExplanationButtons';
 import { useAddLog } from './Logger';
 
 const gptModel = "gpt-4o";
 
-const ChatComponent = ({ apiKey, setVisualizationState, visualizationState, datapointPath, chatActive, questions }) => {
-  const [isTyping, setIsTyping] = useState(false);
+const ChatComponent = ({ apiKey, activeVisualizationObject, chatActive, questions, explanationButtons, guided }) => {
   const [systemMessage, setSystemMessage] = useState('');
   const [fullSystemMessage, setFullSystemMessage] = useState('');
   const [messages, setMessages] = useState([
@@ -25,15 +24,12 @@ const ChatComponent = ({ apiKey, setVisualizationState, visualizationState, data
     { "role": "assistant", "content": metadata["firstMessage"] },
   ]);
   const [sendMessage, setSendMessage] = useState(0);
-  const [explanations, setExplanations] = useState([]);
-  const [visualizations, setVisualizations] = useState([]);
-  const [clickedReply, setClickedReply] = useState(false);
   const msgListRef = useRef(null);
   const addLog = useAddLog();
 
   useEffect(() => {
     const fetchSystemMessage = async () => {
-      const systemMessageFiles = import.meta.glob('/src/assets/systemMessage.txt');
+      const systemMessageFiles = import.meta.glob('/src/assets/chat/systemMessage.txt');
       const systemMessagePaths = Object.keys(systemMessageFiles);
 
       if (systemMessagePaths.length === 0) {
@@ -71,57 +67,6 @@ const ChatComponent = ({ apiKey, setVisualizationState, visualizationState, data
   }, [systemMessage, questions]);
 
   useEffect(() => {
-    const fetchExplanations = async () => {
-      const allFiles = import.meta.glob('/src/assets/datapoints/**/explanations/*.txt');
-      const fetchedExplanations = [];
-
-      for (const path in allFiles) {
-        if (path.includes(datapointPath)) {
-          try {
-            const file = allFiles[path];
-            const module = await file();
-            const response = await fetch(module.default);
-            if (!response.ok) {
-              throw new Error('Network response was not ok');
-            }
-            const text = await response.text();
-            fetchedExplanations.push(text);
-          } catch (error) {
-            console.error(`Failed to fetch explanation from ${path}.`, error);
-          }
-        }
-      }
-      setExplanations(fetchedExplanations);
-    };
-    const fetchVisualizations = async () => {
-      // Only keep the files that match our visualization path
-      const allVisualizations = import.meta.glob('/src/assets/datapoints/**/visualizations/*.{json,png}');
-      const loadedVisualizations = [];
-
-      for (const path in allVisualizations) {
-        // filter out irrelevant assets and the notes
-        if (path.includes(datapointPath) && !path.includes("notes")) {
-          const module = await allVisualizations[path]();
-          const index = path.match(/\/(\d+)\.[json|png]+$/)[1];
-          loadedVisualizations[index] = { path, module: module.default || module };
-        }
-      }
-
-      setVisualizations(loadedVisualizations);
-    };
-    fetchVisualizations();
-    fetchExplanations();
-    setMessages([
-      {
-        message: metadata["firstMessage"],
-        sentTime: "just now",
-        direction: "incoming",
-        sender: "assistant"
-      }
-    ]);
-  }, [datapointPath]);
-
-  useEffect(() => {
     if (!chatActive) {
       return;
     }
@@ -133,14 +78,10 @@ const ChatComponent = ({ apiKey, setVisualizationState, visualizationState, data
   }, [sendMessage]);
 
   const handleSend = async (message) => {
-    const base64 = await encodeImage(visualizations[visualizationState].path);
+    const base64 = await encodeImage(activeVisualizationObject.module);
 
     const newMessage = {
       message,
-      content: [
-        { type: "text", text: "'''" + explanations[visualizationState] + "'''" + message },
-        { type: "image_url", image_url: { url: "data:image/png;base64," + base64 } }
-      ],
       direction: 'outgoing',
       sender: "user"
     };
@@ -148,19 +89,17 @@ const ChatComponent = ({ apiKey, setVisualizationState, visualizationState, data
 
     setMessages(messages => [...messages, newMessage]);
 
-    // setIsTyping(true);
     try {
-      setApiMessages([...apiMessages, { 
-        role: "user", 
+      setApiMessages([...apiMessages, {
+        role: "user",
         content: [
-          { type: "text", text: "'''" + explanations[visualizationState] + "'''" + message },
+          { type: "text", text: "'''" + activeVisualizationObject.name + "'''" + message },
           { type: "image_url", image_url: { url: "data:image/png;base64," + base64 } }
-        ], 
+        ],
       }]);
       setSendMessage(sendMessage + 1);
     } catch (error) {
       console.error("Error in handleSend:", error);
-      // setIsTyping(false);
     }
   };
 
@@ -212,65 +151,25 @@ const ChatComponent = ({ apiKey, setVisualizationState, visualizationState, data
     } catch (error) {
       console.error("Error while processing response:", error);
     }
-    // setIsTyping(false);
   };
 
-  const encodeImage = async (imagePath) => {
-    const imageFiles = import.meta.glob('/src/assets/datapoints/**/visualizations/*.png');
+  const encodeImage = async (visualizationImage) => {
+    const response = await fetch(visualizationImage);
 
-    if (imageFiles[imagePath]) {
-      const module = await imageFiles[imagePath]();
-      const response = await fetch(module.default);
-
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-
-      const blob = await response.blob();
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          resolve(reader.result.split(',')[1]);
-        };
-        reader.onerror = reject;
-        reader.readAsDataURL(blob);
-      });
-    } else {
-      throw new Error('Image not found');
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
     }
+
+    const blob = await response.blob();
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        resolve(reader.result.split(',')[1]);
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
   };
-
-  // useEffect(() => {
-  //   const explainVisualization = async () => {
-  //     if (!chatActive) {
-  //       return;
-  //     }
-  // setIsTyping(true);
-  //     try {
-  //       if (visualizations[visualizationState].path.endsWith('.png')) {
-  //         const base64 = await encodeImage(visualizations[visualizationState].path);
-
-  //         setApiMessages([...apiMessages, {
-  //           role: "user",
-  //           content: [
-  //             { type: "text", text: "'''" + explanations[visualizationState] + "'''" },
-  //             { type: "image_url", image_url: { url: "data:image/png;base64," + base64 } }
-  //           ]
-  //         }]);
-  //       } else {
-  //         setApiMessages([...apiMessages, {
-  //           role: "system",
-  //           content: "'''" + explanations[visualizationState] + "'''"
-  //         }]);
-  //       }
-  //       setSendMessage(sendMessage + 1);
-  //     } catch (error) {
-  //       console.error("Error in explainVisualization:", error);
-  //       setIsTyping(false);
-  //     }
-  //   }
-  //   explainVisualization();
-  // }, [visualizationState, chatActive, visualizations]);
 
   useEffect(() => {
     function sleep(ms) {
@@ -286,9 +185,6 @@ const ChatComponent = ({ apiKey, setVisualizationState, visualizationState, data
 
   useEffect(() => {
     const showVisualization = async () => {
-      // if (!chatActive) {
-      //   return;
-      // }
       setMessages([...messages, {
         payload: {
           src: visualizations[visualizationState].module
@@ -297,7 +193,6 @@ const ChatComponent = ({ apiKey, setVisualizationState, visualizationState, data
         direction: 'incoming',
         sender: "assistant"
       }]);
-      setClickedReply(!clickedReply);
     }
     showVisualization();
   }, [visualizationState, visualizations]);
@@ -309,13 +204,13 @@ const ChatComponent = ({ apiKey, setVisualizationState, visualizationState, data
           <MessageList
             scrollBehavior="auto"
             ref={msgListRef}
-            typingIndicator={isTyping ? <TypingIndicator content="ExplainoBot is typing" /> : null}
+          // typingIndicator={isTyping ? <TypingIndicator content="ExplainoBot is typing" /> : null}
           >
             {messages.map((message, i) => (
               <div key={i}>
                 <Message model={message} />
                 {i === messages.length - 1 && (
-                  <QuickReplies
+                  <ExplanationButtons
                     datapointPath={datapointPath}
                     setVisualizationState={setVisualizationState}
                     visualizationState={visualizationState}

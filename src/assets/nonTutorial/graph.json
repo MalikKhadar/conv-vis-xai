@@ -1,0 +1,53 @@
+{
+    "Visualizations": {
+        "Global Bar Plot": {
+            "Global": true,
+            "Connections": [
+                "Beeswarm Plot",
+                "Scatter Plots"
+            ],
+            "Connection Text": "If you want to see feature values, view the Scatter Plots to do so one feature at a time or the Beeswarm Plot for all features at once."
+        },
+        "Beeswarm Plot": {
+            "Global": true,
+            "Connections": [
+                "Global Bar Plot",
+                "Scatter Plots"
+            ],
+            "Connection Text": "To see this info for one feature at a time, go to the Scatter Plots. For a view that's similar to this one but lacks feature values, use the Global Bar Plot."
+        },
+        "Scatter Plots": {
+            "Global": true,
+            "Connections": [
+                "Global Bar Plot",
+                "Beeswarm Plot"
+            ],
+            "Connection Text": "To see this info for all features at once, check the Beeswarm Plot. The Global Bar Plot provides a similar view to that one but lacks feature values."
+        },
+        "Local Bar Plot": {
+            "Global": false,
+            "Connections": [
+                "Similar Data Table",
+                "Counterfactual Data Table"
+            ],
+            "Connection Text": "Compare the active data point to similar points with the same model prediction in the Similar Data Point Table. For points with the opposite prediction, see the Counterfactual Data Point Table. Neither table includes SHAP values."
+        },
+        "Similar Data Table": {
+            "Global": false,
+            "Connections": [
+                "Counterfactual Data Table",
+                "Local Bar Plot"
+            ],
+            "Connection Text": "Check the Counterfactual Data Point Table if you want the non-active data points to have the opposite prediction as the active one. To see SHAP values for the active data point, use the Local Bar Plot."
+        },
+        "Counterfactual Data Table": {
+            "Global": false,
+            "Connections": [
+                "Similar Data Table",
+                "Local Bar Plot"
+            ],
+            "Connection Text": "Check the Similar Data Point Table if you want the non-active data points to have the same prediction as the active one. To see SHAP values for the active data point, use the Local Bar Plot."
+        }
+    },
+    "Scope Switch": "Select Scope Switch to view / visualizations"
+}

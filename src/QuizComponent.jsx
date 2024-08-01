@@ -5,7 +5,7 @@ import TextField from '@mui/material/TextField';
 import ConfidenceDropdown from './ConfidenceDropdown';
 import { useAddCustomData, useLogger } from './Logger';
 
-const QuizComponent = ({ datapointPath, datapointIndex, setDatapointIndex, setQuestions }) => {
+const QuizComponent = ({ datapointNum, setQuestions }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [quizCompleted, setQuizCompleted] = useState(0);
   const [answers, setAnswers] = useState({});
@@ -19,8 +19,8 @@ const QuizComponent = ({ datapointPath, datapointIndex, setDatapointIndex, setQu
 
   useEffect(() => {
     const loadQuestions = async () => {
-      const questions = import.meta.glob('/src/assets/datapoints/**/questions.json');
-      const questionsPath = Object.keys(questions).find(path => path.includes(datapointPath));
+      const questions = import.meta.glob('/src/assets/nonTutorial/datapoints/**/questions.json');
+      const questionsPath = Object.keys(questions).find(path => path.includes("/"));//datapointPath));
       setCurrentIndex(0);
       setAnswers({});
 
@@ -51,12 +51,12 @@ const QuizComponent = ({ datapointPath, datapointIndex, setDatapointIndex, setQu
           setQuestions(JSON.stringify(questionTexts, null, 2));
         }
       } else {
-        console.error(`No questions found for path: ${datapointPath}`);
+        console.error(`No questions found for path: ${questionsPath}`);
       }
     };
 
     loadQuestions();
-  }, [datapointPath]);
+  }, [datapointNum]);
 
   const handleOptionClick = (option) => {
     setSelectedOption(option);
@@ -91,8 +91,6 @@ const QuizComponent = ({ datapointPath, datapointIndex, setDatapointIndex, setQu
         addCustomData(`e${parseInt(key) + 1}`, answers[key][1]);
         addCustomData(`c${parseInt(key) + 1}`, answers[key][2] - 1);
       });
-
-      setDatapointIndex(datapointIndex + 1);
     }
   }, [quizCompleted]);
 

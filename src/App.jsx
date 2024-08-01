@@ -7,29 +7,38 @@ import ChatComponent from './ChatComponent';
 import PredictionDisplay from './PredictionDisplay';
 import TutorialPage from './TutorialPage';
 import VisualizationRenderer from './VisualizationRenderer';
+import VisualizationFetcher from './VisualizationFetcher';
 import OpenTutorialButton from './OpenTutorialButton';
 import TestKey from './TestKey'
-import NextDatapointMessage from './NextDatapointMessage';
 import { useAddCustomData, useAddLog, useUploadLogs } from './Logger';
 
 function App() {
   const [finishedTutorial, setFinishedTutorial] = useState(false);
-  const [visualizationState, setVisualizationState] = useState(0);
+  const [activeVisualizationName, setActiveVisualizationName] = useState("Global Bar Plot");
+  const [activeVisualizationObject, setActiveVisualizationObject] = useState(null);
+  const [datapointNum, setDatapointNum] = useState(0);
   const addLog = useAddLog();
   const addCustomData = useAddCustomData();
   const uploadLogs = useUploadLogs();
   const hasLoggedRef = useRef(false); // Create a ref to track if logging has been done
   const [apiKey, setApiKey] = useState('');
   const [chatActive, setChatActive] = useState(false);
-  const [datapointPath, setDatapointPath] = useState('');
   const [tutorialOnly, setTutorialOnly] = useState(false);
   const [isChatting, setIsChatting] = useState(false);
+  const [guided, setGuided] = useState(false);
   const [questions, setQuestions] = useState([])
-  const [datapointIndex, setDatapointIndex] = useState(0);
-  const [datapointOrder, setDatapointOrder] = useState(["0", "1"]);
-  const [openNextDatapointMessage, setOpenNextDatapointMessage] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [done, setDone] = useState(false);
+  const [graphData, setGraphData] = useState(null);
+
+  useEffect(() => {
+    const loadGraphData = async () => {
+      const graph = await import('/src/assets/nonTutorial/graph.json');
+      setGraphData(graph.default || graph);
+    };
+
+    loadGraphData();
+  }, []);
 
   useEffect(() => {
     if (!hasLoggedRef.current) {
@@ -44,50 +53,14 @@ function App() {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
 
-    const datapointAllocation = urlParams.get("d");
-    // load datapoint paths
-    let correctDatapoint = '/src/assets/datapoints/correct/' + datapointAllocation.charAt(0);
-    let incorrectDatapoint = '/src/assets/datapoints/incorrect/' + datapointAllocation.charAt(1);
-
-    let newDatapointOrder = [correctDatapoint, incorrectDatapoint];
-
-    if (Math.random() > 0.5) {
-      newDatapointOrder = [incorrectDatapoint, correctDatapoint];
-    }
-
     if (urlParams.has('chat')) {
       setIsChatting(true);
     }
     addCustomData('chat', urlParams.has('chat'));
-
-    const newDatapointPath = newDatapointOrder[datapointIndex];
-
-    setDatapointOrder(newDatapointOrder);
-    setDatapointPath(newDatapointPath);
     addCustomData('participantId', urlParams.get("id"));
-    addCustomData('datapoint', newDatapointPath);
     setTutorialOnly(urlParams.has('tutorialOnly'));
     setLoaded(true);
   };
-
-  useEffect(() => {
-    if (loaded) {
-      uploadLogs();
-
-      if (datapointIndex >= 2) {
-        setDone(true);
-        return;
-      }
-
-      if (datapointIndex > 0) {
-        setOpenNextDatapointMessage(true);
-      }
-      setVisualizationState(0);
-
-      addCustomData('datapoint', datapointOrder[datapointIndex]);
-      setDatapointPath(datapointOrder[datapointIndex]);
-    }
-  }, [datapointIndex]);
 
   const handleFinishTutorial = () => {
     setFinishedTutorial(true);
@@ -96,7 +69,10 @@ function App() {
 
   if (done) {
     return (
-      <p style={{ textAlign: "center" }}>Please return to the Qualtrics and enter the following code: {isChatting ? "gopher" : "continue"}<br />(You may exit out of this tab)</p>
+      <p style={{ textAlign: "center" }}>
+        Please return to the Qualtrics and enter the following code: {isChatting ? "gopher" : "continue"}
+        <br />(You may exit out of this tab)
+      </p>
     )
   }
 
@@ -120,20 +96,20 @@ function App() {
   // main attraction
   return (
     <div className="App" style={{ display: 'flex', gap: '5px', height: "100vh", margin: "auto", boxSizing: "border-box", padding: "10px" }}>
-      <NextDatapointMessage openNextDatapointMessage={openNextDatapointMessage} setOpenNextDatapointMessage={setOpenNextDatapointMessage} />
+      <VisualizationFetcher
+        activeVisualizationName={activeVisualizationName}
+        setActiveVisualizationObject={setActiveVisualizationObject}
+        datapointNum={datapointNum}
+        graphData={graphData}
+      />
       {isChatting ? <TestKey apiKey={apiKey} setApiKey={setApiKey} setChatActive={setChatActive} /> : null}
 
       <div style={{ display: 'flex', flexDirection: 'column', flex: "1", height: "100%", minWidth: "15vw", overflowY: "hidden" }}>
         <div style={{ flex: "1" }}>
-          <PredictionDisplay datapointPath={datapointPath} />
+          <PredictionDisplay datapointNum={datapointNum} />
         </div>
         <div style={{ flex: "2" }}>
-          <QuizComponent
-            datapointPath={datapointPath}
-            datapointIndex={datapointIndex}
-            setDatapointIndex={setDatapointIndex}
-            setQuestions={setQuestions}
-          />
+          <QuizComponent datapointNum={datapointNum} setQuestions={setQuestions} />
         </div>
         <div style={{ flex: "1", alignContent: "end" }}>
           <OpenTutorialButton isChatting={isChatting} />
@@ -145,13 +121,13 @@ function App() {
           <div style={{ width: "1px", height: "100%", backgroundColor: "lightgrey" }} />
           <div style={{ flex: "3", display: "flex", flexDirection: "column", height: "100%", justifyContent: "space-between" }}>
             <div style={{ flex: "1 1 auto", overflowY: "auto", alignContent: "center" }}>
-              <VisualizationRenderer
-                parentState={visualizationState}
-                datapointPath={datapointPath}
-                defaultMessage={"Click on the explanations to the left to help understand the model's prediction"}
-              />
+              <VisualizationRenderer activeVisualizationObject={activeVisualizationObject} />
             </div>
-            <ExplanationButtons visualizationState={visualizationState} setVisualizationState={setVisualizationState} datapointPath={datapointPath} />
+            <ExplanationButtons
+              activeVisualizationObject={activeVisualizationObject}
+              setActiveVisualizationName={setActiveVisualizationName}
+              graphData={graphData}
+            />
           </div>
         </>
         : null}
@@ -160,11 +136,11 @@ function App() {
         <div style={{ flex: "3", height: "100%", maxWidth: "100%" }}>
           <ChatComponent
             apiKey={apiKey}
-            setVisualizationState={setVisualizationState}
-            visualizationState={visualizationState}
-            datapointPath={datapointPath}
+            setActiveVisualizationName={setActiveVisualizationName}
+            activeVisualizationObject={activeVisualizationObject}
             chatActive={chatActive}
             questions={questions}
+            guided={guided}
           />
         </div>
         : <div />}

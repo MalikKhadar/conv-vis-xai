@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
 
-function PredictionDisplay({ datapointPath }) {
+function PredictionDisplay({ datapointNum }) {
   const [prediction, setPrediction] = useState(null);
 
   useEffect(() => {
     const fetchMetadata = async () => {
-      const metadataFiles = import.meta.glob(`/src/assets/datapoints/**/metadata.json`);
+      const metadataFiles = import.meta.glob(`/src/assets/nonTutorial/datapoints/**/metadata.json`);
+      const datapointPath = `/src/assets/nonTutorial/datapoints/${datapointNum}/`;
       const metadataPath = Object.keys(metadataFiles).find(path => path.includes(datapointPath));
 
       if (metadataPath) {
@@ -22,7 +23,7 @@ function PredictionDisplay({ datapointPath }) {
     };
 
     fetchMetadata();
-  }, [datapointPath]);
+  }, [datapointNum]);
 
   return (
     <h3 style={{ textAlign: "center", fontWeight: "normal" }}>

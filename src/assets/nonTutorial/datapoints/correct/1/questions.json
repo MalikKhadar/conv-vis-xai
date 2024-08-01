@@ -1,0 +1,36 @@
+[
+    {
+        "question": "Do you think the model's prediction is accurate? Why or why not?",
+        "options": [
+            "Yes",
+            "No"
+        ],
+        "explain": true
+    },
+    {
+        "question": "Would the model make the same prediction given these modifications to the features? \nCountry = United-States\nEducation = Some-college",
+        "options": [
+            "Yes",
+            "No"
+        ],
+        "explain": false
+    },
+    {
+        "question": "Would the model make the same prediction given these modifications to the features? \nCountry = England",
+        "options": [
+            "Yes",
+            "No"
+        ],
+        "explain": false
+    },
+    {
+        "question": "What is the most important feature for this prediction?",
+        "options": [
+            "Capital Loss",
+            "Occupation",
+            "Capital Gain",
+            "Age"
+        ],
+        "explain": false
+    }
+]
