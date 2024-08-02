@@ -3,7 +3,7 @@ import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
 import { Button } from '@chatscope/chat-ui-kit-react';
 import { useAddLog } from './Logger';
 
-const ExplanationButtons = ({ activeVisualizationObject, setActiveVisualizationName, visualizationObjects }) => {
+const ExplanationButtons = ({ activeVisualizationObject, setActiveVisualizationName, visualizationObjects, guided }) => {
   const [visualizationNames, setVisualizationNames] = useState([]);
   const addLog = useAddLog();
 
@@ -33,7 +33,8 @@ const ExplanationButtons = ({ activeVisualizationObject, setActiveVisualizationN
             key={name}
             border
             onClick={() => { setActiveVisualizationName(name); addLog('Viewing visualization ' + name) }}
-            style={{ flex: "1", backgroundColor: activeVisualizationObject && name == activeVisualizationObject.name ? '#c6e3fa' : "white" }}
+            style={{ flex: "1", backgroundColor: activeVisualizationObject && name == activeVisualizationObject.name ? '#c6e3fa' : 
+              guided && activeVisualizationObject.connections.includes(name) ? "#FAF7C6" : "white" }}
           >
             {name}
           </Button>

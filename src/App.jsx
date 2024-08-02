@@ -26,7 +26,7 @@ function App() {
   const [chatActive, setChatActive] = useState(false);
   const [tutorialOnly, setTutorialOnly] = useState(false);
   const [isChatting, setIsChatting] = useState(false);
-  const [guided, setGuided] = useState(false);
+  const [guided, setGuided] = useState(true);
   const [questions, setQuestions] = useState([])
   const [visitedAllVisualizations, setVisitedAllVisualizations] = useState(false);
   const [done, setDone] = useState(false);
@@ -156,6 +156,7 @@ function App() {
           activeVisualizationObject={activeVisualizationObject}
           setActiveVisualizationName={setActiveVisualizationName}
           visualizationObjects={visualizationObjects}
+          guided={guided}
         />
         <label htmlFor="numberSelect">Choose a data point:</label>
         <select

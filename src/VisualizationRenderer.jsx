@@ -5,7 +5,7 @@ const VisualizationRenderer = ({ activeVisualizationObject, activeVisualizationN
 
   useEffect(() => {
     if (activeVisualizationObject) {
-      console.log("renderer change");
+      console.log(activeVisualizationObject);
       if ('subVisualizations' in activeVisualizationObject) {
         setActiveVisualizationImage(activeVisualizationObject.subVisualizations[activeVisualizationObject.activeSubVisualization]);
       } else {
