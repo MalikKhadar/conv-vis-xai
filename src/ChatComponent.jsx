@@ -2,14 +2,13 @@ import { useState, useEffect, useRef } from 'react';
 import OpenAI from 'openai';
 import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
 import { MainContainer, ChatContainer, MessageList, Message, MessageInput, TypingIndicator } from '@chatscope/chat-ui-kit-react';
-import metadata from './assets/metadata.json';
+import metadata from './assets/chat/metadata.json';
 import './ChatComponent.css'; // Import the custom CSS file
-import ExplanationButtons from './ExplanationButtons';
 import { useAddLog } from './Logger';
 
 const gptModel = "gpt-4o";
 
-const ChatComponent = ({ apiKey, activeVisualizationObject, chatActive, questions, explanationButtons, guided }) => {
+const ChatComponent = ({ apiKey, activeVisualizationObject, activeVisualizationName, chatActive, questions, datapointNum, guided }) => {
   const [systemMessage, setSystemMessage] = useState('');
   const [fullSystemMessage, setFullSystemMessage] = useState('');
   const [messages, setMessages] = useState([
@@ -24,6 +23,7 @@ const ChatComponent = ({ apiKey, activeVisualizationObject, chatActive, question
     { "role": "assistant", "content": metadata["firstMessage"] },
   ]);
   const [sendMessage, setSendMessage] = useState(0);
+  const [isTyping, setIsTyping] = useState(false);
   const msgListRef = useRef(null);
   const addLog = useAddLog();
 
@@ -71,8 +71,10 @@ const ChatComponent = ({ apiKey, activeVisualizationObject, chatActive, question
       return;
     }
     const fetchGPTResponse = async () => {
+      setIsTyping(true);
       let response = await sendMessageToGPT(apiMessages);
       await streamResponseToChat(response, [...messages]);
+      setIsTyping(false);
     };
     fetchGPTResponse();
   }, [sendMessage]);
@@ -89,11 +91,17 @@ const ChatComponent = ({ apiKey, activeVisualizationObject, chatActive, question
 
     setMessages(messages => [...messages, newMessage]);
 
+    // for local visualizations, specify which datapoint it corresponds to for gpt
+    let visualizationNameForGPT = activeVisualizationObject.name;
+    if (!activeVisualizationObject.global) {
+      visualizationNameForGPT += " " + datapointNum.toString();
+    }
+
     try {
       setApiMessages([...apiMessages, {
         role: "user",
         content: [
-          { type: "text", text: "'''" + activeVisualizationObject.name + "'''" + message },
+          { type: "text", text: "'''" + visualizationNameForGPT + "'''" + message },
           { type: "image_url", image_url: { url: "data:image/png;base64," + base64 } }
         ],
       }]);
@@ -147,6 +155,7 @@ const ChatComponent = ({ apiKey, activeVisualizationObject, chatActive, question
         }
       }
       setApiMessages([...apiMessages, { role: "assistant", content: stream }]);
+      console.log(apiMessages);
       addLog('Reply ' + stream);
     } catch (error) {
       console.error("Error while processing response:", error);
@@ -187,15 +196,17 @@ const ChatComponent = ({ apiKey, activeVisualizationObject, chatActive, question
     const showVisualization = async () => {
       setMessages([...messages, {
         payload: {
-          src: visualizations[visualizationState].module
+          src: activeVisualizationObject.module
         },
         type: 'image',
         direction: 'incoming',
         sender: "assistant"
       }]);
     }
-    showVisualization();
-  }, [visualizationState, visualizations]);
+    if (activeVisualizationObject) {
+      showVisualization();
+    }
+  }, [activeVisualizationObject, activeVisualizationName]);
 
   return (
     <div style={{ width: "100%", height: "100%" }}>
@@ -204,19 +215,10 @@ const ChatComponent = ({ apiKey, activeVisualizationObject, chatActive, question
           <MessageList
             scrollBehavior="auto"
             ref={msgListRef}
-          // typingIndicator={isTyping ? <TypingIndicator content="ExplainoBot is typing" /> : null}
+            typingIndicator={isTyping ? <TypingIndicator content="ExplainoBot is typing" /> : null}
           >
             {messages.map((message, i) => (
-              <div key={i}>
-                <Message model={message} />
-                {i === messages.length - 1 && (
-                  <ExplanationButtons
-                    datapointPath={datapointPath}
-                    setVisualizationState={setVisualizationState}
-                    visualizationState={visualizationState}
-                  />
-                )}
-              </div>
+              <Message key={i} model={message} />
             ))}
           </MessageList>
           <MessageInput placeholder="Type message here" onSend={handleSend} />

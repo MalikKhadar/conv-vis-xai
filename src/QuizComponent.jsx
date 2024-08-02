@@ -18,7 +18,6 @@ const QuizComponent = ({ setQuestions, setDone }) => {
   const loadQuestions = async () => {
     const questions = await import('/src/assets/nonTutorial/questions.json');
     const questionsData = questions.default || questions;
-    console.log(questionsData);
 
     const selectRandomFromArray = (array) => {
       return array[Math.floor(Math.random() * array.length)];

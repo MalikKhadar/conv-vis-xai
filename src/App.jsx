@@ -125,48 +125,46 @@ function App() {
         </div>
       </div>
 
-      {!isChatting ?
-        <>
-          <div style={{ width: "1px", height: "100%", backgroundColor: "lightgrey" }} />
-          <div style={{ flex: "3", display: "flex", flexDirection: "column", height: "100%", justifyContent: "space-between" }}>
-            <div style={{ flex: "1 1 auto", overflowY: "auto", alignContent: "center" }}>
-              <VisualizationRenderer
-                activeVisualizationObject={activeVisualizationObject}
-                activeVisualizationName={activeVisualizationName}
-              />
-            </div>
-            <ExplanationButtons
-              activeVisualizationObject={activeVisualizationObject}
+      <div style={{ width: "1px", height: "100%", backgroundColor: "lightgrey" }} />
+      <div style={{ flex: "3", display: "flex", flexDirection: "column", height: "100%", justifyContent: "space-between" }}>
+        {isChatting ?
+          <div style={{ flex: "3", height: "100%", maxWidth: "100%" }}>
+            <ChatComponent
+              apiKey={apiKey}
               setActiveVisualizationName={setActiveVisualizationName}
-              visualizationObjects={visualizationObjects}
+              activeVisualizationObject={activeVisualizationObject}
+              activeVisualizationName={activeVisualizationName}
+              datapointNum={datapointNum}
+              chatActive={chatActive}
+              questions={questions}
+              guided={guided}
             />
-            <label htmlFor="numberSelect">Choose a data point:</label>
-            <select
-              id="numberSelect"
-              value={datapointNum}
-              onChange={(event) => setDatapointNum(parseInt(event.target.value, 10))}
-            >
-              <option value="0">0</option>
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-            </select>
           </div>
-        </>
-        : null}
+          :
+          <div style={{ flex: "1 1 auto", overflowY: "auto", alignContent: "center" }}>
+            <VisualizationRenderer
+              activeVisualizationObject={activeVisualizationObject}
+              activeVisualizationName={activeVisualizationName}
+            />
+          </div>}
 
-      {isChatting ?
-        <div style={{ flex: "3", height: "100%", maxWidth: "100%" }}>
-          <ChatComponent
-            apiKey={apiKey}
-            setActiveVisualizationName={setActiveVisualizationName}
-            activeVisualizationObject={activeVisualizationObject}
-            chatActive={chatActive}
-            questions={questions}
-            guided={guided}
-          />
-        </div>
-        : <div />}
+        <ExplanationButtons
+          activeVisualizationObject={activeVisualizationObject}
+          setActiveVisualizationName={setActiveVisualizationName}
+          visualizationObjects={visualizationObjects}
+        />
+        <label htmlFor="numberSelect">Choose a data point:</label>
+        <select
+          id="numberSelect"
+          value={datapointNum}
+          onChange={(event) => setDatapointNum(parseInt(event.target.value, 10))}
+        >
+          <option value="0">0</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+        </select>
+      </div>
     </div>
   );
 }

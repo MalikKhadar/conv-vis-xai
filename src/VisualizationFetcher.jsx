@@ -25,7 +25,6 @@ const VisualizationFetcher = ({ activeVisualizationName, setActiveVisualizationO
         if (path.includes(globalPath) || path.includes(datapointPath)) {
           const module = await allVisualizations[path]();
           const visualizationName = path.substring(path.lastIndexOf('/') + 1).split(".")[0];
-          console.log(visualizationName);
 
           if (path.includes(scatterPath)) {
             scatterPlots[visualizationName] = module.default || module;
@@ -48,10 +47,10 @@ const VisualizationFetcher = ({ activeVisualizationName, setActiveVisualizationO
         connections: graphData["Scatter Plots"].Connections,
         global: graphData["Scatter Plots"].Global,
         subVisualizations: scatterPlots,
-        activeSubVisualization: "age"
+        activeSubVisualization: "age",
+        module: scatterPlots.age
       };
 
-      console.log(loadedVisualizations);
       setActiveVisualizationObject(loadedVisualizations[activeVisualizationName]);
       setVisualizationObjects(loadedVisualizations);
     };
@@ -59,12 +58,18 @@ const VisualizationFetcher = ({ activeVisualizationName, setActiveVisualizationO
   }, [datapointNum]);
 
   useEffect(() => {
-    console.log("naem chagen");
     if (visualizationObjects) {
       if (activeVisualizationName.includes("/")) {
         const nameParts = activeVisualizationName.split("/");
-        visualizationObjects[nameParts[0]].activeSubVisualization = nameParts[1];
-        setActiveVisualizationObject(visualizationObjects[nameParts[0]]);
+        let updatedVisualizationObject = visualizationObjects[nameParts[0]];
+        updatedVisualizationObject.activeSubVisualization = nameParts[1];
+        updatedVisualizationObject.module = visualizationObjects[nameParts[0]].subVisualizations[nameParts[1]];
+        setActiveVisualizationObject(updatedVisualizationObject);
+
+        let newVisualizationObjects = visualizationObjects;
+        newVisualizationObjects[nameParts[0]] = updatedVisualizationObject;
+
+        setVisualizationObjects(newVisualizationObjects);
       } else {
         setActiveVisualizationObject(visualizationObjects[activeVisualizationName]);
       }

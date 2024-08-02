@@ -9,7 +9,6 @@ const ExplanationButtons = ({ activeVisualizationObject, setActiveVisualizationN
 
   useEffect(() => {
     if (visualizationObjects) {
-      console.log(Object.keys(visualizationObjects));
       setVisualizationNames(Object.keys(visualizationObjects));
     }
   }, [visualizationObjects]);
