@@ -49,6 +49,12 @@ function App() {
   }, []);
 
   useEffect(() => {
+    if (visitedAllVisualizations) {
+      setGuided(false);
+    }
+  }, [visitedAllVisualizations]);
+
+  useEffect(() => {
     if (done) {
       uploadLogs();
     }
@@ -132,7 +138,7 @@ function App() {
       <div style={{ width: "1px", height: "100%", backgroundColor: "lightgrey" }} />
       <div style={{ flex: "3", display: "flex", flexDirection: "column", height: "100%", justifyContent: "space-between" }}>
         {isChatting ?
-          <div style={{ flex: "3", height: "100%", maxWidth: "100%" }}>
+          <div style={{ flex: "3", height: "50%" }}>
             <ChatComponent
               apiKey={apiKey}
               setActiveVisualizationName={setActiveVisualizationName}

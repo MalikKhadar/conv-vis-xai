@@ -97,6 +97,10 @@ const ChatComponent = ({ apiKey, activeVisualizationObject, activeVisualizationN
       visualizationNameForGPT += " " + datapointNum.toString();
     }
 
+    if (guided) {
+      visualizationNameForGPT += ": " + activeVisualizationObject.connectionText;
+    }
+
     try {
       setApiMessages([...apiMessages, {
         role: "user",
