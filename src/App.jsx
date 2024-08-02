@@ -48,6 +48,12 @@ function App() {
     }
   }, []);
 
+  useEffect(() => {
+    if (done) {
+      uploadLogs();
+    }
+  }, [done]);
+
   const firstLoad = () => {
     addLog('Loaded page');
     // extract url params
@@ -112,7 +118,7 @@ function App() {
           <PredictionDisplay datapointNum={datapointNum} />
         </div>
         <div style={{ flex: "2" }}>
-          <QuizComponent datapointNum={datapointNum} setQuestions={setQuestions} />
+          <QuizComponent setDone={setDone} setQuestions={setQuestions} />
         </div>
         <div style={{ flex: "1", alignContent: "end" }}>
           <OpenTutorialButton isChatting={isChatting} />
