@@ -1,17 +1,24 @@
 import { useState, useEffect } from 'react';
 
-const VisualizationFetcher = ({ activeVisualizationName, setActiveVisualizationObject, datapointNum, scatter, graphData }) => {
+const VisualizationFetcher = ({ activeVisualizationName, setActiveVisualizationObject, visualizationObjects, setVisualizationObjects, datapointNum, graphData }) => {
   // Import all JSON and PNG files from the base directory
   const allVisualizations = import.meta.glob('/src/assets/nonTutorial/**/*.png');
-  const [visualizations, setVisualizations] = useState();
 
   useEffect(() => {
     const loadVisualizations = async () => {
       // Only keep the files that match our visualization path
-      const loadedVisualizations = { "Scatter Plots": {} };
+      const loadedVisualizations = {
+        "Scatter Plots": {
+          name: "Scatter Plots",
+          connections: graphData["Scatter Plots"].Connections,
+          global: graphData["Scatter Plots"].Global,
+          subVisualizations: []
+        }
+      };
       const globalPath = '/src/assets/nonTutorial/global/';
-      const datapointPath = '/src/assets/nonTutorial/datapoints/${datapointNum}/';
+      const datapointPath = '/src/assets/nonTutorial/datapoints/' + datapointNum.toString() + "/";
       const scatterPath = '/src/assets/nonTutorial/global/Scatter Plots/';
+      let scatterPlots = {};
 
       for (const path in allVisualizations) {
         // filter out irrelevant assets
@@ -21,13 +28,10 @@ const VisualizationFetcher = ({ activeVisualizationName, setActiveVisualizationO
           console.log(visualizationName);
 
           if (path.includes(scatterPath)) {
-            loadedVisualizations["Scatter Plots"][visualizationName] = {
-              path,
-              name: visualizationName,
-              module: module.default || module
-            }
+            scatterPlots[visualizationName] = module.default || module;
           } else {
-            const visualizationObject = graphData.Visualizations[visualizationName];
+            let visualizationObject = graphData[visualizationName];
+
             loadedVisualizations[visualizationName] = {
               path,
               name: visualizationName,
@@ -38,16 +42,32 @@ const VisualizationFetcher = ({ activeVisualizationName, setActiveVisualizationO
           }
         }
       }
-      console.log(loadedVisualizations);
+      loadedVisualizations["Scatter Plots"] = {
+        path: "none",
+        name: "Scatter Plots",
+        connections: graphData["Scatter Plots"].Connections,
+        global: graphData["Scatter Plots"].Global,
+        subVisualizations: scatterPlots,
+        activeSubVisualization: "age"
+      };
 
-      setVisualizations(loadedVisualizations);
+      console.log(loadedVisualizations);
+      setActiveVisualizationObject(loadedVisualizations[activeVisualizationName]);
+      setVisualizationObjects(loadedVisualizations);
     };
     loadVisualizations();
   }, [datapointNum]);
 
   useEffect(() => {
-    if (visualizations && activeVisualizationName in visualizations) {
-      setActiveVisualizationObject(visualizations[activeVisualizationName]);
+    console.log("naem chagen");
+    if (visualizationObjects) {
+      if (activeVisualizationName.includes("/")) {
+        const nameParts = activeVisualizationName.split("/");
+        visualizationObjects[nameParts[0]].activeSubVisualization = nameParts[1];
+        setActiveVisualizationObject(visualizationObjects[nameParts[0]]);
+      } else {
+        setActiveVisualizationObject(visualizationObjects[activeVisualizationName]);
+      }
     }
   }, [activeVisualizationName]);
 

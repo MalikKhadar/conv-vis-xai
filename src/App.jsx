@@ -16,6 +16,7 @@ function App() {
   const [finishedTutorial, setFinishedTutorial] = useState(false);
   const [activeVisualizationName, setActiveVisualizationName] = useState("Global Bar Plot");
   const [activeVisualizationObject, setActiveVisualizationObject] = useState(null);
+  const [visualizationObjects, setVisualizationObjects] = useState({});
   const [datapointNum, setDatapointNum] = useState(0);
   const addLog = useAddLog();
   const addCustomData = useAddCustomData();
@@ -99,6 +100,8 @@ function App() {
       <VisualizationFetcher
         activeVisualizationName={activeVisualizationName}
         setActiveVisualizationObject={setActiveVisualizationObject}
+        visualizationObjects={visualizationObjects}
+        setVisualizationObjects={setVisualizationObjects}
         datapointNum={datapointNum}
         graphData={graphData}
       />
@@ -121,13 +124,27 @@ function App() {
           <div style={{ width: "1px", height: "100%", backgroundColor: "lightgrey" }} />
           <div style={{ flex: "3", display: "flex", flexDirection: "column", height: "100%", justifyContent: "space-between" }}>
             <div style={{ flex: "1 1 auto", overflowY: "auto", alignContent: "center" }}>
-              <VisualizationRenderer activeVisualizationObject={activeVisualizationObject} />
+              <VisualizationRenderer
+                activeVisualizationObject={activeVisualizationObject}
+                activeVisualizationName={activeVisualizationName}
+              />
             </div>
             <ExplanationButtons
               activeVisualizationObject={activeVisualizationObject}
               setActiveVisualizationName={setActiveVisualizationName}
-              graphData={graphData}
+              visualizationObjects={visualizationObjects}
             />
+            <label htmlFor="numberSelect">Choose a data point:</label>
+            <select
+              id="numberSelect"
+              value={datapointNum}
+              onChange={(event) => setDatapointNum(parseInt(event.target.value, 10))}
+            >
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+            </select>
           </div>
         </>
         : null}

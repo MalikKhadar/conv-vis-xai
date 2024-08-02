@@ -1,13 +1,18 @@
 import { useState, useEffect } from 'react';
 
-const VisualizationRenderer = ({ activeVisualizationObject }) => {
+const VisualizationRenderer = ({ activeVisualizationObject, activeVisualizationName }) => {
   const [activeVisualizationImage, setActiveVisualizationImage] = useState("");
 
   useEffect(() => {
     if (activeVisualizationObject) {
-      setActiveVisualizationImage(activeVisualizationObject.module);
+      console.log("renderer change");
+      if ('subVisualizations' in activeVisualizationObject) {
+        setActiveVisualizationImage(activeVisualizationObject.subVisualizations[activeVisualizationObject.activeSubVisualization]);
+      } else {
+        setActiveVisualizationImage(activeVisualizationObject.module);
+      }
     }
-  }, [activeVisualizationObject]);
+  }, [activeVisualizationObject, activeVisualizationName]);
 
   return (
     // <div style={{ display: "block", margin: "auto", height: "100%" }}>
