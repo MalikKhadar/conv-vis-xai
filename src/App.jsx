@@ -28,7 +28,7 @@ function App() {
   const [isChatting, setIsChatting] = useState(false);
   const [guided, setGuided] = useState(false);
   const [questions, setQuestions] = useState([])
-  const [loaded, setLoaded] = useState(false);
+  const [visitedAllVisualizations, setVisitedAllVisualizations] = useState(false);
   const [done, setDone] = useState(false);
   const [graphData, setGraphData] = useState(null);
 
@@ -66,7 +66,6 @@ function App() {
     addCustomData('chat', urlParams.has('chat'));
     addCustomData('participantId', urlParams.get("id"));
     setTutorialOnly(urlParams.has('tutorialOnly'));
-    setLoaded(true);
   };
 
   const handleFinishTutorial = () => {
@@ -110,6 +109,7 @@ function App() {
         setVisualizationObjects={setVisualizationObjects}
         datapointNum={datapointNum}
         graphData={graphData}
+        setVisitedAllVisualizations={setVisitedAllVisualizations}
       />
       {isChatting ? <TestKey apiKey={apiKey} setApiKey={setApiKey} setChatActive={setChatActive} /> : null}
 
@@ -118,7 +118,11 @@ function App() {
           <PredictionDisplay datapointNum={datapointNum} />
         </div>
         <div style={{ flex: "2" }}>
-          <QuizComponent setDone={setDone} setQuestions={setQuestions} />
+          {visitedAllVisualizations ?
+            <QuizComponent setDone={setDone} setQuestions={setQuestions} />
+            :
+            <p>Visit all 6 types of visualizations before accessing the quiz</p>
+          }
         </div>
         <div style={{ flex: "1", alignContent: "end" }}>
           <OpenTutorialButton isChatting={isChatting} />

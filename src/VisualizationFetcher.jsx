@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 
-const VisualizationFetcher = ({ activeVisualizationName, setActiveVisualizationObject, visualizationObjects, setVisualizationObjects, datapointNum, graphData }) => {
+const VisualizationFetcher = ({ activeVisualizationName, setActiveVisualizationObject, visualizationObjects, setVisualizationObjects, datapointNum, graphData, setVisitedAllVisualizations }) => {
   // Import all JSON and PNG files from the base directory
   const allVisualizations = import.meta.glob('/src/assets/nonTutorial/**/*.png');
+  const [unvisitedVisualizationsNum, setUnvisitedVisualizationsNum] = useState(1);
 
   useEffect(() => {
     const loadVisualizations = async () => {
@@ -36,7 +37,8 @@ const VisualizationFetcher = ({ activeVisualizationName, setActiveVisualizationO
               name: visualizationName,
               connections: visualizationObject.Connections,
               global: visualizationObject.Global,
-              module: module.default || module
+              module: module.default || module,
+              visited: false
             };
           }
         }
@@ -48,9 +50,11 @@ const VisualizationFetcher = ({ activeVisualizationName, setActiveVisualizationO
         global: graphData["Scatter Plots"].Global,
         subVisualizations: scatterPlots,
         activeSubVisualization: "age",
-        module: scatterPlots.age
+        module: scatterPlots.age,
+        visited: false
       };
 
+      setUnvisitedVisualizationsNum(Object.keys(loadedVisualizations).length - 1);
       setActiveVisualizationObject(loadedVisualizations[activeVisualizationName]);
       setVisualizationObjects(loadedVisualizations);
     };
@@ -72,6 +76,17 @@ const VisualizationFetcher = ({ activeVisualizationName, setActiveVisualizationO
         setVisualizationObjects(newVisualizationObjects);
       } else {
         setActiveVisualizationObject(visualizationObjects[activeVisualizationName]);
+      }
+      if (visualizationObjects[activeVisualizationName]) {
+        const visitedStatus = visualizationObjects[activeVisualizationName].visited;
+        if (!visitedStatus) {
+          const updatedUnvisitedVisualizationsNum = unvisitedVisualizationsNum - 1;
+          if (updatedUnvisitedVisualizationsNum <= 0) {
+            setVisitedAllVisualizations(true);
+          }
+          setUnvisitedVisualizationsNum(unvisitedVisualizationsNum - 1);
+        }
+        visualizationObjects[activeVisualizationName].visited = true;
       }
     }
   }, [activeVisualizationName]);
