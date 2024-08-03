@@ -200,7 +200,8 @@ const ChatComponent = ({ apiKey, activeVisualizationObject, activeVisualizationN
     const showVisualization = async () => {
       setMessages([...messages, {
         payload: {
-          src: activeVisualizationObject.module
+          src: activeVisualizationObject.module,
+          width: "100%"
         },
         type: 'image',
         direction: 'incoming',

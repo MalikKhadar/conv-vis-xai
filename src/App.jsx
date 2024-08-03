@@ -151,7 +151,7 @@ function App() {
             />
           </div>
           :
-          <div style={{ flex: "1 1 auto", overflowY: "auto", alignContent: "center" }}>
+          <div style={{ display: "flex", flex: "3", overflowY: "auto", justifyContent: "center" }}>
             <VisualizationRenderer
               activeVisualizationObject={activeVisualizationObject}
               activeVisualizationName={activeVisualizationName}
