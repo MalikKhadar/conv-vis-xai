@@ -39,6 +39,7 @@ const VisualizationFetcher = ({ activeVisualizationName, setActiveVisualizationO
               connectionText: visualizationObject["Connection Text"],
               global: visualizationObject.Global,
               module: module.default || module,
+              order: visualizationObject.Order,
               visited: false
             };
           }
@@ -53,6 +54,7 @@ const VisualizationFetcher = ({ activeVisualizationName, setActiveVisualizationO
         subVisualizations: scatterPlots,
         activeSubVisualization: "age",
         module: scatterPlots.age,
+        order: graphData["Scatter Plots"].Order,
         visited: false
       };
 

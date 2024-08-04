@@ -162,19 +162,10 @@ function App() {
           activeVisualizationObject={activeVisualizationObject}
           setActiveVisualizationName={setActiveVisualizationName}
           visualizationObjects={visualizationObjects}
+          datapointNum={datapointNum}
+          setDatapointNum={setDatapointNum}
           guided={guided}
         />
-        <label htmlFor="numberSelect">Choose a data point:</label>
-        <select
-          id="numberSelect"
-          value={datapointNum}
-          onChange={(event) => setDatapointNum(parseInt(event.target.value, 10))}
-        >
-          <option value="0">0</option>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-        </select>
       </div>
     </div>
   );
