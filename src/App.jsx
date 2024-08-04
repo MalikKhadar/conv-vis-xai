@@ -18,6 +18,7 @@ function App() {
   const [activeVisualizationObject, setActiveVisualizationObject] = useState(null);
   const [visualizationObjects, setVisualizationObjects] = useState({});
   const [datapointNum, setDatapointNum] = useState(0);
+  const [numberOfDatapoints, setNumberOfDatapoints] = useState(0);
   const addLog = useAddLog();
   const addCustomData = useAddCustomData();
   const uploadLogs = useUploadLogs();
@@ -121,7 +122,7 @@ function App() {
 
       <div style={{ display: 'flex', flexDirection: 'column', flex: "1", height: "100%", minWidth: "15vw", overflowY: "hidden" }}>
         <div style={{ flex: "1" }}>
-          <PredictionDisplay datapointNum={datapointNum} />
+          <PredictionDisplay datapointNum={datapointNum} setNumberOfDatapoints={setNumberOfDatapoints} />
         </div>
         <div style={{ flex: "2" }}>
           {visitedAllVisualizations ?
@@ -163,6 +164,7 @@ function App() {
           setActiveVisualizationName={setActiveVisualizationName}
           visualizationObjects={visualizationObjects}
           datapointNum={datapointNum}
+          numberOfDatapoints={numberOfDatapoints}
           setDatapointNum={setDatapointNum}
           guided={guided}
         />

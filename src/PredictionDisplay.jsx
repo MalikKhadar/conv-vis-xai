@@ -1,33 +1,42 @@
 import React, { useState, useEffect } from 'react';
 import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
 
-function PredictionDisplay({ datapointNum }) {
-  const [prediction, setPrediction] = useState(null);
+function PredictionDisplay({ datapointNum, setNumberOfDatapoints }) {
+  const [predictions, setPredictions] = useState([]);
 
   useEffect(() => {
-    const fetchMetadata = async () => {
-      const metadataFiles = import.meta.glob(`/src/assets/nonTutorial/datapoints/**/metadata.json`);
-      const datapointPath = `/src/assets/nonTutorial/datapoints/${datapointNum}/`;
-      const metadataPath = Object.keys(metadataFiles).find(path => path.includes(datapointPath));
+    const loadPredictions = async () => {
+      // Import all JSON files
+      const metadataFiles = import.meta.glob('/src/assets/nonTutorial/datapoints/**/metadata.json');
 
-      if (metadataPath) {
-        try {
-          const module = await metadataFiles[metadataPath]();
-          setPrediction(module.prediction);
-        } catch (error) {
-          console.error('Error fetching metadata:', error);
-        }
-      } else {
-        console.error(`Metadata file not found for path: ${datapointPath}`);
-      }
+      // Create an array of promises to load the files
+      const loadFilePromises = Object.entries(metadataFiles).map(async ([path, loadFile]) => {
+        const module = await loadFile();
+        return { path, prediction: module.default.prediction };
+      });
+
+      // Resolve all promises and sort the results by path
+      const results = await Promise.all(loadFilePromises);
+      results.sort((a, b) => {
+        const aIndex = parseInt(a.path.match(/\/(\d+)\//)[1], 10);
+        const bIndex = parseInt(b.path.match(/\/(\d+)\//)[1], 10);
+        return aIndex - bIndex;
+      });
+
+      // Extract predictions in order
+      const orderedPredictions = results.map(result => result.prediction);
+      setPredictions(orderedPredictions);
+      
+      setNumberOfDatapoints(orderedPredictions.length);
     };
 
-    fetchMetadata();
-  }, [datapointNum]);
+    loadPredictions();
+  }, []);
+
 
   return (
     <h3 style={{ textAlign: "center", fontWeight: "normal" }}>
-      Model prediction: <b>{prediction ? "more" : "less"} than $50k</b>
+      Model prediction: <b>{predictions[datapointNum] ? "more" : "less"} than $50k</b>
     </h3>
   );
 }
