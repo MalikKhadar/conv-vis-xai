@@ -164,7 +164,7 @@ function App() {
           {visitedAllVisualizations ?
             <QuizComponent setDone={setDone} setQuestions={setQuestions} />
             :
-            <p>Visit all 6 types of visualizations before accessing the quiz</p>
+            <p style={{ textAlign: "center" }}>Visit all 6 types of visualizations before accessing the quiz</p>
           }
         </div>
         <div style={{ flex: "1", alignContent: "end" }}>
@@ -173,7 +173,7 @@ function App() {
       </div>
 
       <div style={{ width: "1px", height: "100%", backgroundColor: "lightgrey" }} />
-      <div style={{ flex: "3", display: "flex", flexDirection: "column", height: "100%", justifyContent: "space-between" }}>
+      <div style={{ flex: "3", display: "flex", gap: '7px', flexDirection: "column", height: "100%", justifyContent: "space-between" }}>
         {isChatting ?
           <div style={{ flex: "3", height: "50%" }}>
             {visualizationObjects.visualizations ?

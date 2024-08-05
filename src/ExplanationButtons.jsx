@@ -55,9 +55,9 @@ const ExplanationButtons = ({ visualizationObjects, setVisualizationObjects, dat
   );
 
   const RowOfButtons = ({ visualizations }) => (
-    <div style={{ display: 'flex', justifyContent: 'space-between', height: "50%", alignItems: "start", gap: "2px" }}>
+    <div style={{ display: 'flex', justifyContent: 'space-between', height: "50%", alignItems: "start" }}>
       {visualizations.map((visualizationObject) => (
-        <div key={visualizationObject.name} style={{ display: "flex", height: "100%", flex: "1", alignItems: "center", marginBottom: '10px' }}>
+        <div key={visualizationObject.name} style={{ display: "flex", height: "100%", flex: "1", alignItems: "center" }}>
           <Button
             border
             onClick={() => {
