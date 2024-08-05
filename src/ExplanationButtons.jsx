@@ -4,33 +4,34 @@ import { Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import { Button } from '@chatscope/chat-ui-kit-react';
 import { useAddLog } from './Logger';
 
-const ExplanationButtons = ({ activeVisualizationObject, setActiveVisualizationName, visualizationObjects, datapointNum, numberOfDatapoints, setDatapointNum, guided }) => {
+const ExplanationButtons = ({ activeVisualizationObject, setActiveVisualizationObject, visualizationObjects, datapointNum, setDatapointNum, numberOfDatapoints, guided }) => {
   const [globalVisualizationObjects, setGlobalVisualizationObjects] = useState([]);
   const [localVisualizationObjects, setLocalVisualizationObjects] = useState([]);
-  const [selectedSubVisualizations, setSelectedSubvisualizations] = useState({});
   const [datapointLabels, setDatapointLabels] = useState([]);
+  const [hasSetDefaultVisualization, setHasSetDefaultVisualization] = useState(false);
   const addLog = useAddLog();
 
   useEffect(() => {
     if (visualizationObjects) {
-      // set the default selected subvisualizations
-      let loadedSelectedSubVisualizations = selectedSubVisualizations;
-
-      for (const visualizationObject in visualizationObjects) {
-        const loadedVisualizationObject = visualizationObjects[visualizationObject];
-        if ("subVisualizations" in loadedVisualizationObject) {
-          loadedSelectedSubVisualizations[loadedVisualizationObject.name] = Object.keys(loadedVisualizationObject.subVisualizations)[0];
-        }
-      }
+      const loadedGlobalVisualizationObjects = Object.values(visualizationObjects)
+        .filter(visualization => visualization.global)
+        .sort((a, b) => a.order - b.order);
 
       // populate lists of global and local visualizations
-      setGlobalVisualizationObjects(Object.values(visualizationObjects)
-        .filter(visualization => visualization.global)
-        .sort((a, b) => a.order - b.order));
+      setGlobalVisualizationObjects(loadedGlobalVisualizationObjects);
 
       setLocalVisualizationObjects(Object.values(visualizationObjects)
         .filter(visualization => !visualization.global)
         .sort((a, b) => a.order - b.order));
+
+      if (!hasSetDefaultVisualization && loadedGlobalVisualizationObjects.length > 0) {
+        setActiveVisualizationObject(loadedGlobalVisualizationObjects[0]);
+        setHasSetDefaultVisualization(true);
+      }
+
+      if (activeVisualizationObject) {
+        setActiveVisualizationObject(visualizationObjects[activeVisualizationObject.name]);
+      }
     }
   }, [visualizationObjects]);
 
@@ -43,25 +44,46 @@ const ExplanationButtons = ({ activeVisualizationObject, setActiveVisualizationN
     setDatapointLabels(newDatapointLabels);
   }, [numberOfDatapoints]);
 
-  const handleSubVisualizationChange = (name, e) => {
-    setActiveVisualizationName(name + "/" + e.target.value);
-    let loadedSelectedSubVisualizations = selectedSubVisualizations;
-    loadedSelectedSubVisualizations[name] = e.target.value;
-    setSelectedSubvisualizations(loadedSelectedSubVisualizations);
+  const handleSubVisualizationChange = (visualizationObject, e) => {
+    const newSubVisualization = e.target.value;
+    let updatedVisualizationObject = null;
+  
+    const updateVisualizationObjects = (prevState) => {
+      return prevState.map(obj => {
+        if (obj.name === visualizationObject.name) {
+          const updatedObj = { ...obj, activeSubVisualization: newSubVisualization };
+          updatedVisualizationObject = updatedObj;
+          return updatedObj;
+        }
+        return obj;
+      });
+    };
+  
+    if (visualizationObject.global) {
+      setGlobalVisualizationObjects(prevState => updateVisualizationObjects(prevState));
+    } else {
+      setLocalVisualizationObjects(prevState => updateVisualizationObjects(prevState));
+    }
+  
+    // Ensure updatedVisualizationObject is set before calling setActiveVisualizationObject
+    if (updatedVisualizationObject) {
+      setActiveVisualizationObject(updatedVisualizationObject);
+      addLog('Viewing subvisualization ' + updatedVisualizationObject.name + "/" + newSubVisualization);
+    } else {
+      console.error('Updated Visualization Object is null');
+    }
+  };
 
-    addLog('Viewing subvisualization ' + name + "/" + e.target.value)
-  }
-
-  const subVisualizationDropdown = (options, name) => (
+  const subVisualizationDropdown = (visualizationObject) => (
     <FormControl style={{ flex: "1" }}>
-      <InputLabel id="select-label">Sub-Visualizataion</InputLabel>
+      <InputLabel id="select-label">Sub-Visualization</InputLabel>
       <Select
         labelId="select-label"
-        value={selectedSubVisualizations[name]}
-        onChange={(e) => handleSubVisualizationChange(name, e)}
+        value={visualizationObject.activeSubVisualization}
+        onChange={(e) => handleSubVisualizationChange(visualizationObject, e)}
         label="Sub-Visualization"
       >
-        {Object.keys(options).map((key) => (
+        {Object.keys(visualizationObject.subVisualizations).map((key) => (
           <MenuItem key={key} value={key}>
             {key}
           </MenuItem>
@@ -76,7 +98,7 @@ const ExplanationButtons = ({ activeVisualizationObject, setActiveVisualizationN
         <div key={visualizationObject.name} style={{ display: "flex", height: "100%", flex: "1", alignItems: "center", marginBottom: '10px' }}>
           <Button
             border
-            onClick={() => { setActiveVisualizationName(visualizationObject.name); addLog('Viewing visualization ' + visualizationObject.name) }}
+            onClick={() => { setActiveVisualizationObject(visualizationObject); addLog('Viewing visualization ' + visualizationObject.name) }}
             style={{
               flex: "1",
               height: "100%",
@@ -87,7 +109,7 @@ const ExplanationButtons = ({ activeVisualizationObject, setActiveVisualizationN
             {visualizationObject.name}
           </Button>
           {activeVisualizationObject && "subVisualizations" in visualizationObject &&
-            subVisualizationDropdown(visualizationObject["subVisualizations"], visualizationObject.name)}
+            subVisualizationDropdown(visualizationObject)}
         </div>
       ))}
     </div>
@@ -102,9 +124,10 @@ const ExplanationButtons = ({ activeVisualizationObject, setActiveVisualizationN
             <FormControl variant="outlined">
               <Select
                 labelId="datapoint-select-label"
-                value={datapointNum}
+                value={activeVisualizationObject ? datapointNum : ''}
                 onChange={(event) => {
                   setDatapointNum(parseInt(event.target.value, 10));
+                  setActiveVisualizationObject(activeVisualizationObject);
                   addLog('Set datapoint to ' + (event.target.value).toString())
                 }}
               >

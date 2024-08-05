@@ -14,24 +14,27 @@ import { useAddCustomData, useAddLog, useUploadLogs } from './Logger';
 
 function App() {
   const [finishedTutorial, setFinishedTutorial] = useState(false);
-  const [activeVisualizationName, setActiveVisualizationName] = useState("Global Bar Plot");
+  const [graphData, setGraphData] = useState(null);
   const [activeVisualizationObject, setActiveVisualizationObject] = useState(null);
   const [visualizationObjects, setVisualizationObjects] = useState({});
   const [datapointNum, setDatapointNum] = useState(0);
   const [numberOfDatapoints, setNumberOfDatapoints] = useState(0);
+
   const addLog = useAddLog();
   const addCustomData = useAddCustomData();
   const uploadLogs = useUploadLogs();
   const hasLoggedRef = useRef(false); // Create a ref to track if logging has been done
+  
   const [apiKey, setApiKey] = useState('');
   const [chatActive, setChatActive] = useState(false);
   const [tutorialOnly, setTutorialOnly] = useState(false);
   const [isChatting, setIsChatting] = useState(false);
+  
   const [guided, setGuided] = useState(true);
   const [questions, setQuestions] = useState([])
+  const [unvisitedVisualizationsNum, setUnvisitedVisualizationsNum] = useState(1);
   const [visitedAllVisualizations, setVisitedAllVisualizations] = useState(false);
   const [done, setDone] = useState(false);
-  const [graphData, setGraphData] = useState(null);
 
   useEffect(() => {
     const loadGraphData = async () => {
@@ -48,6 +51,19 @@ function App() {
       hasLoggedRef.current = true;
     }
   }, []);
+
+  useEffect(() => {
+    if (activeVisualizationObject) {
+      if (!activeVisualizationObject.visited) {
+        const updatedUnvisitedVisualizationsNum = unvisitedVisualizationsNum - 1;
+        if (updatedUnvisitedVisualizationsNum <= 0) {
+          setVisitedAllVisualizations(true);
+        }
+        setUnvisitedVisualizationsNum(unvisitedVisualizationsNum - 1);
+      }
+      activeVisualizationObject.visited = true;
+    }
+  }, [activeVisualizationObject]);
 
   useEffect(() => {
     if (visitedAllVisualizations) {
@@ -110,13 +126,11 @@ function App() {
   return (
     <div className="App" style={{ display: 'flex', gap: '5px', height: "100vh", margin: "auto", boxSizing: "border-box", padding: "10px" }}>
       <VisualizationFetcher
-        activeVisualizationName={activeVisualizationName}
-        setActiveVisualizationObject={setActiveVisualizationObject}
         visualizationObjects={visualizationObjects}
         setVisualizationObjects={setVisualizationObjects}
+        setUnvisitedVisualizationsNum={setUnvisitedVisualizationsNum}
         datapointNum={datapointNum}
         graphData={graphData}
-        setVisitedAllVisualizations={setVisitedAllVisualizations}
       />
       {isChatting ? <TestKey apiKey={apiKey} setApiKey={setApiKey} setChatActive={setChatActive} /> : null}
 
@@ -142,9 +156,7 @@ function App() {
           <div style={{ flex: "3", height: "50%" }}>
             <ChatComponent
               apiKey={apiKey}
-              setActiveVisualizationName={setActiveVisualizationName}
               activeVisualizationObject={activeVisualizationObject}
-              activeVisualizationName={activeVisualizationName}
               datapointNum={datapointNum}
               chatActive={chatActive}
               questions={questions}
@@ -155,17 +167,18 @@ function App() {
           <div style={{ display: "flex", flex: "3", overflowY: "auto", justifyContent: "center" }}>
             <VisualizationRenderer
               activeVisualizationObject={activeVisualizationObject}
-              activeVisualizationName={activeVisualizationName}
+              datapointNum={datapointNum}
             />
           </div>}
 
         <ExplanationButtons
           activeVisualizationObject={activeVisualizationObject}
-          setActiveVisualizationName={setActiveVisualizationName}
+          setActiveVisualizationObject={setActiveVisualizationObject}
           visualizationObjects={visualizationObjects}
+          setVisualizationObjects={setVisualizationObjects}
           datapointNum={datapointNum}
-          numberOfDatapoints={numberOfDatapoints}
           setDatapointNum={setDatapointNum}
+          numberOfDatapoints={numberOfDatapoints}
           guided={guided}
         />
       </div>

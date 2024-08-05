@@ -1,9 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 
-const VisualizationFetcher = ({ activeVisualizationName, setActiveVisualizationObject, visualizationObjects, setVisualizationObjects, datapointNum, graphData, setVisitedAllVisualizations }) => {
+const VisualizationFetcher = ({ visualizationObjects, setVisualizationObjects, setUnvisitedVisualizationsNum, datapointNum, graphData }) => {
   // Import all JSON and PNG files from the base directory
   const allVisualizations = import.meta.glob('/src/assets/nonTutorial/**/*.png');
-  const [unvisitedVisualizationsNum, setUnvisitedVisualizationsNum] = useState(1);
 
   useEffect(() => {
     const loadVisualizations = async () => {
@@ -45,6 +44,14 @@ const VisualizationFetcher = ({ activeVisualizationName, setActiveVisualizationO
           }
         }
       }
+      
+      let loadedActiveSubVisualization = Object.keys(scatterPlots)[0];
+      if (visualizationObjects && "Scatter Plots" in visualizationObjects) {
+        console.log("scatter plots already has an active subvisualization");
+        loadedActiveSubVisualization = visualizationObjects["Scatter Plots"].activeSubVisualization;
+        console.log(loadedActiveSubVisualization);
+      }
+
       loadedVisualizations["Scatter Plots"] = {
         path: "none",
         name: "Scatter Plots",
@@ -52,48 +59,16 @@ const VisualizationFetcher = ({ activeVisualizationName, setActiveVisualizationO
         connectionText: graphData["Scatter Plots"]["Connection Text"],
         global: graphData["Scatter Plots"].Global,
         subVisualizations: scatterPlots,
-        activeSubVisualization: "age",
-        module: scatterPlots.age,
+        activeSubVisualization: loadedActiveSubVisualization,
         order: graphData["Scatter Plots"].Order,
         visited: false
       };
 
-      setUnvisitedVisualizationsNum(Object.keys(loadedVisualizations).length - 1);
-      setActiveVisualizationObject(loadedVisualizations[activeVisualizationName]);
+      setUnvisitedVisualizationsNum(Object.keys(loadedVisualizations).length);
       setVisualizationObjects(loadedVisualizations);
     };
     loadVisualizations();
   }, [datapointNum]);
-
-  useEffect(() => {
-    if (visualizationObjects) {
-      if (activeVisualizationName.includes("/")) {
-        const nameParts = activeVisualizationName.split("/");
-        let updatedVisualizationObject = visualizationObjects[nameParts[0]];
-        updatedVisualizationObject.activeSubVisualization = nameParts[1];
-        updatedVisualizationObject.module = visualizationObjects[nameParts[0]].subVisualizations[nameParts[1]];
-        setActiveVisualizationObject(updatedVisualizationObject);
-
-        let newVisualizationObjects = visualizationObjects;
-        newVisualizationObjects[nameParts[0]] = updatedVisualizationObject;
-
-        setVisualizationObjects(newVisualizationObjects);
-      } else {
-        setActiveVisualizationObject(visualizationObjects[activeVisualizationName]);
-      }
-      if (visualizationObjects[activeVisualizationName]) {
-        const visitedStatus = visualizationObjects[activeVisualizationName].visited;
-        if (!visitedStatus) {
-          const updatedUnvisitedVisualizationsNum = unvisitedVisualizationsNum - 1;
-          if (updatedUnvisitedVisualizationsNum <= 0) {
-            setVisitedAllVisualizations(true);
-          }
-          setUnvisitedVisualizationsNum(unvisitedVisualizationsNum - 1);
-        }
-        visualizationObjects[activeVisualizationName].visited = true;
-      }
-    }
-  }, [activeVisualizationName]);
 
   return null;
 };

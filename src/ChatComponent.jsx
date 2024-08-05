@@ -8,7 +8,7 @@ import { useAddLog } from './Logger';
 
 const gptModel = "gpt-4o";
 
-const ChatComponent = ({ apiKey, activeVisualizationObject, activeVisualizationName, chatActive, questions, datapointNum, guided }) => {
+const ChatComponent = ({ apiKey, activeVisualizationObject, selectedSubVisualization, chatActive, questions, datapointNum, guided }) => {
   const [systemMessage, setSystemMessage] = useState('');
   const [fullSystemMessage, setFullSystemMessage] = useState('');
   const [messages, setMessages] = useState([
@@ -95,6 +95,10 @@ const ChatComponent = ({ apiKey, activeVisualizationObject, activeVisualizationN
     let visualizationNameForGPT = activeVisualizationObject.name;
     if (!activeVisualizationObject.global) {
       visualizationNameForGPT += " " + datapointNum.toString();
+    }
+
+    if ("subVisualizations" in activeVisualizationObject) {
+      visualizationNameForGPT += " " + selectedSubVisualization;
     }
 
     if (guided) {
@@ -211,7 +215,7 @@ const ChatComponent = ({ apiKey, activeVisualizationObject, activeVisualizationN
     if (activeVisualizationObject) {
       showVisualization();
     }
-  }, [activeVisualizationObject, activeVisualizationName]);
+  }, [activeVisualizationObject, selectedSubVisualization]);
 
   return (
     <div style={{ width: "100%", height: "100%" }}>
