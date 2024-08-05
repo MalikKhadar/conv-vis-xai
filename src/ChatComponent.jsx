@@ -8,7 +8,7 @@ import { useAddLog } from './Logger';
 
 const gptModel = "gpt-4o";
 
-const ChatComponent = ({ apiKey, activeVisualizationObject, selectedSubVisualization, chatActive, questions, datapointNum, guided }) => {
+const ChatComponent = ({ apiKey, visualizationObjects, chatActive, questions, datapointNum, guided }) => {
   const [systemMessage, setSystemMessage] = useState('');
   const [fullSystemMessage, setFullSystemMessage] = useState('');
   const [messages, setMessages] = useState([
@@ -80,7 +80,16 @@ const ChatComponent = ({ apiKey, activeVisualizationObject, selectedSubVisualiza
   }, [sendMessage]);
 
   const handleSend = async (message) => {
-    const base64 = await encodeImage(activeVisualizationObject.module);
+    let imageToEncode;
+    let activeVisualization = visualizationObjects.visualizations[visualizationObjects.activeVisualization];
+
+    if ("subVisualizations" in activeVisualization) {
+      imageToEncode = activeVisualization.subVisualizations[activeVisualization.activeSubVisualization];
+    } else {
+      imageToEncode = activeVisualization.module;
+    }
+
+    const base64 = await encodeImage(imageToEncode);
 
     const newMessage = {
       message,
@@ -92,17 +101,17 @@ const ChatComponent = ({ apiKey, activeVisualizationObject, selectedSubVisualiza
     setMessages(messages => [...messages, newMessage]);
 
     // for local visualizations, specify which datapoint it corresponds to for gpt
-    let visualizationNameForGPT = activeVisualizationObject.name;
-    if (!activeVisualizationObject.global) {
+    let visualizationNameForGPT = activeVisualization.name;
+    if (!activeVisualization.global) {
       visualizationNameForGPT += " " + datapointNum.toString();
     }
 
-    if ("subVisualizations" in activeVisualizationObject) {
-      visualizationNameForGPT += " " + selectedSubVisualization;
+    if ("subVisualizations" in activeVisualization) {
+      visualizationNameForGPT += " " + activeVisualization.activeSubVisualization;
     }
 
     if (guided) {
-      visualizationNameForGPT += ": " + activeVisualizationObject.connectionText;
+      visualizationNameForGPT += ": " + activeVisualization.connectionText;
     }
 
     try {
@@ -202,9 +211,23 @@ const ChatComponent = ({ apiKey, activeVisualizationObject, selectedSubVisualiza
 
   useEffect(() => {
     const showVisualization = async () => {
+      let imageToSend;
+      let activeVisualization = visualizationObjects.visualizations[visualizationObjects.activeVisualization];
+
+      // prevent sending the same image on visited update
+      if (!activeVisualization.visited) {
+        return;
+      }
+
+      if ("subVisualizations" in activeVisualization) {
+        imageToSend = activeVisualization.subVisualizations[activeVisualization.activeSubVisualization];
+      } else {
+        imageToSend = activeVisualization.module;
+      }
+
       setMessages([...messages, {
         payload: {
-          src: activeVisualizationObject.module,
+          src: imageToSend,
           width: "100%"
         },
         type: 'image',
@@ -212,10 +235,10 @@ const ChatComponent = ({ apiKey, activeVisualizationObject, selectedSubVisualiza
         sender: "assistant"
       }]);
     }
-    if (activeVisualizationObject) {
+    if (visualizationObjects.activeVisualization) {
       showVisualization();
     }
-  }, [activeVisualizationObject, selectedSubVisualization]);
+  }, [visualizationObjects.visualizations[visualizationObjects.activeVisualization]]);
 
   return (
     <div style={{ width: "100%", height: "100%" }}>

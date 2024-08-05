@@ -1,17 +1,25 @@
 import { useState, useEffect } from 'react';
 
-const VisualizationRenderer = ({ activeVisualizationObject }) => {
+const VisualizationRenderer = ({ visualizationObjects }) => {
   const [activeVisualizationImage, setActiveVisualizationImage] = useState("");
 
   useEffect(() => {
-    if (activeVisualizationObject) {
-      if ('subVisualizations' in activeVisualizationObject) {
-        setActiveVisualizationImage(activeVisualizationObject.subVisualizations[activeVisualizationObject.activeSubVisualization]);
+    const activeName = visualizationObjects.activeVisualization;
+    
+    if (!activeName) {
+      return;
+    }
+
+    const currentVisualization = visualizationObjects.visualizations[activeName];
+
+    if (currentVisualization) {
+      if ('subVisualizations' in currentVisualization) {
+        setActiveVisualizationImage(currentVisualization.subVisualizations[currentVisualization.activeSubVisualization]);
       } else {
-        setActiveVisualizationImage(activeVisualizationObject.module);
+        setActiveVisualizationImage(currentVisualization.module);
       }
     }
-  }, [activeVisualizationObject]);
+  }, [visualizationObjects]);
 
   return (
     <img src={activeVisualizationImage} style={{ maxHeight: "100%", maxWidth: "100%", alignSelf: "center", display: "flex" }} />

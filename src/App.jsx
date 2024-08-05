@@ -15,7 +15,6 @@ import { useAddCustomData, useAddLog, useUploadLogs } from './Logger';
 function App() {
   const [finishedTutorial, setFinishedTutorial] = useState(false);
   const [graphData, setGraphData] = useState(null);
-  const [activeVisualizationObject, setActiveVisualizationObject] = useState(null);
   const [visualizationObjects, setVisualizationObjects] = useState({});
   const [datapointNum, setDatapointNum] = useState(0);
   const [numberOfDatapoints, setNumberOfDatapoints] = useState(0);
@@ -24,12 +23,12 @@ function App() {
   const addCustomData = useAddCustomData();
   const uploadLogs = useUploadLogs();
   const hasLoggedRef = useRef(false); // Create a ref to track if logging has been done
-  
+
   const [apiKey, setApiKey] = useState('');
   const [chatActive, setChatActive] = useState(false);
   const [tutorialOnly, setTutorialOnly] = useState(false);
   const [isChatting, setIsChatting] = useState(false);
-  
+
   const [guided, setGuided] = useState(true);
   const [questions, setQuestions] = useState([])
   const [unvisitedVisualizationsNum, setUnvisitedVisualizationsNum] = useState(1);
@@ -53,17 +52,40 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (activeVisualizationObject) {
-      if (!activeVisualizationObject.visited) {
-        const updatedUnvisitedVisualizationsNum = unvisitedVisualizationsNum - 1;
-        if (updatedUnvisitedVisualizationsNum <= 0) {
-          setVisitedAllVisualizations(true);
-        }
-        setUnvisitedVisualizationsNum(unvisitedVisualizationsNum - 1);
-      }
-      activeVisualizationObject.visited = true;
+    const activeName = visualizationObjects.activeVisualization;
+
+    if (!activeName) {
+      return;
     }
-  }, [activeVisualizationObject]);
+
+    const currentVisualization = visualizationObjects.visualizations[activeName];
+
+    if (currentVisualization && !currentVisualization.visited) {
+      const updatedUnvisitedVisualizationsNum = unvisitedVisualizationsNum - 1;
+
+      if (updatedUnvisitedVisualizationsNum <= 0) {
+        setVisitedAllVisualizations(true);
+      }
+      setUnvisitedVisualizationsNum(updatedUnvisitedVisualizationsNum);
+
+      const updatedVisualization = {
+        ...currentVisualization,
+        visited: true
+      };
+
+      setVisualizationObjects((prevState) => {
+        const updatedVisualizations = {
+          ...prevState.visualizations,
+          [activeName]: updatedVisualization
+        };
+
+        return {
+          ...prevState,
+          visualizations: updatedVisualizations
+        };
+      });
+    }
+  }, [visualizationObjects]);
 
   useEffect(() => {
     if (visitedAllVisualizations) {
@@ -154,26 +176,26 @@ function App() {
       <div style={{ flex: "3", display: "flex", flexDirection: "column", height: "100%", justifyContent: "space-between" }}>
         {isChatting ?
           <div style={{ flex: "3", height: "50%" }}>
-            <ChatComponent
-              apiKey={apiKey}
-              activeVisualizationObject={activeVisualizationObject}
-              datapointNum={datapointNum}
-              chatActive={chatActive}
-              questions={questions}
-              guided={guided}
-            />
+            {visualizationObjects.visualizations ?
+              <ChatComponent
+                apiKey={apiKey}
+                visualizationObjects={visualizationObjects}
+                datapointNum={datapointNum}
+                chatActive={chatActive}
+                questions={questions}
+                guided={guided}
+              />
+              : null}
           </div>
           :
           <div style={{ display: "flex", flex: "3", overflowY: "auto", justifyContent: "center" }}>
             <VisualizationRenderer
-              activeVisualizationObject={activeVisualizationObject}
+              visualizationObjects={visualizationObjects}
               datapointNum={datapointNum}
             />
           </div>}
 
         <ExplanationButtons
-          activeVisualizationObject={activeVisualizationObject}
-          setActiveVisualizationObject={setActiveVisualizationObject}
           visualizationObjects={visualizationObjects}
           setVisualizationObjects={setVisualizationObjects}
           datapointNum={datapointNum}

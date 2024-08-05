@@ -4,36 +4,9 @@ import { Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import { Button } from '@chatscope/chat-ui-kit-react';
 import { useAddLog } from './Logger';
 
-const ExplanationButtons = ({ activeVisualizationObject, setActiveVisualizationObject, visualizationObjects, datapointNum, setDatapointNum, numberOfDatapoints, guided }) => {
-  const [globalVisualizationObjects, setGlobalVisualizationObjects] = useState([]);
-  const [localVisualizationObjects, setLocalVisualizationObjects] = useState([]);
+const ExplanationButtons = ({ visualizationObjects, setVisualizationObjects, datapointNum, setDatapointNum, numberOfDatapoints, guided }) => {
   const [datapointLabels, setDatapointLabels] = useState([]);
-  const [hasSetDefaultVisualization, setHasSetDefaultVisualization] = useState(false);
   const addLog = useAddLog();
-
-  useEffect(() => {
-    if (visualizationObjects) {
-      const loadedGlobalVisualizationObjects = Object.values(visualizationObjects)
-        .filter(visualization => visualization.global)
-        .sort((a, b) => a.order - b.order);
-
-      // populate lists of global and local visualizations
-      setGlobalVisualizationObjects(loadedGlobalVisualizationObjects);
-
-      setLocalVisualizationObjects(Object.values(visualizationObjects)
-        .filter(visualization => !visualization.global)
-        .sort((a, b) => a.order - b.order));
-
-      if (!hasSetDefaultVisualization && loadedGlobalVisualizationObjects.length > 0) {
-        setActiveVisualizationObject(loadedGlobalVisualizationObjects[0]);
-        setHasSetDefaultVisualization(true);
-      }
-
-      if (activeVisualizationObject) {
-        setActiveVisualizationObject(visualizationObjects[activeVisualizationObject.name]);
-      }
-    }
-  }, [visualizationObjects]);
 
   useEffect(() => {
     const newDatapointLabels = Array.from({ length: numberOfDatapoints }, (v, i) => ({
@@ -46,32 +19,21 @@ const ExplanationButtons = ({ activeVisualizationObject, setActiveVisualizationO
 
   const handleSubVisualizationChange = (visualizationObject, e) => {
     const newSubVisualization = e.target.value;
-    let updatedVisualizationObject = null;
-  
-    const updateVisualizationObjects = (prevState) => {
-      return prevState.map(obj => {
-        if (obj.name === visualizationObject.name) {
-          const updatedObj = { ...obj, activeSubVisualization: newSubVisualization };
-          updatedVisualizationObject = updatedObj;
-          return updatedObj;
-        }
-        return obj;
-      });
+    const updatedVisualizationObject = {
+      ...visualizationObjects.visualizations[visualizationObject.name],
+      activeSubVisualization: newSubVisualization
     };
-  
-    if (visualizationObject.global) {
-      setGlobalVisualizationObjects(prevState => updateVisualizationObjects(prevState));
-    } else {
-      setLocalVisualizationObjects(prevState => updateVisualizationObjects(prevState));
-    }
-  
-    // Ensure updatedVisualizationObject is set before calling setActiveVisualizationObject
-    if (updatedVisualizationObject) {
-      setActiveVisualizationObject(updatedVisualizationObject);
-      addLog('Viewing subvisualization ' + updatedVisualizationObject.name + "/" + newSubVisualization);
-    } else {
-      console.error('Updated Visualization Object is null');
-    }
+
+    setVisualizationObjects(prevState => ({
+      ...prevState,
+      visualizations: {
+        ...prevState.visualizations,
+        [visualizationObject.name]: updatedVisualizationObject
+      },
+      activeVisualization: visualizationObject.name
+    }));
+
+    addLog('Viewing subvisualization ' + visualizationObject.name + "/" + newSubVisualization);
   };
 
   const subVisualizationDropdown = (visualizationObject) => (
@@ -79,11 +41,11 @@ const ExplanationButtons = ({ activeVisualizationObject, setActiveVisualizationO
       <InputLabel id="select-label">Sub-Visualization</InputLabel>
       <Select
         labelId="select-label"
-        value={visualizationObject.activeSubVisualization}
+        value={visualizationObject.activeSubVisualization || ''}
         onChange={(e) => handleSubVisualizationChange(visualizationObject, e)}
         label="Sub-Visualization"
       >
-        {Object.keys(visualizationObject.subVisualizations).map((key) => (
+        {Object.keys(visualizationObject.subVisualizations || {}).map((key) => (
           <MenuItem key={key} value={key}>
             {key}
           </MenuItem>
@@ -92,24 +54,30 @@ const ExplanationButtons = ({ activeVisualizationObject, setActiveVisualizationO
     </FormControl>
   );
 
-  const RowOfButtons = ({ visualizationObjects }) => (
+  const RowOfButtons = ({ visualizations }) => (
     <div style={{ display: 'flex', justifyContent: 'space-between', height: "50%", alignItems: "start", gap: "2px" }}>
-      {visualizationObjects.map((visualizationObject) => (
+      {visualizations.map((visualizationObject) => (
         <div key={visualizationObject.name} style={{ display: "flex", height: "100%", flex: "1", alignItems: "center", marginBottom: '10px' }}>
           <Button
             border
-            onClick={() => { setActiveVisualizationObject(visualizationObject); addLog('Viewing visualization ' + visualizationObject.name) }}
+            onClick={() => {
+              setVisualizationObjects(prevState => ({
+                ...prevState,
+                activeVisualization: visualizationObject.name
+              }));
+              addLog('Viewing visualization ' + visualizationObject.name);
+            }}
             style={{
               flex: "1",
               height: "100%",
-              backgroundColor: activeVisualizationObject && visualizationObject.name == activeVisualizationObject.name ? '#c6e3fa' :
-                guided && activeVisualizationObject.connections.includes(visualizationObject.name) ? "#FAF7C6" : "white"
+              backgroundColor: visualizationObject.name === visualizationObjects.activeVisualization ? '#c6e3fa' :
+                guided && visualizationObjects.visualizations[visualizationObjects.activeVisualization]?.connections.includes(visualizationObject.name)
+                  ? "#FAF7C6" : "white"
             }}
           >
             {visualizationObject.name}
           </Button>
-          {activeVisualizationObject && "subVisualizations" in visualizationObject &&
-            subVisualizationDropdown(visualizationObject)}
+          {visualizationObject.subVisualizations && subVisualizationDropdown(visualizationObject)}
         </div>
       ))}
     </div>
@@ -124,11 +92,12 @@ const ExplanationButtons = ({ activeVisualizationObject, setActiveVisualizationO
             <FormControl variant="outlined">
               <Select
                 labelId="datapoint-select-label"
-                value={activeVisualizationObject ? datapointNum : ''}
+                // using visualizationObjects.visualizations just to see if stuff is loaded
+                value={visualizationObjects.visualizations ? datapointNum : ""}
                 onChange={(event) => {
-                  setDatapointNum(parseInt(event.target.value, 10));
-                  setActiveVisualizationObject(activeVisualizationObject);
-                  addLog('Set datapoint to ' + (event.target.value).toString())
+                  const newDatapointNum = parseInt(event.target.value, 10);
+                  setDatapointNum(newDatapointNum);
+                  addLog('Set datapoint to ' + newDatapointNum.toString());
                 }}
               >
                 {datapointLabels.map((datapoint) => (
@@ -141,10 +110,16 @@ const ExplanationButtons = ({ activeVisualizationObject, setActiveVisualizationO
           </div>
         </div>
       </div>
-      <div>
-        <RowOfButtons visualizationObjects={globalVisualizationObjects} />
-        <RowOfButtons visualizationObjects={localVisualizationObjects} />
-      </div>
+      {visualizationObjects.visualizations ? (
+        <div>
+          <RowOfButtons
+            visualizations={visualizationObjects.globalOrder.map(name => visualizationObjects.visualizations[name])}
+          />
+          <RowOfButtons
+            visualizations={visualizationObjects.localOrder.map(name => visualizationObjects.visualizations[name])}
+          />
+        </div>
+      ) : null}
     </div>
   );
 };
