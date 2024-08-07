@@ -16,7 +16,7 @@ const QuizComponent = ({ setQuestions, setDone }) => {
   const addCustomData = useAddCustomData();
 
   const loadQuestions = async () => {
-    const questions = await import('/src/assets/nonTutorial/questions.json');
+    const questions = await import('/src/assets/nonTutorial/questions/questions.json');
     const questionsData = questions.default || questions;
 
     const selectRandomFromArray = (array) => {
@@ -107,44 +107,53 @@ const QuizComponent = ({ setQuestions, setDone }) => {
   const currentQuestion = shuffledQuestions[currentIndex];
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', width: "100%", height: "100%", justifyContent: "flex-end" }}>
-      <div style={{ display: 'flex', flexDirection: 'column', width: "100%", height: "100%" }}>
-        <h3 style={{ whiteSpace: 'pre-wrap', fontWeight: 'normal', flex: '1' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', width: "100%", height: "100%" }}>
+      <div style={{ display: 'flex', flexDirection: 'column', width: "100%", height: "100%", overflow: 'hidden' }}>
+        <h3 style={{ whiteSpace: 'pre-wrap', fontWeight: 'normal', flexShrink: 0 }}>
           <b>Question {currentIndex + 1}/{shuffledQuestions.length}</b>: {currentQuestion.Prompt}
         </h3>
         {currentQuestion.Image && (
-          <img
-            src={currentQuestion.Image}
-            alt="Question related"
-            style={{ maxWidth: '100%', maxHeight: '300px', objectFit: 'contain', marginBottom: '10px' }}
-          />
+          <div style={{ flex: '1', display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '10px' }}>
+            <img
+              src={currentQuestion.Image}
+              alt="Question related"
+              style={{ maxHeight: "45vh", objectFit: 'contain' }}
+            />
+          </div>
         )}
-        {currentQuestion.Options.map((option, index) => (
-          <Button
-            key={index}
-            border
-            onClick={() => handleOptionClick(option, index)}
-            style={{
-              margin: '2px',
-              backgroundColor: index === selectedOption ? '#c6e3fa' : 'white',
-              flex: "1"
-            }}
-          >
-            {option}
-          </Button>
-        ))}
+        <div style={{ display: "flex", flexFlow: "column" }}>
+          {currentQuestion.Options.map((option, index) => (
+            <Button
+              key={index}
+              border
+              onClick={() => handleOptionClick(option, index)}
+              style={{
+                margin: '2px',
+                backgroundColor: index === selectedOption ? '#c6e3fa' : 'white',
+                flex: "1 0 auto"
+              }}
+            >
+              {option}
+            </Button>
+          ))}
+        </div>
         <div style={{ height: '1em' }} />
-        <ConfidenceDropdown confidenceRating={confidenceRating} setConfidenceRating={setConfidenceRating} style={{ paddingBottom: "10px" }} />
-        <div style={{ flex: "10" }} />
-        <Button
-          border
-          onClick={handleSubmit}
-          disabled={!(selectedOption >= 0 && confidenceRating)}
-        >
-          Submit
-        </Button>
+        <div style={{ display: "flex", flexFlow: "row", width: "100%", alignItems: "center", marginTop: '10px' }}>
+          <ConfidenceDropdown
+            confidenceRating={confidenceRating}
+            setConfidenceRating={setConfidenceRating}
+            style={{ flexShrink: 0, marginRight: '10px' }}
+          />
+          <Button
+            border
+            onClick={handleSubmit}
+            disabled={!(selectedOption >= 0 && confidenceRating)}
+            style={{ flexShrink: 0, height: "100%" }}
+          >
+            Submit
+          </Button>
+        </div>
       </div>
-      <div style={{ height: "5px" }} />
     </div>
   );
 };

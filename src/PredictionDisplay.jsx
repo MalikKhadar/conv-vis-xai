@@ -35,9 +35,10 @@ function PredictionDisplay({ datapointNum, setNumberOfDatapoints }) {
 
 
   return (
-    <h3 style={{ textAlign: "center", fontWeight: "normal" }}>
-      Model prediction: <b>{predictions[datapointNum] ? "more" : "less"} than $50k</b>
-    </h3>
+    // <h3 style={{ textAlign: "center", fontWeight: "normal" }}>
+    //   Model prediction: <b>{predictions[datapointNum] ? "more" : "less"} than $50k</b>
+    // </h3>
+    null
   );
 }
 

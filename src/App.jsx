@@ -5,7 +5,7 @@ import QuizComponent from './QuizComponent';
 import ExplanationButtons from './ExplanationButtons';
 import ChatComponent from './ChatComponent';
 import PredictionDisplay from './PredictionDisplay';
-import TutorialPage from './TutorialPage';
+import InterpretationTutorial from './InterpretationTutorial';
 import VisualizationRenderer from './VisualizationRenderer';
 import VisualizationFetcher from './VisualizationFetcher';
 import OpenTutorialButton from './OpenTutorialButton';
@@ -26,7 +26,7 @@ function App() {
 
   const [apiKey, setApiKey] = useState('');
   const [chatActive, setChatActive] = useState(false);
-  const [tutorialOnly, setTutorialOnly] = useState(false);
+  const [interpretationTutorial, setInterpretationTutorial] = useState(false);
   const [isChatting, setIsChatting] = useState(false);
 
   const [guided, setGuided] = useState(true);
@@ -110,7 +110,7 @@ function App() {
     }
     addCustomData('chat', urlParams.has('chat'));
     addCustomData('participantId', urlParams.get("id"));
-    setTutorialOnly(urlParams.has('tutorialOnly'));
+    setInterpretationTutorial(urlParams.has('interpretationTutorial'));
   };
 
   const handleFinishTutorial = () => {
@@ -131,8 +131,8 @@ function App() {
   if (!finishedTutorial) {
     return (
       <div>
-        <TutorialPage />
-        {!tutorialOnly ?
+        <InterpretationTutorial />
+        {!interpretationTutorial ?
           <div style={{ display: "flex", flexFlow: "column", justifyContent: "center", alignItems: "center" }}>
             <div><b>If you need help:</b> This tutorial will be available by clicking a "Reopen Tutorial" button.</div>
             <b>Click the "Begin" button below to load the interface</b>
@@ -157,17 +157,15 @@ function App() {
       {isChatting ? <TestKey apiKey={apiKey} setApiKey={setApiKey} setChatActive={setChatActive} /> : null}
 
       <div style={{ display: 'flex', flexDirection: 'column', flex: "1", height: "100%", minWidth: "15vw", overflowY: "hidden" }}>
+        <PredictionDisplay datapointNum={datapointNum} setNumberOfDatapoints={setNumberOfDatapoints} />
         <div style={{ flex: "1" }}>
-          <PredictionDisplay datapointNum={datapointNum} setNumberOfDatapoints={setNumberOfDatapoints} />
-        </div>
-        <div style={{ flex: "2" }}>
           {visitedAllVisualizations ?
             <QuizComponent setDone={setDone} setQuestions={setQuestions} />
             :
-            <p style={{ textAlign: "center" }}>Visit all 6 types of visualizations before accessing the quiz</p>
+            <p style={{ textAlign: "center", marginTop: "50%" }}>The questions will appear once you've explored the data and visuals presented to the right</p>
           }
         </div>
-        <div style={{ flex: "1", alignContent: "end" }}>
+        <div style={{ flex: "0", alignContent: "end" }}>
           <OpenTutorialButton isChatting={isChatting} />
         </div>
       </div>

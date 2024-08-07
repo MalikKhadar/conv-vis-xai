@@ -11,14 +11,15 @@ const gptModel = "gpt-4o";
 const ChatComponent = ({ apiKey, visualizationObjects, chatActive, questions, datapointNum, guided }) => {
   const [systemMessage, setSystemMessage] = useState('');
   const [fullSystemMessage, setFullSystemMessage] = useState('');
-  const [messages, setMessages] = useState([
-    {
-      message: metadata["firstMessage"],
-      sentTime: "just now",
-      direction: "incoming",
-      sender: "assistant"
-    }
-  ]);
+  // const [messages, setMessages] = useState([
+  //   {
+  //     message: metadata["firstMessage"],
+  //     sentTime: "just now",
+  //     direction: "incoming",
+  //     sender: "assistant"
+  //   }
+  // ]);
+  const [messages, setMessages] = useState([]);
   const [apiMessages, setApiMessages] = useState([
     { "role": "assistant", "content": metadata["firstMessage"] },
   ]);
@@ -65,6 +66,17 @@ const ChatComponent = ({ apiKey, visualizationObjects, chatActive, questions, da
 
     constructFullSystemMessage();
   }, [systemMessage, questions]);
+
+  useEffect(() => {
+    if (chatActive) {
+      const newMessage = {
+        message: metadata["firstMessage"],
+        direction: 'incoming',
+        sender: "assistant"
+      };
+      setMessages(messages => [...messages, newMessage]);
+    }
+  }, [chatActive]);
 
   useEffect(() => {
     if (!chatActive) {
@@ -209,6 +221,16 @@ const ChatComponent = ({ apiKey, visualizationObjects, chatActive, questions, da
     scrollDown();
   }, [messages])
 
+  // Function to check if an image is wide
+  const isImageWide = (imageUrl, callback) => {
+    const img = new Image();
+    img.onload = () => {
+      const aspectRatio = img.width / img.height;
+      callback(aspectRatio > 2); // true if width >> height, meaning the image is wide
+    };
+    img.src = imageUrl;
+  };
+
   useEffect(() => {
     const showVisualization = async () => {
       let imageToSend;
@@ -225,15 +247,20 @@ const ChatComponent = ({ apiKey, visualizationObjects, chatActive, questions, da
         imageToSend = activeVisualization.module;
       }
 
-      setMessages([...messages, {
-        payload: {
-          src: imageToSend,
-          width: "100%"
-        },
-        type: 'image',
-        direction: 'incoming',
-        sender: "assistant"
-      }]);
+      isImageWide(imageToSend, (isWide) => {
+        const newMessage = {
+          payload: {
+            src: imageToSend,
+            width: isWide ? "55vw" : "100%",
+            height: isWide ? "100%" : "60vh"
+          },
+          type: 'image',
+          direction: 'outgoing',
+          sender: "user"
+        };
+
+        setMessages([...messages, newMessage]);
+      });
     }
     if (visualizationObjects.activeVisualization) {
       showVisualization();

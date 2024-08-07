@@ -1,5 +1,9 @@
+.cs-message__image-content {
+    float: right;
+}
+
 .cs-message--outgoing .cs-message__content {
-    background-color: white !important;
+    background-color: #66c2a5b6 !important;
 }
 
 .cs-message-input__content-editor {
@@ -11,7 +15,7 @@
 }
 
 .cs-message__html-content {
-    font-size: 18px;
+    font-size: 17px;
 }
 
 .cs-main-container {

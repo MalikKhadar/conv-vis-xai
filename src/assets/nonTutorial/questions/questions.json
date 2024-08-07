@@ -1,0 +1,21 @@
+[
+    {
+        "Prompt": "What color is the sky?",
+        "Image": "src/assets/nonTutorial/questions/Similar Data Table.png",
+        "Options": [
+            "bluebluebluebluebluebluebluebluebluebluebluebluebluebluebl",
+            "not bluenot bluenot bluenot bluenot bluenot",
+            "maybe bluemaybe bluemaybe blue",
+            "skip"
+        ]
+    },
+    {
+        "Prompt": "What color is the sky?",
+        "Options": [
+            "bluebluebluebluebluebluebluebluebluebluebluebluebluebluebl",
+            "not bluenot bluenot bluenot bluenot bluenot",
+            "maybe bluemaybe bluemaybe blue",
+            "skip"
+        ]
+    }
+]

@@ -3,21 +3,17 @@ import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
 import { Button } from '@chatscope/chat-ui-kit-react';
 import { useAddLog } from './Logger';
 
-const OpenTutorialButton = (isChatting) => {
+const OpenTutorialButton = () => {
   const addLog = useAddLog();
 
   const openTutorial = () => {
-    addLog('Reopened tutorial');
+    addLog('Opened interpretation tutorial');
 
     // Get the current URL without the query string
     const baseUrl = window.location.origin + window.location.pathname;
 
     // Define the new query string
-    let newQueryString = "?tutorialOnly&d=00";
-
-    if (isChatting == true) {
-      newQueryString += "&chat";
-    }
+    let newQueryString = "?interpretationTutorial";
 
     // Open a new tab with the new URL
     window.open(baseUrl + newQueryString, '_blank');
@@ -29,7 +25,7 @@ const OpenTutorialButton = (isChatting) => {
         border
         onClick={openTutorial}
       >
-        Reopen Tutorial<br/>(opens in a new tab)
+        Open XAI Interpretation Tutorial<br/>(opens in a new tab)
       </Button>
     </div>
   );
