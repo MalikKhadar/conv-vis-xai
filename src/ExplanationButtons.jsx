@@ -59,7 +59,9 @@ const ExplanationButtons = ({ visualizationObjects, setVisualizationObjects, dat
       {visualizations.map((visualizationObject) => (
         <div key={visualizationObject.name} style={{ display: "flex", height: "100%", flex: "1", alignItems: "center" }}>
           <Button
-            border
+            // border
+            border = {!(guided && !introducedVisualizations.includes(visualizationObject.name))}
+            // style={{display: "none"}}
             disabled={writingIntro || (guided && !introducedVisualizations.includes(visualizationObject.name))}
             onClick={() => {
               setVisualizationObjects(prevState => ({
@@ -70,11 +72,12 @@ const ExplanationButtons = ({ visualizationObjects, setVisualizationObjects, dat
             }}
             style={{
               flex: "1",
+              // display: "none",
               height: "100%",
               backgroundColor: visualizationObject.name === visualizationObjects.activeVisualization ? '#c6e3fa' : "white"
             }}
           >
-            {visualizationObject.name}
+            {guided && !introducedVisualizations.includes(visualizationObject.name) ? "" : visualizationObject.name}
           </Button>
           {visualizationObject.subVisualizations && subVisualizationDropdown(visualizationObject)}
         </div>

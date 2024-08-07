@@ -22,6 +22,9 @@ const VisualizationFetcher = ({ visualizationObjects, setVisualizationObjects, s
             scatterPlots[visualizationName] = module.default || module;
           } else {
             let visualizationObject = graphData[visualizationName];
+            let loadedVisited = visualizationObjects.visualizations ?
+              visualizationObject.visited : false;
+
             visualizations[visualizationName] = {
               path,
               name: visualizationName,
@@ -30,7 +33,7 @@ const VisualizationFetcher = ({ visualizationObjects, setVisualizationObjects, s
               global: visualizationObject.Global,
               module: module.default || module,
               order: visualizationObject.Order,
-              visited: false
+              visited: loadedVisited
             };
 
             if (visualizationObject.Global) {
@@ -43,10 +46,12 @@ const VisualizationFetcher = ({ visualizationObjects, setVisualizationObjects, s
       }
 
       let loadedSubVisualization = Object.keys(scatterPlots)[0];
+      let loadedVisited = false;
       if (visualizationObjects.visualizations) {
         loadedSubVisualization = visualizationObjects.visualizations["Scatter Plots"].activeSubVisualization;
+        loadedVisited = true;
       }
-      
+
       visualizations["Scatter Plots"] = {
         path: "none",
         name: "Scatter Plots",
@@ -56,7 +61,7 @@ const VisualizationFetcher = ({ visualizationObjects, setVisualizationObjects, s
         subVisualizations: scatterPlots,
         activeSubVisualization: loadedSubVisualization,
         order: graphData["Scatter Plots"].Order,
-        visited: false
+        visited: loadedVisited
       };
       globalOrder.push("Scatter Plots");
 

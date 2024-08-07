@@ -3,7 +3,11 @@
 }
 
 .cs-message--outgoing .cs-message__content {
-    background-color: #66c2a5b6 !important;
+    background-color: #b4e5d5 !important;
+}
+
+.cs-message--incoming .cs-message__content {
+    background-color: #dfe6f7 !important;
 }
 
 .cs-message-input__content-editor {

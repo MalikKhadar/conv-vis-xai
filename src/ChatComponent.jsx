@@ -195,6 +195,7 @@ const ChatComponent = ({ apiKey, visualizationObjects, chatActive, questions, da
         }
       }
       setWritingIntro(false);
+      console.log(apiMessages);
       setApiMessages([...apiMessages, { role: "assistant", content: stream }]);
       addLog('Reply ' + stream);
     } catch (error) {
@@ -237,7 +238,7 @@ const ChatComponent = ({ apiKey, visualizationObjects, chatActive, questions, da
     const img = new Image();
     img.onload = () => {
       const aspectRatio = img.width / img.height;
-      callback(aspectRatio > 2); // true if width >> height, meaning the image is wide
+      callback(aspectRatio > 1.5); // true if width >> height, meaning the image is wide
     };
     img.src = imageUrl;
   };
