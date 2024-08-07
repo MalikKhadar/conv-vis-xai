@@ -1,1 +1,0 @@
-const o=[{Prompt:"What color is the sky?",Image:"src/assets/nonTutorial/global/Beeswarm Plot.png",Options:["blue","not blue"]},[{Prompt:"dp 1",Options:["yes1","no1"]},{Prompt:"dp 2",Options:["yes2","no2"]}]];export{o as default};
