@@ -8,7 +8,7 @@ import { useAddLog } from './Logger';
 
 const gptModel = "gpt-4o";
 
-const ChatComponent = ({ apiKey, visualizationObjects, chatActive, questions, datapointNum, guided, introducedVisualizations, setIntroducedVisualizations }) => {
+const ChatComponent = ({ apiKey, visualizationObjects, chatActive, questions, datapointNum, guided, setWritingIntro, introducedVisualizations, setIntroducedVisualizations }) => {
   const [systemMessage, setSystemMessage] = useState('');
   const [fullSystemMessage, setFullSystemMessage] = useState('');
   // const [messages, setMessages] = useState([
@@ -194,7 +194,7 @@ const ChatComponent = ({ apiKey, visualizationObjects, chatActive, questions, da
           }
         }
       }
-
+      setWritingIntro(false);
       setApiMessages([...apiMessages, { role: "assistant", content: stream }]);
       addLog('Reply ' + stream);
     } catch (error) {
@@ -268,6 +268,7 @@ const ChatComponent = ({ apiKey, visualizationObjects, chatActive, questions, da
         if (activeVisualization.visited) {
           setMessages([...messages, newMessage]);
         } else {
+          setWritingIntro(true);
           handleSend("");
         }
       });

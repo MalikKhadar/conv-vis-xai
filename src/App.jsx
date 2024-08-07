@@ -29,7 +29,8 @@ function App() {
   const [interpretationTutorial, setInterpretationTutorial] = useState(false);
   const [isChatting, setIsChatting] = useState(false);
 
-  const [guided, setGuided] = useState(true);
+  const [guided, setGuided] = useState(false);
+  const [writingIntro, setWritingIntro] = useState(false);
   const [introducedVisualizations, setIntroducedVisualizations] = useState(["Global Bar Plot"]);
   const [questions, setQuestions] = useState([])
   const [unvisitedVisualizationsNum, setUnvisitedVisualizationsNum] = useState(1);
@@ -112,8 +113,15 @@ function App() {
 
     if (urlParams.has('chat')) {
       setIsChatting(true);
+      addCustomData('condition', 'chat');
     }
-    addCustomData('chat', urlParams.has('chat'));
+    else if (urlParams.has('guide')) {
+      setGuided(true);
+      setIsChatting(true);
+      addCustomData('condition', 'guided');
+    } else {
+      addCustomData('condition', 'no chat');
+    }
     addCustomData('participantId', urlParams.get("id"));
     setInterpretationTutorial(urlParams.has('interpretationTutorial'));
   };
@@ -187,6 +195,7 @@ function App() {
                 chatActive={chatActive}
                 questions={questions}
                 guided={guided}
+                setWritingIntro={setWritingIntro}
                 introducedVisualizations={introducedVisualizations}
                 setIntroducedVisualizations={setIntroducedVisualizations}
               />
@@ -207,6 +216,7 @@ function App() {
           setDatapointNum={setDatapointNum}
           numberOfDatapoints={numberOfDatapoints}
           guided={guided}
+          writingIntro={writingIntro}
           introducedVisualizations={introducedVisualizations}
         />
       </div>

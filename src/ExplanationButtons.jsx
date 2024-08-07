@@ -4,7 +4,7 @@ import { Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import { Button } from '@chatscope/chat-ui-kit-react';
 import { useAddLog } from './Logger';
 
-const ExplanationButtons = ({ visualizationObjects, setVisualizationObjects, datapointNum, setDatapointNum, numberOfDatapoints, guided, introducedVisualizations }) => {
+const ExplanationButtons = ({ visualizationObjects, setVisualizationObjects, datapointNum, setDatapointNum, numberOfDatapoints, guided, writingIntro, introducedVisualizations }) => {
   const [datapointLabels, setDatapointLabels] = useState([]);
   const addLog = useAddLog();
 
@@ -60,7 +60,7 @@ const ExplanationButtons = ({ visualizationObjects, setVisualizationObjects, dat
         <div key={visualizationObject.name} style={{ display: "flex", height: "100%", flex: "1", alignItems: "center" }}>
           <Button
             border
-            disabled={!introducedVisualizations.includes(visualizationObject.name)}
+            disabled={writingIntro || (guided && !introducedVisualizations.includes(visualizationObject.name))}
             onClick={() => {
               setVisualizationObjects(prevState => ({
                 ...prevState,
@@ -71,9 +71,6 @@ const ExplanationButtons = ({ visualizationObjects, setVisualizationObjects, dat
             style={{
               flex: "1",
               height: "100%",
-              // backgroundColor: visualizationObject.name === visualizationObjects.activeVisualization ? '#c6e3fa' :
-              //   guided && visualizationObjects.visualizations[visualizationObjects.activeVisualization]?.connections.includes(visualizationObject.name)
-              //     ? "#FAF7C6" : "white"
               backgroundColor: visualizationObject.name === visualizationObjects.activeVisualization ? '#c6e3fa' : "white"
             }}
           >
