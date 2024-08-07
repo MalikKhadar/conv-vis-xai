@@ -30,6 +30,7 @@ function App() {
   const [isChatting, setIsChatting] = useState(false);
 
   const [guided, setGuided] = useState(true);
+  const [introducedVisualizations, setIntroducedVisualizations] = useState(["Global Bar Plot"]);
   const [questions, setQuestions] = useState([])
   const [unvisitedVisualizationsNum, setUnvisitedVisualizationsNum] = useState(1);
   const [visitedAllVisualizations, setVisitedAllVisualizations] = useState(false);
@@ -86,6 +87,10 @@ function App() {
       });
     }
   }, [visualizationObjects]);
+
+  useEffect(() => {
+    console.log(introducedVisualizations);
+  }, [introducedVisualizations]);
 
   useEffect(() => {
     if (visitedAllVisualizations) {
@@ -182,6 +187,8 @@ function App() {
                 chatActive={chatActive}
                 questions={questions}
                 guided={guided}
+                introducedVisualizations={introducedVisualizations}
+                setIntroducedVisualizations={setIntroducedVisualizations}
               />
               : null}
           </div>
@@ -200,6 +207,7 @@ function App() {
           setDatapointNum={setDatapointNum}
           numberOfDatapoints={numberOfDatapoints}
           guided={guided}
+          introducedVisualizations={introducedVisualizations}
         />
       </div>
     </div>

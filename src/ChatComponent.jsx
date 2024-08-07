@@ -8,7 +8,7 @@ import { useAddLog } from './Logger';
 
 const gptModel = "gpt-4o";
 
-const ChatComponent = ({ apiKey, visualizationObjects, chatActive, questions, datapointNum, guided }) => {
+const ChatComponent = ({ apiKey, visualizationObjects, chatActive, questions, datapointNum, guided, introducedVisualizations, setIntroducedVisualizations }) => {
   const [systemMessage, setSystemMessage] = useState('');
   const [fullSystemMessage, setFullSystemMessage] = useState('');
   // const [messages, setMessages] = useState([
@@ -69,12 +69,13 @@ const ChatComponent = ({ apiKey, visualizationObjects, chatActive, questions, da
 
   useEffect(() => {
     if (chatActive) {
-      const newMessage = {
-        message: metadata["firstMessage"],
-        direction: 'incoming',
-        sender: "assistant"
-      };
-      setMessages(messages => [...messages, newMessage]);
+      // const newMessage = {
+      //   message: metadata["firstMessage"],
+      //   direction: 'incoming',
+      //   sender: "assistant"
+      // };
+      // setMessages(messages => [...messages, newMessage]);
+      handleSend("");
     }
   }, [chatActive]);
 
@@ -103,14 +104,16 @@ const ChatComponent = ({ apiKey, visualizationObjects, chatActive, questions, da
 
     const base64 = await encodeImage(imageToEncode);
 
-    const newMessage = {
-      message,
-      direction: 'outgoing',
-      sender: "user"
-    };
-    addLog('Sent ' + message);
+    if (message) {
+      const newMessage = {
+        message,
+        direction: 'outgoing',
+        sender: "user"
+      };
+      addLog('Sent ' + message);
 
-    setMessages(messages => [...messages, newMessage]);
+      setMessages(messages => [...messages, newMessage]);
+    }
 
     // for local visualizations, specify which datapoint it corresponds to for gpt
     let visualizationNameForGPT = activeVisualization.name;
@@ -122,7 +125,7 @@ const ChatComponent = ({ apiKey, visualizationObjects, chatActive, questions, da
       visualizationNameForGPT += " " + activeVisualization.activeSubVisualization;
     }
 
-    if (guided) {
+    if (guided && message) {
       visualizationNameForGPT += ": " + activeVisualization.connectionText;
     }
 
@@ -183,8 +186,16 @@ const ChatComponent = ({ apiKey, visualizationObjects, chatActive, questions, da
           }]);
         }
       }
+      const currentConnections = visualizationObjects.visualizations[visualizationObjects.activeVisualization].connections;
+      for (const connection in currentConnections) {
+        if (!introducedVisualizations.includes(currentConnections[connection])) {
+          if (stream.includes(currentConnections[connection])) {
+            setIntroducedVisualizations(oldArray => [...oldArray, currentConnections[connection]]);
+          }
+        }
+      }
+
       setApiMessages([...apiMessages, { role: "assistant", content: stream }]);
-      console.log(apiMessages);
       addLog('Reply ' + stream);
     } catch (error) {
       console.error("Error while processing response:", error);
@@ -236,11 +247,6 @@ const ChatComponent = ({ apiKey, visualizationObjects, chatActive, questions, da
       let imageToSend;
       let activeVisualization = visualizationObjects.visualizations[visualizationObjects.activeVisualization];
 
-      // prevent sending the same image on visited update
-      if (!activeVisualization.visited) {
-        return;
-      }
-
       if ("subVisualizations" in activeVisualization) {
         imageToSend = activeVisualization.subVisualizations[activeVisualization.activeSubVisualization];
       } else {
@@ -259,7 +265,11 @@ const ChatComponent = ({ apiKey, visualizationObjects, chatActive, questions, da
           sender: "user"
         };
 
-        setMessages([...messages, newMessage]);
+        if (activeVisualization.visited) {
+          setMessages([...messages, newMessage]);
+        } else {
+          handleSend("");
+        }
       });
     }
     if (visualizationObjects.activeVisualization) {
