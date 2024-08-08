@@ -148,7 +148,9 @@ const ChatComponent = ({ apiKey, visualizationObjects, chatActive, questions, da
     }
 
     if (guided && message) {
-      visualizationNameForGPT += ": " + activeVisualization.connectionText;
+      for (const connection in activeVisualization.connections) {
+        visualizationNameForGPT += " [" + connection + "]"
+      }
     }
 
     try {
@@ -208,17 +210,30 @@ const ChatComponent = ({ apiKey, visualizationObjects, chatActive, questions, da
           }]);
         }
       }
-      const currentConnections = visualizationObjects.visualizations[visualizationObjects.activeVisualization].connections;
-      for (const connection in currentConnections) {
-        if (!introducedVisualizations.includes(currentConnections[connection])) {
-          if (stream.includes(currentConnections[connection])) {
-            setIntroducedVisualizations(oldArray => [...oldArray, currentConnections[connection]]);
+      setApiMessages([...apiMessages, { role: "assistant", content: stream }]);
+
+      if (guided && stream.includes("[RECOMMEND]")) {
+        stream = stream.replace("[RECOMMEND]", "");
+        stream += "\n\nIf you're ready to view another explanation, I recommend the:"
+
+        const currentConnections = visualizationObjects.visualizations[visualizationObjects.activeVisualization].connections;
+        console.log(visualizationObjects.visualizations[visualizationObjects.activeVisualization]);
+        for (const connection in currentConnections) {
+          stream += "\n<b>" + connection + "</b> " + currentConnections[connection].replace("[X]", datapointNum.toString());
+
+          if (!introducedVisualizations.includes(connection)) {
+            setIntroducedVisualizations(oldArray => [...oldArray, connection]);
           }
         }
+        setMessages([...chatMessages, {
+          message: stream,
+          direction: 'incoming',
+          sender: "assistant"
+        }]);
       }
+
       setWritingIntro(false);
       console.log(apiMessages);
-      setApiMessages([...apiMessages, { role: "assistant", content: stream }]);
       addLog('Reply ' + stream);
     } catch (error) {
       console.error("Error while processing response:", error);
