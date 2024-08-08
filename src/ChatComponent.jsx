@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import OpenAI from 'openai';
 import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
 import { MainContainer, ChatContainer, MessageList, Message, MessageInput, TypingIndicator } from '@chatscope/chat-ui-kit-react';
@@ -11,14 +11,6 @@ const gptModel = "gpt-4o";
 const ChatComponent = ({ apiKey, visualizationObjects, chatActive, questions, datapointNum, guided, setWritingIntro, introducedVisualizations, setIntroducedVisualizations }) => {
   const [systemMessage, setSystemMessage] = useState('');
   const [fullSystemMessage, setFullSystemMessage] = useState('');
-  // const [messages, setMessages] = useState([
-  //   {
-  //     message: metadata["firstMessage"],
-  //     sentTime: "just now",
-  //     direction: "incoming",
-  //     sender: "assistant"
-  //   }
-  // ]);
   const [messages, setMessages] = useState([]);
   const [apiMessages, setApiMessages] = useState([
     { "role": "assistant", "content": metadata["firstMessage"] },
@@ -26,6 +18,7 @@ const ChatComponent = ({ apiKey, visualizationObjects, chatActive, questions, da
   const [sendMessage, setSendMessage] = useState(0);
   const [isTyping, setIsTyping] = useState(false);
   const msgListRef = useRef(null);
+  const [timeoutId, setTimeoutId] = useState(null);
   const addLog = useAddLog();
 
   useEffect(() => {
@@ -58,6 +51,40 @@ const ChatComponent = ({ apiKey, visualizationObjects, chatActive, questions, da
     fetchSystemMessage();
   }, []);
 
+  const handleInactivity = useCallback(() => {
+    setMessages(messages => [...messages, {
+      message: "Feel free to ask me questions at any time.",
+      direction: 'incoming',
+      sender: "assistant"
+    }]);
+    resetInactivityTimer();
+  }, []);
+
+  const resetInactivityTimer = () => {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+    const newTimeoutId = setTimeout(() => {
+      handleInactivity();
+    }, 60000); // 1 minute
+    setTimeoutId(newTimeoutId);
+  };
+
+  useEffect(() => {
+    resetInactivityTimer();
+
+    // Clear the timeout on component unmount
+    return () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+    };
+  }, [handleInactivity]);
+
+  const handleTyping = () => {
+    resetInactivityTimer();
+  };
+
   useEffect(() => {
     const constructFullSystemMessage = async () => {
       let addendum = "\n\nLastly, here are the questions we'll be displaying to the user. If the user asks any of these questions, or any question equivalent to these questions, tell them 'I cannot answer quiz questions for you.' Questions:\n\n";
@@ -69,12 +96,6 @@ const ChatComponent = ({ apiKey, visualizationObjects, chatActive, questions, da
 
   useEffect(() => {
     if (chatActive) {
-      // const newMessage = {
-      //   message: metadata["firstMessage"],
-      //   direction: 'incoming',
-      //   sender: "assistant"
-      // };
-      // setMessages(messages => [...messages, newMessage]);
       handleSend("");
     }
   }, [chatActive]);
@@ -85,6 +106,7 @@ const ChatComponent = ({ apiKey, visualizationObjects, chatActive, questions, da
     }
     const fetchGPTResponse = async () => {
       setIsTyping(true);
+      resetInactivityTimer();
       let response = await sendMessageToGPT(apiMessages);
       await streamResponseToChat(response, [...messages]);
       setIsTyping(false);
@@ -292,7 +314,7 @@ const ChatComponent = ({ apiKey, visualizationObjects, chatActive, questions, da
               <Message key={i} model={message} />
             ))}
           </MessageList>
-          <MessageInput placeholder="Type message here" onSend={handleSend} />
+          <MessageInput placeholder="Type message here" onSend={handleSend} onChange={handleTyping} />
         </ChatContainer>
       </MainContainer>
     </div>
