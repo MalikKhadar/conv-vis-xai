@@ -56,11 +56,11 @@ Here is a list of the types of XAI visualizations involved in this task and how 
     "INTERPRETATION": "X will be replaced with a number corresponding to a specific datapoint. A local feature importance plot, where the bars are the SHAP values for each feature. Note that the feature values are shown in gray to the left of the feature names."
   },
   {
-    "VISUALIZATION_NAME": "Similar data points table X",
+    "VISUALIZATION_NAME": "Similar Data Table X",
     "INTERPRETATION": "X will be replaced with a number corresponding to a specific datapoint. This table displays the features of data point X and five similar data points that had the same model prediction as data point X. Dashes indicate that a data point has the same value as the data point X for that column."
   },
   {
-    "VISUALIZATION_NAME": "Counterfactual data points table X",
+    "VISUALIZATION_NAME": "Counterfactual Data Table X",
     "INTERPRETATION": "X will be replaced with a number corresponding to a specific datapoint. This table displays the features of data point X and five similar data points that had the opposite model prediction as data point X. Dashes indicate that a data point has the same value as the data point X for that column."
   }
 ]
