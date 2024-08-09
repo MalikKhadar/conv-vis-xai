@@ -19,7 +19,6 @@ const SplitButton = ({ visualizationObject, visualizationObjects, handleSubVisua
   };
 
   const handleMenuItemClick = (option, index) => {
-    console.log(option);
     handleSubVisualizationChange(visualizationObject, option);
     setOpen(false);
   };

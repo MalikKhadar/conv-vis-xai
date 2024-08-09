@@ -8,7 +8,7 @@ import { useAddLog } from './Logger';
 
 const gptModel = "gpt-4o";
 
-const ChatComponent = ({ apiKey, visualizationObjects, chatActive, questions, datapointNum, guided, setWritingIntro, introducedVisualizations, setIntroducedVisualizations }) => {
+const ChatComponent = ({ apiKey, visualizationObjects, chatActive, questions, datapointNum, guided, setWritingIntro, introducedVisualizations, setIntroducedVisualizations, recentlySelectedOption, setRecentlySelectedOption }) => {
   const [systemMessage, setSystemMessage] = useState('');
   const [fullSystemMessage, setFullSystemMessage] = useState('');
   const [messages, setMessages] = useState([]);
@@ -56,21 +56,36 @@ const ChatComponent = ({ apiKey, visualizationObjects, chatActive, questions, da
     setGiveReminder(true);
   }, []);
 
+  useEffect(() => {
+    if (giveReminder && recentlySelectedOption) {
+      setRecentlySelectedOption(false); // Reset this state after processing
+      setMessages(prevMessages => [
+        ...prevMessages,
+        {
+          message: "I can't give you answers to the quiz questions, but I can still help you out.",
+          direction: 'incoming',
+          sender: "assistant"
+        }
+      ]);
+      resetInactivityTimer();
+    }
+  }, [giveReminder, recentlySelectedOption]);
+
   const resetInactivityTimer = () => {
-    setGiveReminder(false);
+    setGiveReminder(false); // Resetting reminder state
     if (timeoutId) {
-      clearTimeout(timeoutId);
+      clearTimeout(timeoutId); // Clear the previous timer
     }
     const newTimeoutId = setTimeout(() => {
-      handleInactivity();
-    }, 600); // 1 minute
-    setTimeoutId(newTimeoutId);
+      handleInactivity(); // Triggers inactivity after 1 minute
+    }, 60000); // 1 minute
+    setTimeoutId(newTimeoutId); // Save new timeout ID
   };
 
   useEffect(() => {
-    resetInactivityTimer();
+    resetInactivityTimer(); // Start/reset timer on component mount
 
-    // Clear the timeout on component unmount
+    // Clean up on unmount
     return () => {
       if (timeoutId) {
         clearTimeout(timeoutId);
@@ -79,13 +94,23 @@ const ChatComponent = ({ apiKey, visualizationObjects, chatActive, questions, da
   }, [handleInactivity]);
 
   const handleTyping = () => {
-    resetInactivityTimer();
+    resetInactivityTimer(); // Reset timer on user interaction
   };
 
   useEffect(() => {
     const constructFullSystemMessage = async () => {
-      let addendum = "\n\nLastly, here are the questions we'll be displaying to the user. If the user asks any of these questions, or any question equivalent to these questions, tell them 'I cannot answer quiz questions for you.' Questions:\n\n";
-      setFullSystemMessage(systemMessage + addendum + questions);
+      let updatedSystemMessage = systemMessage;
+
+      if (guided) {
+        updatedSystemMessage = updatedSystemMessage.replace("...", metadata["guided"]);
+        updatedSystemMessage = updatedSystemMessage.replace("[PARTING]", metadata["parting"]["guided"])
+      } else {
+        updatedSystemMessage = updatedSystemMessage.replace("[PARTING]", metadata["parting"]["chat"])
+      }
+
+      let addendum = "\n\n" + metadata["prequestions"] + "\n\n";
+
+      setFullSystemMessage(updatedSystemMessage + addendum + questions);
     };
 
     constructFullSystemMessage();
@@ -211,16 +236,22 @@ const ChatComponent = ({ apiKey, visualizationObjects, chatActive, questions, da
 
       if (guided && stream.includes("[RECOMMEND]")) {
         stream = stream.replace("[RECOMMEND]", "");
-        stream += "\n\nIf you're ready to view another explanation, I recommend the:"
+
+        if (stream) {
+          stream += "\n\n";
+        }
+        stream += "If you're ready to view another explanation, I recommend the:"
 
         const currentConnections = visualizationObjects.visualizations[visualizationObjects.activeVisualization].connections;
+        stream += "<ul>";
         for (const connection in currentConnections) {
-          stream += "\n<b>" + connection + "</b> " + currentConnections[connection].replace("[X]", datapointNum.toString());
+          stream += "<li><b>" + connection + "</b> " + currentConnections[connection].replace("[X]", datapointNum.toString()) + "</li>";
 
           if (!introducedVisualizations.includes(connection)) {
             setIntroducedVisualizations(oldArray => [...oldArray, connection]);
           }
         }
+        stream += "</ul>";
         setMessages([...chatMessages, {
           message: stream,
           direction: 'incoming',
@@ -298,7 +329,7 @@ const ChatComponent = ({ apiKey, visualizationObjects, chatActive, questions, da
           sender: "user"
         }];
 
-        if (giveReminder && activeVisualization.visited && !writingIntro) {
+        if (giveReminder) {
           newMessages.push({
             message: "Let me know if you have any questions.",
             direction: 'incoming',

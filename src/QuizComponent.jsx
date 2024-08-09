@@ -4,7 +4,7 @@ import { Button } from '@chatscope/chat-ui-kit-react';
 import ConfidenceDropdown from './ConfidenceDropdown';
 import { useAddCustomData, useLogger } from './Logger';
 
-const QuizComponent = ({ setQuestions, setDone }) => {
+const QuizComponent = ({ setQuestions, setDone, setRecentlySelectedOption }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [quizCompleted, setQuizCompleted] = useState(0);
   const [answers, setAnswers] = useState({});
@@ -66,6 +66,7 @@ const QuizComponent = ({ setQuestions, setDone }) => {
   }, []);
 
   const handleOptionClick = (option, index) => {
+    setRecentlySelectedOption(true);
     setSelectedOption(index);
     addLog('Selected option ' + option);
   };
