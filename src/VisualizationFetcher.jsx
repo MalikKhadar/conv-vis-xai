@@ -44,7 +44,7 @@ const VisualizationFetcher = ({ visualizationObjects, setVisualizationObjects, s
         }
       }
 
-      let loadedSubVisualization = Object.keys(scatterPlots)[0];
+      let loadedSubVisualization = "";
       let loadedVisited = false;
       if (visualizationObjects.visualizations) {
         loadedSubVisualization = visualizationObjects.visualizations["Scatter Plots"].activeSubVisualization;
