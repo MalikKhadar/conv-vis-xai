@@ -1,0 +1,1 @@
+const t=[[{Prompt:"Which of the following changes to data point 0 would change the model's prediction from <$50k to >$50k?",Options:["Change Occupation to Exec-managerial","Change Native Country to Canada","Change Marital Status to Divorced","Change Sex to Female"]}]];export{t as default};
