@@ -23,7 +23,7 @@ const VisualizationFetcher = ({ visualizationObjects, setVisualizationObjects, s
           } else {
             let visualizationObject = graphData[visualizationName];
             let loadedVisited = visualizationObjects.visualizations ?
-              visualizationObject.visited : false;
+              visualizationObjects.visualizations[visualizationName].visited : false;
 
             visualizations[visualizationName] = {
               path,
