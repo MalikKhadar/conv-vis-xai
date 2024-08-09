@@ -6,7 +6,7 @@ import metadata from './assets/chat/metadata.json';
 import './ChatComponent.css'; // Import the custom CSS file
 import { useAddLog } from './Logger';
 
-const gptModel = "gpt-4o-mini";
+const gptModel = "gpt-4o";
 
 const ChatComponent = ({ apiKey, visualizationObjects, chatActive, questions, datapointNum, guided, setWritingIntro, introducedVisualizations, setIntroducedVisualizations }) => {
   const [systemMessage, setSystemMessage] = useState('');
@@ -19,6 +19,7 @@ const ChatComponent = ({ apiKey, visualizationObjects, chatActive, questions, da
   const [isTyping, setIsTyping] = useState(false);
   const msgListRef = useRef(null);
   const [timeoutId, setTimeoutId] = useState(null);
+  const [giveReminder, setGiveReminder] = useState(false);
   const addLog = useAddLog();
 
   useEffect(() => {
@@ -52,21 +53,17 @@ const ChatComponent = ({ apiKey, visualizationObjects, chatActive, questions, da
   }, []);
 
   const handleInactivity = useCallback(() => {
-    setMessages(messages => [...messages, {
-      message: "Feel free to ask me questions at any time.",
-      direction: 'incoming',
-      sender: "assistant"
-    }]);
-    resetInactivityTimer();
+    setGiveReminder(true);
   }, []);
 
   const resetInactivityTimer = () => {
+    setGiveReminder(false);
     if (timeoutId) {
       clearTimeout(timeoutId);
     }
     const newTimeoutId = setTimeout(() => {
       handleInactivity();
-    }, 60000); // 1 minute
+    }, 6000); // 1 minute
     setTimeoutId(newTimeoutId);
   };
 
@@ -82,6 +79,7 @@ const ChatComponent = ({ apiKey, visualizationObjects, chatActive, questions, da
   }, [handleInactivity]);
 
   const handleTyping = () => {
+    setGiveReminder(false);
     resetInactivityTimer();
   };
 
@@ -292,7 +290,7 @@ const ChatComponent = ({ apiKey, visualizationObjects, chatActive, questions, da
       }
 
       isImageWide(imageToSend, (isWide) => {
-        const newMessage = {
+        const newMessages = [{
           payload: {
             src: imageToSend,
             width: isWide ? "55vw" : "100%",
@@ -301,10 +299,19 @@ const ChatComponent = ({ apiKey, visualizationObjects, chatActive, questions, da
           type: 'image',
           direction: 'outgoing',
           sender: "user"
-        };
+        }];
 
         if (activeVisualization.visited) {
-          setMessages([...messages, newMessage]);
+          if (giveReminder && !setWritingIntro) {
+            newMessages.push({
+              message: "Let me know if you have any questions.",
+              direction: 'incoming',
+              sender: "assistant"
+            });
+          }
+          resetInactivityTimer();
+
+          setMessages([...messages, ...newMessages]);
         } else {
           setWritingIntro(true);
           handleSend("");

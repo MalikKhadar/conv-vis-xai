@@ -47,7 +47,7 @@ const SplitButton = ({ visualizationObject, visualizationObjects, handleSubVisua
         <div style={{ display: "flex", width: "100%" }}>
           <Button
             border
-            disabled={writingIntro}
+            disabled={writingIntro || !visualizationObject.activeSubVisualization}
             onClick={handleClick}
             style={{
               flex: "3",

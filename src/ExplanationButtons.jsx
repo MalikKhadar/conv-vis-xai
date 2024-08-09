@@ -42,7 +42,6 @@ const ExplanationButtons = ({ visualizationObjects, setVisualizationObjects, dat
         <div key={visualizationObject.name} style={{ display: "flex", height: "100%", flex: "1", alignItems: "center" }}>
           {visualizationObject.subVisualizations ?
             <SplitButton
-              // disabled={writingIntro}
               hidden={guided && !introducedVisualizations.includes(visualizationObject.name)}
               style={{
                 flex: "1",
