@@ -90,16 +90,6 @@ function App() {
   }, [visualizationObjects]);
 
   useEffect(() => {
-    console.log(introducedVisualizations);
-  }, [introducedVisualizations]);
-
-  useEffect(() => {
-    if (visitedAllVisualizations) {
-      setGuided(false);
-    }
-  }, [visitedAllVisualizations]);
-
-  useEffect(() => {
     if (done) {
       uploadLogs();
     }
