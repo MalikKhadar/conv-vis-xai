@@ -6,7 +6,7 @@ import metadata from './assets/chat/metadata.json';
 import './ChatComponent.css'; // Import the custom CSS file
 import { useAddLog } from './Logger';
 
-const gptModel = "gpt-4o";
+const gptModel = "gpt-4o-mini";
 
 const ChatComponent = ({ apiKey, visualizationObjects, chatActive, questions, datapointNum, guided, setWritingIntro, introducedVisualizations, setIntroducedVisualizations }) => {
   const [systemMessage, setSystemMessage] = useState('');
