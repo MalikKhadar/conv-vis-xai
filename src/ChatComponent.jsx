@@ -63,7 +63,7 @@ const ChatComponent = ({ apiKey, visualizationObjects, chatActive, questions, da
     }
     const newTimeoutId = setTimeout(() => {
       handleInactivity();
-    }, 6000); // 1 minute
+    }, 600); // 1 minute
     setTimeoutId(newTimeoutId);
   };
 
@@ -79,7 +79,6 @@ const ChatComponent = ({ apiKey, visualizationObjects, chatActive, questions, da
   }, [handleInactivity]);
 
   const handleTyping = () => {
-    setGiveReminder(false);
     resetInactivityTimer();
   };
 
@@ -215,7 +214,6 @@ const ChatComponent = ({ apiKey, visualizationObjects, chatActive, questions, da
         stream += "\n\nIf you're ready to view another explanation, I recommend the:"
 
         const currentConnections = visualizationObjects.visualizations[visualizationObjects.activeVisualization].connections;
-        console.log(visualizationObjects.visualizations[visualizationObjects.activeVisualization]);
         for (const connection in currentConnections) {
           stream += "\n<b>" + connection + "</b> " + currentConnections[connection].replace("[X]", datapointNum.toString());
 
@@ -231,7 +229,6 @@ const ChatComponent = ({ apiKey, visualizationObjects, chatActive, questions, da
       }
 
       setWritingIntro(false);
-      console.log(apiMessages);
       addLog('Reply ' + stream);
     } catch (error) {
       console.error("Error while processing response:", error);
@@ -301,27 +298,32 @@ const ChatComponent = ({ apiKey, visualizationObjects, chatActive, questions, da
           sender: "user"
         }];
 
-        if (activeVisualization.visited) {
-          if (giveReminder && !setWritingIntro) {
-            newMessages.push({
-              message: "Let me know if you have any questions.",
-              direction: 'incoming',
-              sender: "assistant"
-            });
-          }
-          resetInactivityTimer();
-
-          setMessages([...messages, ...newMessages]);
-        } else {
-          setWritingIntro(true);
-          handleSend("");
+        if (giveReminder && activeVisualization.visited && !writingIntro) {
+          newMessages.push({
+            message: "Let me know if you have any questions.",
+            direction: 'incoming',
+            sender: "assistant"
+          });
         }
+        resetInactivityTimer();
+        setMessages([...messages, ...newMessages]);
       });
     }
     if (visualizationObjects.activeVisualization) {
       showVisualization();
     }
   }, [visualizationObjects.visualizations[visualizationObjects.activeVisualization]]);
+
+  useEffect(() => {
+    const explainVisualization = async () => {
+      setWritingIntro(true);
+      resetInactivityTimer();
+      handleSend("");
+    }
+    if (visualizationObjects.activeVisualization && visualizationObjects.visualizations[visualizationObjects.activeVisualization].visited) {
+      explainVisualization();
+    }
+  }, [visualizationObjects.visualizations[visualizationObjects.activeVisualization].visited]);
 
   return (
     <div style={{ width: "100%", height: "100%" }}>
