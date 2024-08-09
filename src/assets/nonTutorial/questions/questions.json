@@ -8,6 +8,136 @@
                 "Change Marital Status to Divorced",
                 "Change Sex to Female"
             ]
+        },
+        {
+            "Prompt": "Which of the following changes to data point 1 would change the model's prediction from >$50k to <$50k?",
+            "Options": [
+                "Change Hours per week to 40",
+                "Change Native Country to United States",
+                "Change Race to White",
+                "Change Hours per week to 50"
+            ]
+        },
+        {
+            "Prompt": "Which of the following changes to data point 2 would change the model's prediction from <$50k to >$50k?",
+            "Options": [
+                "Change Sex to Male",
+                "Change Marital Status to Divorced",
+                "Change Race to Asian Pac Islander",
+                "Change Education to Assoc acdm"
+            ]
+        },
+        {
+            "Prompt": "Which of the following changes to data point 3 would change the model's prediction from >$50k to <$50k?",
+            "Options": [
+                "Change Native Country to United States",
+                "Change Workclass to ?",
+                "Change Education to Some-college",
+                "Change Hours per week to 40"
+            ]
         }
-    ]
+    ],
+    {
+        "Prompt": "Which of the following populations are most likely to have >50k income?",
+        "Options": [
+            "People younger than 30",
+            "People born in the United States",
+            "People who are divorced, separated, or widowed",
+            "People with at least some college education"
+        ]
+    },
+    {
+        "Prompt": "Which data point's 3 most important features are most similar to the 3 most important global features?",
+        "Options": [
+            "0: Age, Hours per week, Education",
+            "1: Marital Status, Education, Hours per week",
+            "2: Marital Status, Hours per week, Relationship",
+            "3: Age, Marital Status, Hours per week"
+        ]
+    },
+    [
+        {
+            "Prompt": "Classify the following data point when compared to data point 0 (assume all unmentioned feature values are shared between data points)\nAge: 47.0\nOccupation: Exec managerial",
+            "Options": [
+                "Compared to data point 0, this is a similar data point",
+                "Compared to data point 0, this is a counterfactual data point"
+            ]
+        },
+        {
+            "Prompt": "Classify the following data point when compared to data point 1 (assume all unmentioned feature values are shared between data points)\nAge: 32.0\nHours per week: 40.0\nNative Country: India",
+            "Options": [
+                "Compared to data point 1, this is a similar data point",
+                "Compared to data point 1, this is a counterfactual data point"
+            ]
+        },
+        {
+            "Prompt": "Classify the following data point when compared to data point 2 (assume all unmentioned feature values are shared between data points)\nWorkclass: Federal gov\nRelationship: Other relative\nRace: White\nSex: Male\nHours per week: 45.0",
+            "Options": [
+                "Compared to data point 2, this is a similar data point",
+                "Compared to data point 2, this is a counterfactual data point"
+            ]
+        },
+        {
+            "Prompt": "Classify the following data point when compared to data point 3 (assume all unmentioned feature values are shared between data points)\nAge:50.0\nOccupation: Machine op inspct\nNative Country: United States",
+            "Options": [
+                "Compared to data point 3, this is a similar data point",
+                "Compared to data point 3, this is a counterfactual data point"
+            ]
+        }
+    ],
+    {
+        "Prompt": "Which of these changes will result in the greatest decrease in SHAP value for the affected data points?",
+        "Options": [
+            "Set data points with Education: Some-college to Education: Prof-school",
+            "Set data points with Capital Gain: 40000 to Capital Gain: 20000",
+            "Set data points with Relationship: Wife to Relationship: Husband",
+            "Set data points with Workclass: Local-gov to Workclass: Private"
+        ]
+    },
+    {
+        "Prompt": "Which of the following features has this trend of SHAP values?",
+        "Image": "src/assets/nonTutorial/questions/trend.png",
+        "Options": [
+            "Capital Loss",
+            "Marital Status",
+            "Education",
+            "Age"
+        ]
+    },
+    {
+        "Prompt": "Which is the most important feature for this model overall?",
+        "Options": [
+            "Occupation",
+            "Capital Gain",
+            "Age",
+            "Marital Status"
+        ]
+    },
+    {
+        "Prompt": "If I want to know about the ranking of different features, which visual would be the most helpful?",
+        "Options": [
+            "Global bar plot",
+            "Beeswarm plot",
+            "All scatter plots",
+            "Similar table"
+        ]
+    },
+    {
+        "Prompt": "Which of the following best represents the 'blue' in the beeswarm plot?",
+        "Options": [
+            "Low SHAP value",
+            "Low feature value",
+            "People with low income",
+            "People with high income"
+        ]
+    },
+    {
+        "Prompt": "For which of the following plots does the x-axis NOT represent a SHAP value?",
+        "Options": [
+            "Local Bar Plot",
+            "Scatter Plots",
+            "Beeswarm plot",
+            "Global Bar Plot"
+        ]
+    }
 ]
