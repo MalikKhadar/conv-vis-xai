@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState, useRef } from 'react';
 import { Button } from '@chatscope/chat-ui-kit-react';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
@@ -10,9 +10,9 @@ import Popper from '@mui/material/Popper';
 import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
 
-const SplitButton = ({ visualizationObject, visualizationObjects, handleSubVisualizationChange, hidden }) => {
-  const [open, setOpen] = React.useState(false);
-  const anchorRef = React.useRef(null);
+const SplitButton = ({ visualizationObject, visualizationObjects, handleSubVisualizationChange, hidden, writingIntro }) => {
+  const [open, setOpen] = useState(false);
+  const anchorRef = useRef(null);
 
   const handleClick = () => {
     handleSubVisualizationChange(visualizationObject, visualizationObject.activeSubVisualization);
@@ -47,20 +47,21 @@ const SplitButton = ({ visualizationObject, visualizationObjects, handleSubVisua
         <div style={{ display: "flex", width: "100%" }}>
           <Button
             border
-            disabled={!visualizationObject.activeSubVisualization}
+            disabled={writingIntro}
             onClick={handleClick}
-            style={{ 
-              flex: "3", 
-              marginRight: "0px", 
-              marginBottom: "0px", 
-              borderRadius: "0px", 
-              backgroundColor: visualizationObject.name === visualizationObjects.activeVisualization ? '#c6e3fa' : "white" 
+            style={{
+              flex: "3",
+              marginRight: "0px",
+              marginBottom: "0px",
+              borderRadius: "0px",
+              backgroundColor: visualizationObject.name === visualizationObjects.activeVisualization ? '#c6e3fa' : "white"
             }}
           >
             {visualizationObject.activeSubVisualization ? visualizationObject.name + ": " + visualizationObject.activeSubVisualization : visualizationObject.name}
           </Button>
           <Button
             border
+            disabled={writingIntro}
             height="100%"
             style={{ flex: "1", marginLeft: "0px", marginBottom: "0px", borderRadius: "0px" }}
             aria-controls={open ? 'split-button-menu' : undefined}
@@ -112,4 +113,4 @@ const SplitButton = ({ visualizationObject, visualizationObjects, handleSubVisua
   );
 }
 
-export default SplitButton
+export default SplitButton;

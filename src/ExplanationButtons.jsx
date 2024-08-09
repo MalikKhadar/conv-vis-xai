@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
-import { Select, MenuItem, FormControl, InputLabel } from '@mui/material';
+import { Select, MenuItem, FormControl } from '@mui/material';
 import { Button } from '@chatscope/chat-ui-kit-react';
 import SplitButton from './SplitButton';
 import { useAddLog } from './Logger';
@@ -42,7 +42,7 @@ const ExplanationButtons = ({ visualizationObjects, setVisualizationObjects, dat
         <div key={visualizationObject.name} style={{ display: "flex", height: "100%", flex: "1", alignItems: "center" }}>
           {visualizationObject.subVisualizations ?
             <SplitButton
-              disabled={writingIntro}
+              // disabled={writingIntro}
               hidden={guided && !introducedVisualizations.includes(visualizationObject.name)}
               style={{
                 flex: "1",
@@ -53,6 +53,7 @@ const ExplanationButtons = ({ visualizationObjects, setVisualizationObjects, dat
               visualizationObject={visualizationObject}
               visualizationObjects={visualizationObjects}
               handleSubVisualizationChange={handleSubVisualizationChange}
+              writingIntro={writingIntro}
             />
             :
             <Button
