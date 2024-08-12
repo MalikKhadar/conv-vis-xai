@@ -18,7 +18,7 @@ const StyledDiv = styled('div')({
 const StyledSub = styled('div')({
   margin: '10px',
   padding: '10px',
-  backgroundColor: '#ececec',
+  backgroundColor: '#ffffff',
   borderRadius: '5px',
 });
 
