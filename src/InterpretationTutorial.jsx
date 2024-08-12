@@ -67,63 +67,8 @@ const StyledListItem = styled('li')({
 });
 
 const InterpretationTutorial = () => {
-  const featureDescriptions = {
-    age: 'age of the individual in years',
-    workclass: 'type of employment the individual has',
-    'education': 'the highest level of education completed by the individual',
-    'marital-status': 'marital status of the individual',
-    occupation: 'type of occupation the individual is engaged in',
-    relationship: 'relationship status of the individual',
-    race: 'race of the individual',
-    sex: 'sex of the individual',
-    'capital-gain': 'profit the individual made from the sale of capital assets',
-    'capital-loss': 'loss the individual incurred from selling capital assets for lower prices than their purchase price',
-    'hours-per-week': 'number of hours worked per week',
-    'native-country': 'native country of the individual',
-  };
-
-  const ordinalEducations = [
-    "Preschool",
-    "1st-4th",
-    "5th-6th",
-    "7th-8th",
-    "9th",
-    "10th",
-    "11th",
-    "12th",
-    "HS-grad (High school graduate)",
-    "Some-college",
-    "Assoc-voc (Associate - vocational)",
-    "Assoc-acdm (Associate - academic)",
-    "Bachelors",
-    "Masters",
-    "Prof-school (Professional school)",
-    "Doctorate"
-  ];
-
   return (
     <StyledDiv>
-      <StyledHeader>General Dataset Information:</StyledHeader>
-      <StyledParagraph>
-        <b>UCI Census Income Dataset:</b> This dataset is extracted from 1994 census data. The prediction task is to determine whether a person's income exceeds $50k a year. 24.2% of data points in the dataset actually made more than $50k.
-      </StyledParagraph>
-      <StyledSub>
-        <b>Features:</b>
-        <StyledList>
-          {Object.keys(featureDescriptions).map((feature, index) => (
-            <StyledListItem key={index}>{feature} - {featureDescriptions[feature]}</StyledListItem>
-          ))}
-        </StyledList>
-      </StyledSub>
-      <StyledSub>
-        <b>Education levels, ranked from lowest to highest:</b>
-        <StyledList>
-          {ordinalEducations.map((level, index) => (
-            <StyledListItem key={index}>{level}</StyledListItem>
-          ))}
-        </StyledList>
-      </StyledSub>
-
       <StyledHeader>Model details:</StyledHeader>
       <StyledParagraph>
         For this task, the model predicted that 21.2% of data points made more than $50k. The accuracy of the model on its training set is 90.1%, and the accuracy of the model on its test set is 87.3%. Below, you'll find two examples of data points and predictions that the model made on them (these data points won't be used in the interface)

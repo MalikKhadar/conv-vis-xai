@@ -5,7 +5,8 @@ import QuizComponent from './QuizComponent';
 import ExplanationButtons from './ExplanationButtons';
 import ChatComponent from './ChatComponent';
 import PredictionDisplay from './PredictionDisplay';
-import InterpretationTutorial from './InterpretationTutorial';
+import InterfaceTutorial from './InterfaceTutorial';
+import InterpretationTutorial from './InterpretationTutorial'
 import VisualizationRenderer from './VisualizationRenderer';
 import VisualizationFetcher from './VisualizationFetcher';
 import OpenTutorialButton from './OpenTutorialButton';
@@ -14,6 +15,7 @@ import { useAddCustomData, useAddLog, useUploadLogs } from './Logger';
 
 function App() {
   const [finishedTutorial, setFinishedTutorial] = useState(false);
+  const [condition, setCondition] = useState("");
   const [graphData, setGraphData] = useState(null);
   const [visualizationObjects, setVisualizationObjects] = useState({});
   const [datapointNum, setDatapointNum] = useState(0);
@@ -105,13 +107,16 @@ function App() {
     if (urlParams.has('chat')) {
       setIsChatting(true);
       addCustomData('condition', 'chat');
+      setCondition('chat');
     }
     else if (urlParams.has('guide')) {
       setGuided(true);
       setIsChatting(true);
       addCustomData('condition', 'guided');
+      setCondition('guide');
     } else {
       addCustomData('condition', 'no chat');
+      setCondition('noChat');
     }
     addCustomData('participantId', urlParams.get("id"));
     setInterpretationTutorial(urlParams.has('interpretationTutorial'));
@@ -132,19 +137,22 @@ function App() {
   }
 
   // render tutorial
+  if (interpretationTutorial) {
+    return (
+      <InterpretationTutorial />
+    )
+  }
+
   if (!finishedTutorial) {
     return (
-      <div>
-        <InterpretationTutorial />
-        {!interpretationTutorial ?
-          <div style={{ display: "flex", flexFlow: "column", justifyContent: "center", alignItems: "center" }}>
-            <div><b>If you need help:</b> This tutorial will be available by clicking a "Reopen Tutorial" button.</div>
-            <b>Click the "Begin" button below to load the interface</b>
-            <br />
-            <button onClick={handleFinishTutorial} style={{ marginBottom: "10px" }}>Begin</button>
-          </div>
-          : null}
-      </div >
+      <>
+        <InterfaceTutorial condition={condition} />
+        <div style={{ display: "flex", flexFlow: "column", justifyContent: "center", alignItems: "center" }}>
+          <b>Click the "Begin" button below to load the interface</b>
+          <br />
+          <button onClick={handleFinishTutorial} style={{ marginBottom: "10px" }}>Begin</button>
+        </div>
+      </>
     )
   }
 
