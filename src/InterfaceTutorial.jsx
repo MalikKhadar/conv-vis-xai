@@ -75,49 +75,72 @@ const InterfaceTutorial = ({ condition }) => {
 
   return (
     <StyledDiv>
-      <StyledHeader>General Dataset Information:</StyledHeader>
+      <StyledHeader>The Task:</StyledHeader>
       <StyledParagraph>
-        <b>UCI Census Income Dataset:</b> This dataset is extracted from 1994 census data. The prediction task is to determine whether a person's income exceeds $50k a year. 24.2% of data points in the dataset actually made more than $50k.
+        Your task is to answer some questions about a machine learning model. You will use an interface that displays data and visualizations about the model to help answer the questions.
       </StyledParagraph>
-      <StyledSub>
-        <b>Features:</b>
-        <StyledList>
-          {Object.keys(featureDescriptions).map((feature, index) => (
-            <StyledListItem key={index}>{feature} - {featureDescriptions[feature]}</StyledListItem>
-          ))}
-        </StyledList>
-      </StyledSub>
-      <StyledSub>
-        <b>Education levels, ranked from lowest to highest:</b>
-        <StyledList>
-          {ordinalEducations.map((level, index) => (
-            <StyledListItem key={index}>{level}</StyledListItem>
-          ))}
-        </StyledList>
-      </StyledSub>
+      <StyledParagraph>
+        This page has instructions on how to use the interface. At the very bottom of this page is a button that will take you to the interface.
+      </StyledParagraph>
 
       <StyledHeader>The Interface:</StyledHeader>
-      {condition == "noChat" ?
-        <>
-          <img src={noChatExplore} style={{ width: "100%" }} />
-          <img src={noChatQnA} style={{ width: "100%" }} />
-        </>
-        : null
-      }
-      {condition == "chat" ?
-        <>
-          <img src={chatExplore} style={{ width: "100%" }} />
-          <img src={chatQnA} style={{ width: "100%" }} />
-        </>
-        : null
-      }
-      {condition == "guide" ?
-        <>
-          <img src={guideExplore} style={{ width: "100%" }} />
-          <img src={guideQnA} style={{ width: "100%" }} />
-        </>
-        : null
-      }
+      <StyledParagraph>
+        First, you will explore the data and visualizations in the interface. A quiz will be unlocked once you've explored everything. The data and visualizations will remain accessible while completing the quiz.
+      </StyledParagraph>
+      <StyledParagraph>
+        <b>Note: </b> You don't need to visit every version of every visual to unlock the quiz. You'll only need to view one scatter plot out of the 12 available, and one version of each local visualization.
+      </StyledParagraph>
+      <StyledSub>
+        <StyledParagraph>
+          This is how the interface will look when you first open it:
+        </StyledParagraph>
+        {condition == "noChat" ?
+          <>
+            <img src={noChatExplore} style={{ width: "100%" }} />
+          </>
+          : null
+        }
+        {condition == "chat" ?
+          <>
+            <img src={chatExplore} style={{ width: "100%" }} />
+          </>
+          : null
+        }
+        {condition == "guide" ?
+          <>
+            <img src={guideExplore} style={{ width: "100%" }} />
+          </>
+          : null
+        }
+      </StyledSub>
+
+      <StyledSub>
+        <StyledParagraph>
+          The interface will look something like this once you've unlocked the quiz. <b>Some important notes:</b>
+          <ul>
+            <li>You cannot revisit questions that have been submitted.</li>
+            <li>You'll need to use the dropdowns (1 and 2) to answer some of the questions.</li>
+          </ul>
+        </StyledParagraph>
+        {condition == "noChat" ?
+          <>
+            <img src={noChatQnA} style={{ width: "100%" }} />
+          </>
+          : null
+        }
+        {condition == "chat" ?
+          <>
+            <img src={chatQnA} style={{ width: "100%" }} />
+          </>
+          : null
+        }
+        {condition == "guide" ?
+          <>
+            <img src={guideQnA} style={{ width: "100%" }} />
+          </>
+          : null
+        }
+      </StyledSub>
     </StyledDiv >
   );
 }

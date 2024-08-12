@@ -69,6 +69,27 @@ const StyledListItem = styled('li')({
 const InterpretationTutorial = () => {
   return (
     <StyledDiv>
+      <StyledHeader>General Dataset Information:</StyledHeader>
+      <StyledParagraph>
+        <b>UCI Census Income Dataset:</b> This dataset is extracted from 1994 census data. The prediction task is to determine whether a person's income exceeds $50k a year. 24.2% of data points in the dataset actually made more than $50k.
+      </StyledParagraph>
+      <StyledSub>
+        <b>Features:</b>
+        <StyledList>
+          {Object.keys(featureDescriptions).map((feature, index) => (
+            <StyledListItem key={index}>{feature} - {featureDescriptions[feature]}</StyledListItem>
+          ))}
+        </StyledList>
+      </StyledSub>
+      <StyledSub>
+        <b>Education levels, ranked from lowest to highest:</b>
+        <StyledList>
+          {ordinalEducations.map((level, index) => (
+            <StyledListItem key={index}>{level}</StyledListItem>
+          ))}
+        </StyledList>
+      </StyledSub>
+      
       <StyledHeader>Model details:</StyledHeader>
       <StyledParagraph>
         For this task, the model predicted that 21.2% of data points made more than $50k. The accuracy of the model on its training set is 90.1%, and the accuracy of the model on its test set is 87.3%. Below, you'll find two examples of data points and predictions that the model made on them (these data points won't be used in the interface)
