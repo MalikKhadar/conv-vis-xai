@@ -47,7 +47,7 @@
         ]
     },
     {
-        "Prompt": "Which data point's 3 most important features are most similar to the 3 most important global features?",
+        "Prompt": "Which data point's ranking of top-3 feature importances is most similar to the global ranking of feature importances?",
         "Options": [
             "0: Age, Hours per week, Education",
             "1: Marital Status, Education, Hours per week",
