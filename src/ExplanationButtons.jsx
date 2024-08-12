@@ -72,7 +72,8 @@ const ExplanationButtons = ({ visualizationObjects, setVisualizationObjects, dat
                 backgroundColor: visualizationObject.name === visualizationObjects.activeVisualization ? '#c6e3fa' : "white"
               }}
             >
-              {visualizationObject.name + (visualizationObject.global ? "" : " (data point " + datapointNum.toString() + ")")}
+              {(visualizationObject.visited ? "" : "New: ") +
+                visualizationObject.name + (visualizationObject.global ? "" : " (data point " + datapointNum.toString() + ")")}
             </Button>
           }
         </div>

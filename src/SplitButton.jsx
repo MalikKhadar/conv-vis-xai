@@ -56,7 +56,8 @@ const SplitButton = ({ visualizationObject, visualizationObjects, handleSubVisua
               backgroundColor: visualizationObject.name === visualizationObjects.activeVisualization ? '#c6e3fa' : "white"
             }}
           >
-            {visualizationObject.activeSubVisualization ? visualizationObject.name + ": " + visualizationObject.activeSubVisualization : visualizationObject.name}
+            {visualizationObject.activeSubVisualization ? visualizationObject.name + ": " + visualizationObject.activeSubVisualization
+            : "New: " + visualizationObject.name}
           </Button>
           <Button
             border
