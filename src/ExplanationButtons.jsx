@@ -85,7 +85,7 @@ const ExplanationButtons = ({ visualizationObjects, setVisualizationObjects, dat
     <div style={{ display: 'grid', gridTemplateColumns: 'auto 1fr', gap: '5px', width: '100%' }}>
       <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
         <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', height: '100%' }}>
-          <div style={{ flex: "1", display: "flex", flexDirection: "row" }}>
+          <div style={{ flex: "1", display: "flex", flexDirection: "row", borderBottom: "1px solid lightgrey" }}>
             <FormControl variant="outlined">
               <Select
                 style={{ pointerEvents: "none" }}
