@@ -5,6 +5,9 @@ import ConfidenceDropdown from './ConfidenceDropdown';
 import { useAddCustomData, useLogger } from './Logger';
 
 const QuizComponent = ({ setQuestions, setDone, setRecentlySelectedOption }) => {
+  // Import all PNG images from the specified directory
+  const images = import.meta.glob('/src/assets/nonTutorial/questions/*.png');
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [quizCompleted, setQuizCompleted] = useState(0);
   const [answers, setAnswers] = useState({});
@@ -14,56 +17,84 @@ const QuizComponent = ({ setQuestions, setDone, setRecentlySelectedOption }) => 
   const [confidenceRating, setConfidenceRating] = useState("");
   const { addLog, logs } = useLogger();
   const addCustomData = useAddCustomData();
-
-  const loadQuestions = async () => {
-    const questions = await import('/src/assets/nonTutorial/questions/questions.json');
-    const questionsData = questions.default || questions;
-
-    const selectRandomFromArray = (array) => {
-      return array[Math.floor(Math.random() * array.length)];
-    };
-
-    const processQuestions = (questions) => {
-      return questions.map(question => {
-        if (Array.isArray(question)) {
-          return selectRandomFromArray(question);
-        }
-        return question;
-      });
-    };
-
-    if (questionsData && questionsData.length > 0) {
-      const processedQuestions = processQuestions(questionsData);
-
-      const shuffleArray = (array) => {
-        for (let i = array.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [array[i], array[j]] = [array[j], array[i]];
-        }
-        return array;
-      };
-
-      const shuffled = shuffleArray([...processedQuestions]);
-      const map = shuffled.reduce((acc, question, index) => {
-        acc[index] = processedQuestions.findIndex(q => q.Prompt === question.Prompt);
-        return acc;
-      }, {});
-
-      setShuffledQuestions(shuffled);
-      setIndexMap(map);
-
-      // Extract question texts and format as JSON-like string
-      const questionTexts = processedQuestions.map(q => q.Prompt);
-      // use setQuestions to transmit questions to system message in ChatComponent
-      setQuestions(JSON.stringify(questionTexts, null, 2));
-    } else {
-      console.error(`No questions found`);
-    }
-  };
+  const [imageSrc, setImageSrc] = useState(null);
 
   useEffect(() => {
+    const loadQuestions = async () => {
+      const questions = await import('/src/assets/nonTutorial/questions/questions.json');
+      const questionsData = questions.default || questions;
+
+      const selectRandomFromArray = (array) => array[Math.floor(Math.random() * array.length)];
+
+      const processQuestions = (questions) => questions.map(question =>
+        Array.isArray(question) ? selectRandomFromArray(question) : question
+      );
+
+      if (questionsData && questionsData.length > 0) {
+        const processedQuestions = processQuestions(questionsData);
+
+        const shuffleArray = (array) => {
+          for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+          }
+          return array;
+        };
+
+        const shuffled = shuffleArray([...processedQuestions]);
+        const map = shuffled.reduce((acc, question, index) => {
+          acc[index] = processedQuestions.findIndex(q => q.Prompt === question.Prompt);
+          return acc;
+        }, {});
+
+        setShuffledQuestions(shuffled);
+        setIndexMap(map);
+
+        // Set questions for the system message in ChatComponent
+        setQuestions(JSON.stringify(processedQuestions.map(q => q.Prompt), null, 2));
+      } else {
+        console.error(`No questions found`);
+      }
+    };
+
     loadQuestions();
-  }, []);
+  }, [setQuestions]);
+
+  useEffect(() => {
+    if (quizCompleted) {
+      Object.keys(answers).forEach((key) => {
+        addCustomData(`q${parseInt(key) + 1}`, answers[key][0].toString());
+        addCustomData(`c${parseInt(key) + 1}`, answers[key][1] - 1);
+      });
+      setDone(true);
+    }
+  }, [quizCompleted, answers, addCustomData, setDone]);
+
+  useEffect(() => {
+    const currentQuestion = shuffledQuestions[currentIndex];
+
+    if (!currentQuestion?.Image) {
+      return;
+    }
+
+    const imagePath = currentQuestion.Image;
+
+    if (imagePath) {
+      // Ensure the imagePath starts with a leading '/'
+      const formattedImagePath = imagePath.startsWith('/') ? imagePath : `/${imagePath}`;
+
+      // Check if the formatted path exists in the images object
+      if (images[formattedImagePath]) {
+        images[formattedImagePath]().then((module) => {
+          setImageSrc(module.default);
+        });
+      } else {
+        setImageSrc(null);
+      }
+    } else {
+      setImageSrc(null);
+    }
+  }, [currentIndex]);
 
   const handleOptionClick = (option, index) => {
     setRecentlySelectedOption(true);
@@ -91,39 +122,27 @@ const QuizComponent = ({ setQuestions, setDone, setRecentlySelectedOption }) => 
     }
   };
 
-  useEffect(() => {
-    if (quizCompleted) {
-      Object.keys(answers).forEach((key, index) => {
-        addCustomData(`q${parseInt(key) + 1}`, answers[key][0].toString());
-        addCustomData(`c${parseInt(key) + 1}`, answers[key][1] - 1);
-      });
-      setDone(true);
-    }
-  }, [quizCompleted]);
-
   if (!shuffledQuestions.length) {
     return <div>Loading...</div>;
   }
-
-  const currentQuestion = shuffledQuestions[currentIndex];
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', width: "100%", height: "100%" }}>
       <div style={{ display: 'flex', flexDirection: 'column', width: "100%", height: "100%", overflow: 'hidden' }}>
         <h3 style={{ whiteSpace: 'pre-wrap', fontWeight: 'normal', flexShrink: 0 }}>
-          <b>Question {currentIndex + 1}/{shuffledQuestions.length}</b>: {currentQuestion.Prompt}
+          <b>Question {currentIndex + 1}/{shuffledQuestions.length}</b>: {shuffledQuestions[currentIndex].Prompt}
         </h3>
-        {currentQuestion.Image && (
+        {imageSrc && (
           <div style={{ flex: '1', display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '10px' }}>
             <img
-              src={currentQuestion.Image}
+              src={imageSrc}
               alt="Question related"
               style={{ maxHeight: "45vh", objectFit: 'contain' }}
             />
           </div>
         )}
         <div style={{ display: "flex", flexFlow: "column" }}>
-          {currentQuestion.Options.map((option, index) => (
+          {shuffledQuestions[currentIndex].Options.map((option, index) => (
             <Button
               key={index}
               border
