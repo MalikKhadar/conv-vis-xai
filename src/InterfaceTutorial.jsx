@@ -62,19 +62,19 @@ const InterfaceTutorial = ({ condition }) => {
         </StyledParagraph>
         {condition == "noChat" ?
           <>
-            <img src={noChatExplore} style={{ width: "100%" }} />
+            <img src={noChatExplore} style={{ maxHeight: "100vh" }} />
           </>
           : null
         }
         {condition == "chat" ?
           <>
-            <img src={chatExplore} style={{ width: "100%" }} />
+            <img src={chatExplore} style={{ maxHeight: "100vh" }} />
           </>
           : null
         }
         {condition == "guide" ?
           <>
-            <img src={guideExplore} style={{ width: "100%" }} />
+            <img src={guideExplore} style={{ maxHeight: "100vh" }} />
           </>
           : null
         }
@@ -92,19 +92,19 @@ const InterfaceTutorial = ({ condition }) => {
         </div>
         {condition == "noChat" ?
           <>
-            <img src={noChatQnA} style={{ width: "100%" }} />
+            <img src={noChatQnA} style={{ maxHeight: "100vh" }} />
           </>
           : null
         }
         {condition == "chat" ?
           <>
-            <img src={chatQnA} style={{ width: "100%" }} />
+            <img src={chatQnA} style={{ maxHeight: "100vh" }} />
           </>
           : null
         }
         {condition == "guide" ?
           <>
-            <img src={guideQnA} style={{ width: "100%" }} />
+            <img src={guideQnA} style={{ maxHeight: "100vh" }} />
           </>
           : null
         }
