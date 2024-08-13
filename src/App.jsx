@@ -35,7 +35,7 @@ function App() {
   const [writingIntro, setWritingIntro] = useState(false);
   const [introducedVisualizations, setIntroducedVisualizations] = useState(["Global Bar Plot"]);
   const [recentlySelectedOption, setRecentlySelectedOption] = useState(false);
-  const [questions, setQuestions] = useState([])
+  const [currentQuestion, setCurrentQuestion] = useState("");
   const [unvisitedVisualizationsNum, setUnvisitedVisualizationsNum] = useState(1);
   const [visitedAllVisualizations, setVisitedAllVisualizations] = useState(false);
   const [done, setDone] = useState(false);
@@ -172,7 +172,7 @@ function App() {
         <PredictionDisplay datapointNum={datapointNum} setNumberOfDatapoints={setNumberOfDatapoints} />
         <div style={{ flex: "1" }}>
           {visitedAllVisualizations ?
-            <QuizComponent setDone={setDone} setQuestions={setQuestions} setRecentlySelectedOption={setRecentlySelectedOption} />
+            <QuizComponent setDone={setDone} setCurrentQuestion={setCurrentQuestion} setRecentlySelectedOption={setRecentlySelectedOption} />
             :
             <p style={{ textAlign: "center", marginTop: "50%" }}>The questions will appear once you've explored the data and visuals presented to the right</p>
           }
@@ -192,7 +192,7 @@ function App() {
                 visualizationObjects={visualizationObjects}
                 datapointNum={datapointNum}
                 chatActive={chatActive}
-                questions={questions}
+                currentQuestion={currentQuestion}
                 guided={guided}
                 setWritingIntro={setWritingIntro}
                 introducedVisualizations={introducedVisualizations}

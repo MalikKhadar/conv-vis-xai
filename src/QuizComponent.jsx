@@ -4,7 +4,7 @@ import { Button } from '@chatscope/chat-ui-kit-react';
 import ConfidenceDropdown from './ConfidenceDropdown';
 import { useAddCustomData, useLogger } from './Logger';
 
-const QuizComponent = ({ setQuestions, setDone, setRecentlySelectedOption }) => {
+const QuizComponent = ({ setCurrentQuestion, setDone, setRecentlySelectedOption }) => {
   // Import all PNG images from the specified directory
   const images = import.meta.glob('/src/assets/nonTutorial/questions/*.png');
 
@@ -50,8 +50,6 @@ const QuizComponent = ({ setQuestions, setDone, setRecentlySelectedOption }) => 
         setShuffledQuestions(shuffled);
         setIndexMap(map);
 
-        // Set questions for the system message in ChatComponent
-        setQuestions(JSON.stringify(processedQuestions.map(q => q.Prompt), null, 2));
         setCurrentIndex(0);
       } else {
         console.error(`No questions found`);
@@ -59,7 +57,7 @@ const QuizComponent = ({ setQuestions, setDone, setRecentlySelectedOption }) => 
     };
 
     loadQuestions();
-  }, [setQuestions]);
+  }, []);
 
   useEffect(() => {
     if (quizCompleted) {
@@ -73,6 +71,10 @@ const QuizComponent = ({ setQuestions, setDone, setRecentlySelectedOption }) => 
 
   useEffect(() => {
     const currentQuestion = shuffledQuestions[currentIndex];
+
+    if (currentIndex > -1) {
+      setCurrentQuestion(currentQuestion.Prompt);
+    }
 
     if (!currentQuestion?.Image) {
       setImageSrc(null);

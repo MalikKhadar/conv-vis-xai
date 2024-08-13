@@ -8,7 +8,7 @@ import { useAddLog } from './Logger';
 
 const gptModel = "gpt-4o";
 
-const ChatComponent = ({ apiKey, visualizationObjects, chatActive, questions, datapointNum, guided, setWritingIntro, introducedVisualizations, setIntroducedVisualizations, recentlySelectedOption, setRecentlySelectedOption }) => {
+const ChatComponent = ({ apiKey, visualizationObjects, chatActive, currentQuestion, datapointNum, guided, setWritingIntro, introducedVisualizations, setIntroducedVisualizations, recentlySelectedOption, setRecentlySelectedOption }) => {
   const [systemMessage, setSystemMessage] = useState('');
   const [fullSystemMessage, setFullSystemMessage] = useState('');
   const [messages, setMessages] = useState([]);
@@ -108,13 +108,13 @@ const ChatComponent = ({ apiKey, visualizationObjects, chatActive, questions, da
         updatedSystemMessage = updatedSystemMessage.replace("[PARTING]", metadata["parting"]["chat"])
       }
 
-      let addendum = "\n\n" + metadata["prequestions"] + "\n\n";
+      //let addendum = "\n\n" + metadata["prequestions"] + "\n\n";
 
-      setFullSystemMessage(updatedSystemMessage + addendum + questions);
+      setFullSystemMessage(updatedSystemMessage);// + addendum + questions);
     };
 
     constructFullSystemMessage();
-  }, [systemMessage, questions]);
+  }, [systemMessage]);
 
   useEffect(() => {
     if (chatActive) {
@@ -175,11 +175,13 @@ const ChatComponent = ({ apiKey, visualizationObjects, chatActive, questions, da
       }
     }
 
+    const questionPart = currentQuestion ? "<<<" + currentQuestion + ">>>" : "";
+
     try {
       setApiMessages([...apiMessages, {
         role: "user",
         content: [
-          { type: "text", text: "'''" + visualizationNameForGPT + "'''" + message },
+          { type: "text", text: "'''" + visualizationNameForGPT + "'''" + questionPart + message },
           { type: "image_url", image_url: { url: "data:image/png;base64," + base64 } }
         ],
       }]);
@@ -258,6 +260,7 @@ const ChatComponent = ({ apiKey, visualizationObjects, chatActive, questions, da
           sender: "assistant"
         }]);
       }
+      console.log(apiMessages);
 
       setWritingIntro(false);
       addLog('Reply ' + stream);
