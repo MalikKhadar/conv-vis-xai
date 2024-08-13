@@ -39,40 +39,6 @@ const StyledListItem = styled('li')({
 });
 
 const InterfaceTutorial = ({ condition }) => {
-  const featureDescriptions = {
-    age: 'age of the individual in years',
-    workclass: 'type of employment the individual has',
-    'education': 'the highest level of education completed by the individual',
-    'marital-status': 'marital status of the individual',
-    occupation: 'type of occupation the individual is engaged in',
-    relationship: 'relationship status of the individual',
-    race: 'race of the individual',
-    sex: 'sex of the individual',
-    'capital-gain': 'profit the individual made from the sale of capital assets',
-    'capital-loss': 'loss the individual incurred from selling capital assets for lower prices than their purchase price',
-    'hours-per-week': 'number of hours worked per week',
-    'native-country': 'native country of the individual',
-  };
-
-  const ordinalEducations = [
-    "Preschool",
-    "1st-4th",
-    "5th-6th",
-    "7th-8th",
-    "9th",
-    "10th",
-    "11th",
-    "12th",
-    "HS-grad (High school graduate)",
-    "Some-college",
-    "Assoc-voc (Associate - vocational)",
-    "Assoc-acdm (Associate - academic)",
-    "Bachelors",
-    "Masters",
-    "Prof-school (Professional school)",
-    "Doctorate"
-  ];
-
   return (
     <StyledDiv>
       <StyledHeader>The Task:</StyledHeader>
@@ -117,11 +83,13 @@ const InterfaceTutorial = ({ condition }) => {
       <StyledSub>
         <StyledParagraph>
           The interface will look something like this once you've unlocked the quiz. <b>Some important notes:</b>
-          <ul>
-            <li>You cannot revisit questions that have been submitted.</li>
-            <li>You'll need to use the dropdowns (1 and 2) to answer some of the questions.</li>
-          </ul>
         </StyledParagraph>
+        <div>
+          <StyledList>
+            <StyledListItem>You cannot revisit questions that have been submitted.</StyledListItem>
+            <StyledListItem>You'll need to use the dropdowns (1 and 2) to answer some of the questions.</StyledListItem>
+          </StyledList>
+        </div>
         {condition == "noChat" ?
           <>
             <img src={noChatQnA} style={{ width: "100%" }} />
