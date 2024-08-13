@@ -8,7 +8,7 @@ const QuizComponent = ({ setQuestions, setDone, setRecentlySelectedOption }) => 
   // Import all PNG images from the specified directory
   const images = import.meta.glob('/src/assets/nonTutorial/questions/*.png');
 
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(-1);
   const [quizCompleted, setQuizCompleted] = useState(0);
   const [answers, setAnswers] = useState({});
   const [selectedOption, setSelectedOption] = useState(-1);
@@ -52,6 +52,7 @@ const QuizComponent = ({ setQuestions, setDone, setRecentlySelectedOption }) => 
 
         // Set questions for the system message in ChatComponent
         setQuestions(JSON.stringify(processedQuestions.map(q => q.Prompt), null, 2));
+        setCurrentIndex(0);
       } else {
         console.error(`No questions found`);
       }
