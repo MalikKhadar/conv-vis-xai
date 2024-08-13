@@ -74,6 +74,7 @@ const QuizComponent = ({ setQuestions, setDone, setRecentlySelectedOption }) => 
     const currentQuestion = shuffledQuestions[currentIndex];
 
     if (!currentQuestion?.Image) {
+      setImageSrc(null);
       return;
     }
 
