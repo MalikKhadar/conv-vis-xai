@@ -247,7 +247,7 @@ const ChatComponent = ({ apiKey, visualizationObjects, chatActive, currentQuesti
         const currentConnections = visualizationObjects.visualizations[visualizationObjects.activeVisualization].connections;
         stream += "<ul>";
         for (const connection in currentConnections) {
-          stream += "<li><b>" + connection + "</b> " + currentConnections[connection].replace("[X]", datapointNum.toString()) + "</li>";
+          stream += "<li><b>" + connection + "</b> " + currentConnections[connection].replace("[X]", "(data point " + datapointNum.toString() + ")") + "</li>";
 
           if (!introducedVisualizations.includes(connection)) {
             setIntroducedVisualizations(oldArray => [...oldArray, connection]);
@@ -260,8 +260,6 @@ const ChatComponent = ({ apiKey, visualizationObjects, chatActive, currentQuesti
           sender: "assistant"
         }]);
       }
-      console.log(apiMessages);
-
       setWritingIntro(false);
       addLog('Reply ' + stream);
     } catch (error) {
