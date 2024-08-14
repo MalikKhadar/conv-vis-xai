@@ -150,7 +150,7 @@
         ]
     },
     {
-        "Prompt": "Which dataset is this task about. Select Income. This is an attention check.",
+        "Prompt": "Which dataset is this task about? Select Income. This is an attention check.",
         "Options": [
             "Diabetes",
             "Titanic",
