@@ -141,12 +141,6 @@ const ChatComponent = ({ apiKey, visualizationObjects, chatActive, currentQuesti
   }, [sendMessage]);
 
   const handleSend = async (message) => {
-    // if (!visualizationObjects.activeSubVisualization) {
-    //   console.log("not active");
-    //   return;
-    // }
-    // console.log("yes active");
-
     if (message) {
       const newMessage = {
         message,
@@ -203,7 +197,6 @@ const ChatComponent = ({ apiKey, visualizationObjects, chatActive, currentQuesti
     const questionPart = currentQuestion ? "<<<" + currentQuestion + ">>>" : "";
 
     try {
-      console.log(apiMessages);
       setApiMessages([...apiMessages, {
         role: "user",
         content: [
