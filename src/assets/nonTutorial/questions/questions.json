@@ -141,22 +141,21 @@
         ]
     },
     {
-        "Prompt": "The color test you are about to take part in is very simple, when asked for your favorite color you must select 'Orange'. This is an attention check.\n\nBased on the text you read above, what is your favorite color?",
+        "Prompt": "Which color of the following colors is used in the visualizations you've seen in this interface? Select blue. This is an attention check.",
         "Options": [
-            "Red",
+            "Purple",
             "Blue",
             "Green",
-            "Orange",
-            "Black"
+            "Orange"
         ]
     },
     {
-        "Prompt": "Please indicate your agreement with the following statement: I swim across the Pacific Ocean to get to work every day.",
+        "Prompt": "Which dataset is this task about. Select Income. This is an attention check.",
         "Options": [
-            "Strongly Disagree",
-            "Disagree",
-            "Agree",
-            "Strongly Agree"
+            "Diabetes",
+            "Titanic",
+            "Income",
+            "Iris"
         ]
     }
 ]
