@@ -139,5 +139,24 @@
             "Beeswarm plot",
             "Global Bar Plot"
         ]
+    },
+    {
+        "Prompt": "The color test you are about to take part in is very simple, when asked for your favorite color you must select 'Orange'. This is an attention check.\n\nBased on the text you read above, what is your favorite color?",
+        "Options": [
+            "Red",
+            "Blue",
+            "Green",
+            "Orange",
+            "Black"
+        ]
+    },
+    {
+        "Prompt": "Please indicate your agreement with the following statement: I swim across the Pacific Ocean to get to work every day.",
+        "Options": [
+            "Strongly Disagree",
+            "Disagree",
+            "Agree",
+            "Strongly Agree"
+        ]
     }
 ]
