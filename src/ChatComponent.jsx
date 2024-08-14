@@ -255,7 +255,7 @@ const ChatComponent = ({ apiKey, visualizationObjects, chatActive, currentQuesti
       }
       setApiMessages([...apiMessages, { role: "assistant", content: stream }]);
 
-      if (writingIntro) {
+      if (guided && writingIntro) {
         stream += "[RECOMMEND]";
       }
 
