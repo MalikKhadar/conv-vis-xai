@@ -387,7 +387,7 @@ const ChatComponent = ({ apiKey, visualizationObjects, chatActive, currentQuesti
           <MessageList
             scrollBehavior="auto"
             ref={msgListRef}
-            typingIndicator={isTyping ? <TypingIndicator content="ExplainoBot is typing" /> : null}
+            typingIndicator={isTyping ? <TypingIndicator content="XAI Assistant is typing" /> : null}
           >
             {messages.map((message, i) => (
               <Message key={i} model={message} />

@@ -1,7 +1,7 @@
 {
     "firstMessage": {
-        "guided": "I'm here to help answer any questions you have as you exlpore and take the quiz on the data and visuals. Click the Global Bar Plot button below to begin.",
-        "chat": "I'm here to help answer any questions you have as you exlpore and take the quiz on the data and visuals. Click one of the buttons below to begin"
+        "guided": "Hello, I'm here to help answer any questions you have as you exlpore and take the quiz on the data and visuals. Click the Global Bar Plot button below to begin.",
+        "chat": "Hello, I'm here to help answer any questions you have as you explore and take the quiz on the data and visuals. Click one of the buttons below to begin"
     },
     "prequestions": "Lastly, here are the questions we'll be displaying to the user. If the user asks any of these questions, tell them 'I cannot answer quiz questions for you, but I can help you understand them and understand how to reach the correct answer.' Here are the questions:",
     "parting": {
