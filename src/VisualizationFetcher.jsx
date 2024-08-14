@@ -67,7 +67,9 @@ const VisualizationFetcher = ({ visualizationObjects, setVisualizationObjects, s
       const sortedGlobalOrder = globalOrder.sort((a, b) => visualizations[a].order - visualizations[b].order);
       const sortedLocalOrder = localOrder.sort((a, b) => visualizations[a].order - visualizations[b].order);
 
-      setUnvisitedVisualizationsNum(Object.keys(visualizations).length);
+      if (!visualizationObjects.visualizations) {
+        setUnvisitedVisualizationsNum(Object.keys(visualizations).length);
+      }
       setVisualizationObjects({
         visualizations,
         globalOrder: sortedGlobalOrder,
