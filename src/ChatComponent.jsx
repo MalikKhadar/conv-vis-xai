@@ -8,12 +8,16 @@ import { useAddLog } from './Logger';
 
 const gptModel = "gpt-4o";
 
-const ChatComponent = ({ apiKey, visualizationObjects, chatActive, currentQuestion, datapointNum, guided, setWritingIntro, introducedVisualizations, setIntroducedVisualizations, recentlySelectedOption, setRecentlySelectedOption }) => {
+const ChatComponent = ({ apiKey, visualizationObjects, chatActive, currentQuestion, datapointNum, guided, writingIntro, setWritingIntro, introducedVisualizations, setIntroducedVisualizations, recentlySelectedOption, setRecentlySelectedOption }) => {
   const [systemMessage, setSystemMessage] = useState('');
   const [fullSystemMessage, setFullSystemMessage] = useState('');
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState([{
+    message: guided ? metadata["firstMessage"]["guided"] : metadata["firstMessage"]["chat"],
+    direction: 'incoming',
+    sender: "assistant"
+  }]);
   const [apiMessages, setApiMessages] = useState([
-    { "role": "assistant", "content": metadata["firstMessage"] },
+    { "role": "assistant", "content": guided ? metadata["firstMessage"]["guided"] : metadata["firstMessage"]["chat"] },
   ]);
   const [sendMessage, setSendMessage] = useState(0);
   const [isTyping, setIsTyping] = useState(false);
@@ -116,11 +120,11 @@ const ChatComponent = ({ apiKey, visualizationObjects, chatActive, currentQuesti
     constructFullSystemMessage();
   }, [systemMessage]);
 
-  useEffect(() => {
-    if (chatActive) {
-      handleSend("");
-    }
-  }, [chatActive]);
+  // useEffect(() => {
+  //   if (chatActive) {
+  //     handleSend("");
+  //   }
+  // }, [chatActive]);
 
   useEffect(() => {
     if (!chatActive) {
@@ -137,16 +141,11 @@ const ChatComponent = ({ apiKey, visualizationObjects, chatActive, currentQuesti
   }, [sendMessage]);
 
   const handleSend = async (message) => {
-    let imageToEncode;
-    let activeVisualization = visualizationObjects.visualizations[visualizationObjects.activeVisualization];
-
-    if ("subVisualizations" in activeVisualization) {
-      imageToEncode = activeVisualization.subVisualizations[activeVisualization.activeSubVisualization];
-    } else {
-      imageToEncode = activeVisualization.module;
-    }
-
-    const base64 = await encodeImage(imageToEncode);
+    // if (!visualizationObjects.activeSubVisualization) {
+    //   console.log("not active");
+    //   return;
+    // }
+    // console.log("yes active");
 
     if (message) {
       const newMessage = {
@@ -159,10 +158,36 @@ const ChatComponent = ({ apiKey, visualizationObjects, chatActive, currentQuesti
       setMessages(messages => [...messages, newMessage]);
     }
 
+    let imageToEncode;
+    let activeVisualization = visualizationObjects.visualizations[visualizationObjects.activeVisualization];
+
+    if (!activeVisualization) {
+      try {
+        setApiMessages([...apiMessages, {
+          role: "user",
+          content: [
+            { type: "text", text: "'''SPECIAL MESSAGE: the user is trying to converse before selecting a visualization. Tell them how to select a visualization!'''" + message },
+          ],
+        }]);
+        setSendMessage(sendMessage + 1);
+      } catch (error) {
+        console.error("Error in handleSend:", error);
+      }
+      return;
+    }
+
+    if ("subVisualizations" in activeVisualization) {
+      imageToEncode = activeVisualization.subVisualizations[activeVisualization.activeSubVisualization];
+    } else {
+      imageToEncode = activeVisualization.module;
+    }
+
+    const base64 = await encodeImage(imageToEncode);
+
     // for local visualizations, specify which datapoint it corresponds to for gpt
     let visualizationNameForGPT = activeVisualization.name;
     if (!activeVisualization.global) {
-      visualizationNameForGPT += " " + datapointNum.toString();
+      visualizationNameForGPT += " (data point " + datapointNum.toString() + ")";
     }
 
     if ("subVisualizations" in activeVisualization) {
@@ -178,6 +203,7 @@ const ChatComponent = ({ apiKey, visualizationObjects, chatActive, currentQuesti
     const questionPart = currentQuestion ? "<<<" + currentQuestion + ">>>" : "";
 
     try {
+      console.log(apiMessages);
       setApiMessages([...apiMessages, {
         role: "user",
         content: [
@@ -236,8 +262,12 @@ const ChatComponent = ({ apiKey, visualizationObjects, chatActive, currentQuesti
       }
       setApiMessages([...apiMessages, { role: "assistant", content: stream }]);
 
+      if (writingIntro) {
+        stream += "[RECOMMEND]";
+      }
+
       if (guided && stream.includes("[RECOMMEND]")) {
-        stream = stream.replace("[RECOMMEND]", "");
+        stream = stream.replaceAll("[RECOMMEND]", "");
 
         if (stream) {
           stream += "\n\n";
@@ -355,7 +385,7 @@ const ChatComponent = ({ apiKey, visualizationObjects, chatActive, currentQuesti
     if (visualizationObjects.activeVisualization && visualizationObjects.visualizations[visualizationObjects.activeVisualization].visited) {
       explainVisualization();
     }
-  }, [visualizationObjects.visualizations[visualizationObjects.activeVisualization].visited]);
+  }, [visualizationObjects.visualizations[visualizationObjects.activeVisualization]?.visited]);
 
   return (
     <div style={{ width: "100%", height: "100%" }}>
@@ -370,7 +400,7 @@ const ChatComponent = ({ apiKey, visualizationObjects, chatActive, currentQuesti
               <Message key={i} model={message} />
             ))}
           </MessageList>
-          <MessageInput placeholder="Type message here" onSend={handleSend} onChange={handleTyping} />
+          <MessageInput disabled={isTyping} placeholder="Type message here" onSend={handleSend} onChange={handleTyping} />
         </ChatContainer>
       </MainContainer>
     </div>

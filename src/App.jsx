@@ -194,6 +194,7 @@ function App() {
                 chatActive={chatActive}
                 currentQuestion={currentQuestion}
                 guided={guided}
+                writingIntro={writingIntro}
                 setWritingIntro={setWritingIntro}
                 introducedVisualizations={introducedVisualizations}
                 setIntroducedVisualizations={setIntroducedVisualizations}

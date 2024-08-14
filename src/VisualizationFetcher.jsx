@@ -74,7 +74,7 @@ const VisualizationFetcher = ({ visualizationObjects, setVisualizationObjects, s
         visualizations,
         globalOrder: sortedGlobalOrder,
         localOrder: sortedLocalOrder,
-        activeVisualization: visualizationObjects?.activeVisualization || sortedGlobalOrder[0]
+        activeVisualization: visualizationObjects?.activeVisualization || null
       });
     };
     loadVisualizations();
