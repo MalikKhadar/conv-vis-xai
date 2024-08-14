@@ -5,7 +5,7 @@ const VisualizationRenderer = ({ visualizationObjects }) => {
 
   useEffect(() => {
     const activeName = visualizationObjects.activeVisualization;
-    
+
     if (!activeName) {
       return;
     }
@@ -21,9 +21,15 @@ const VisualizationRenderer = ({ visualizationObjects }) => {
     }
   }, [visualizationObjects]);
 
-  return (
-    <img src={activeVisualizationImage} style={{ maxHeight: "100%", maxWidth: "100%", alignSelf: "center", display: "flex" }} />
-  );
+  if (activeVisualizationImage) {
+    return (
+      <img src={activeVisualizationImage} style={{ maxHeight: "100%", maxWidth: "100%", alignSelf: "center", display: "flex" }} />
+    )
+  } else {
+    return (
+      <p style={{ maxHeight: "100%", maxWidth: "100%", alignSelf: "center", display: "flex" }}>Use the buttons below to begin your exploration</p>
+    )
+  }
 };
 
 export default VisualizationRenderer;
