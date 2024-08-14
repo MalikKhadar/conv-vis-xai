@@ -4,7 +4,6 @@ Occupation: Exec managerial`,Options:["Compared to data point 0, this is a simil
 Age: 32.0
 Hours per week: 40.0
 Native Country: India`,Options:["Compared to data point 1, this is a similar data point","Compared to data point 1, this is a counterfactual data point"]},{Prompt:`Classify the following data point when compared to data point 2 (assume all unmentioned feature values are shared between data points)
-Workclass: Federal gov
 Relationship: Other relative
 Race: White
 Sex: Male
