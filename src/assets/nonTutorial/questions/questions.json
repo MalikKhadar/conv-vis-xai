@@ -71,7 +71,7 @@
             ]
         },
         {
-            "Prompt": "Classify the following data point when compared to data point 2 (assume all unmentioned feature values are shared between data points)\nWorkclass: Federal gov\nRelationship: Other relative\nRace: White\nSex: Male\nHours per week: 45.0",
+            "Prompt": "Classify the following data point when compared to data point 2 (assume all unmentioned feature values are shared between data points)\nRelationship: Other relative\nRace: White\nSex: Male\nHours per week: 45.0",
             "Options": [
                 "Compared to data point 2, this is a similar data point",
                 "Compared to data point 2, this is a counterfactual data point"
