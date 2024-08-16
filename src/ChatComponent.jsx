@@ -260,10 +260,6 @@ const ChatComponent = ({ apiKey, visualizationObjects, chatActive, currentQuesti
       }
       stream = stream.replaceAll("[GOOD_QUESTION]", "");
 
-      if (writingIntro) {
-        stream += "\n\nRecommended question: " + visualizationObjects.visualizations[visualizationObjects.activeVisualization].question;
-      }
-
       if (guided && (stream.includes("[RECOMMEND]") || writingIntro)) {
         stream = stream.replaceAll("[RECOMMEND]", "");
 
@@ -361,7 +357,7 @@ const ChatComponent = ({ apiKey, visualizationObjects, chatActive, currentQuesti
 
         if (giveReminder) {
           newMessages.push({
-            message: "Let me know if you have any questions.",
+            message: "Let me know if you have any questions. Here's a good one you could ask: " + visualizationObjects.visualizations[visualizationObjects.activeVisualization].question,
             direction: 'incoming',
             sender: "assistant"
           });
