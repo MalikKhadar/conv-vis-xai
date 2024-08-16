@@ -172,7 +172,7 @@ function App() {
       <div style={{ display: 'flex', flexDirection: 'column', flex: "1", height: "100%", minWidth: "15vw", overflowY: "hidden" }}>
         <PredictionDisplay datapointNum={datapointNum} setNumberOfDatapoints={setNumberOfDatapoints} />
         <div style={{ flex: "1" }}>
-          {visitedAllVisualizations && goodQuestionCount > 5 ? (
+          {visitedAllVisualizations && (goodQuestionCount > 5 || !isChatting) ? (
             <QuizComponent
               setDone={setDone}
               setCurrentQuestion={setCurrentQuestion}
