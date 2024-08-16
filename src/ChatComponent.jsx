@@ -8,7 +8,7 @@ import { useAddLog } from './Logger';
 
 const gptModel = "gpt-4o";
 
-const ChatComponent = ({ apiKey, visualizationObjects, chatActive, currentQuestion, datapointNum, guided, writingIntro, setWritingIntro, introducedVisualizations, setIntroducedVisualizations, recentlySelectedOption, setRecentlySelectedOption }) => {
+const ChatComponent = ({ apiKey, visualizationObjects, chatActive, currentQuestion, datapointNum, guided, writingIntro, setWritingIntro, introducedVisualizations, setIntroducedVisualizations, recentlySelectedOption, setRecentlySelectedOption, goodQuestionCount, setGoodQuestionCount }) => {
   const [systemMessage, setSystemMessage] = useState('');
   const [fullSystemMessage, setFullSystemMessage] = useState('');
   const [messages, setMessages] = useState([{
@@ -255,11 +255,16 @@ const ChatComponent = ({ apiKey, visualizationObjects, chatActive, currentQuesti
       }
       setApiMessages([...apiMessages, { role: "assistant", content: stream }]);
 
-      if (guided && writingIntro) {
-        stream += "[RECOMMEND]";
+      if (stream.includes("[GOOD_QUESTION]")) {
+        setGoodQuestionCount(goodQuestionCount + 1);
+      }
+      stream = stream.replaceAll("[GOOD_QUESTION]", "");
+
+      if (writingIntro) {
+        stream += "\n\nRecommended question: " + visualizationObjects.visualizations[visualizationObjects.activeVisualization].question;
       }
 
-      if (guided && stream.includes("[RECOMMEND]")) {
+      if (guided && (stream.includes("[RECOMMEND]") || writingIntro)) {
         stream = stream.replaceAll("[RECOMMEND]", "");
 
         if (stream) {
@@ -277,12 +282,13 @@ const ChatComponent = ({ apiKey, visualizationObjects, chatActive, currentQuesti
           }
         }
         stream += "</ul>";
-        setMessages([...chatMessages, {
-          message: stream,
-          direction: 'incoming',
-          sender: "assistant"
-        }]);
       }
+
+      setMessages([...chatMessages, {
+        message: stream,
+        direction: 'incoming',
+        sender: "assistant"
+      }]);
       setWritingIntro(false);
       addLog('Reply ' + stream);
     } catch (error) {

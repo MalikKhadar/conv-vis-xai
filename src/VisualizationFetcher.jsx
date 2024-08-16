@@ -32,7 +32,8 @@ const VisualizationFetcher = ({ visualizationObjects, setVisualizationObjects, s
               global: visualizationObject.Global,
               module: module.default || module,
               order: visualizationObject.Order,
-              visited: loadedVisited
+              visited: loadedVisited,
+              question: visualizationObject.Question
             };
 
             if (visualizationObject.Global) {
@@ -59,7 +60,8 @@ const VisualizationFetcher = ({ visualizationObjects, setVisualizationObjects, s
         subVisualizations: scatterPlots,
         activeSubVisualization: loadedSubVisualization,
         order: graphData["Scatter Plots"].Order,
-        visited: loadedVisited
+        visited: loadedVisited,
+        question: graphData["Scatter Plots"].Question
       };
       globalOrder.push("Scatter Plots");
 

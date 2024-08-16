@@ -6,7 +6,8 @@
             "Beeswarm Plot": "to see this info with feature values included",
             "Scatter Plots": "to see this info with feature values included <b>for a single feature at a time</b>",
             "Local Bar Plot": "to see this info with feature values included <b>for a single data point</b>"
-        }
+        },
+        "Question": "What is the significance of mean(|SHAP value|)?"
     },
     "Beeswarm Plot": {
         "Global": true,
@@ -15,7 +16,8 @@
             "Global Bar Plot": "to see this info without feature values included",
             "Scatter Plots": "to see this info for a single feature at a time",
             "Local Bar Plot": "to see this info for a single data point"
-        }
+        },
+        "Question": "Could you help me understand the 'Age' part of this plot?"
     },
     "Scatter Plots": {
         "Global": true,
@@ -24,7 +26,8 @@
             "Beeswarm Plot": "to see this info for all features at once",
             "Global Bar Plot": "to see this info for all features at once <b>without feature values included</b>",
             "Local Bar Plot": "to see this info for all features at once <b>for a single data point</b>"
-        }
+        },
+        "Question": "What do the grey bars at the bottom of the plot represent?"
     },
     "Local Bar Plot": {
         "Global": false,
@@ -33,7 +36,8 @@
             "Similar Data Table": "to compare this data point to similar ones with the <b>same</b> model prediction",
             "Counterfactual Data Table": "to compare this data point to similar ones with the <b>opposite</b> model prediction",
             "Beeswarm Plot": "to see this info for all data points"
-        }
+        },
+        "Question": "What do these values add up to?"
     },
     "Similar Data Table": {
         "Global": false,
@@ -42,7 +46,8 @@
             "Counterfactual Data Table": "to compare data point [X] to similar data points with the <b>opposite</b> model prediction",
             "Local Bar Plot": "to see the SHAP values for data point [X]",
             "Beeswarm Plot": "to see all data points with SHAP values included"
-        }
+        },
+        "Question": "What patterns do you see in this table?"
     },
     "Counterfactual Data Table": {
         "Global": false,
@@ -51,6 +56,7 @@
             "Similar Data Table": "to compare data point [X] to similar data points with the <b>same</b> model prediction",
             "Local Bar Plot": "to see the SHAP values for data point [X]",
             "Beeswarm Plot": "to see all data points with SHAP values included"
-        }
+        },
+        "Question": "What do the counterfactual data points have in common?"
     }
 }

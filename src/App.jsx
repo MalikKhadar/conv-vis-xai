@@ -34,6 +34,7 @@ function App() {
   const [guided, setGuided] = useState(false);
   const [writingIntro, setWritingIntro] = useState(false);
   const [introducedVisualizations, setIntroducedVisualizations] = useState(["Global Bar Plot"]);
+  const [goodQuestionCount, setGoodQuestionCount] = useState(0);
   const [recentlySelectedOption, setRecentlySelectedOption] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState("");
   const [unvisitedVisualizationsNum, setUnvisitedVisualizationsNum] = useState(1);
@@ -171,11 +172,21 @@ function App() {
       <div style={{ display: 'flex', flexDirection: 'column', flex: "1", height: "100%", minWidth: "15vw", overflowY: "hidden" }}>
         <PredictionDisplay datapointNum={datapointNum} setNumberOfDatapoints={setNumberOfDatapoints} />
         <div style={{ flex: "1" }}>
-          {visitedAllVisualizations ?
-            <QuizComponent setDone={setDone} setCurrentQuestion={setCurrentQuestion} setRecentlySelectedOption={setRecentlySelectedOption} />
-            :
-            <p style={{ textAlign: "center", marginTop: "50%" }}>The questions will appear once you've explored the data and visuals presented to the right</p>
-          }
+          {visitedAllVisualizations && goodQuestionCount > 5 ? (
+            <QuizComponent
+              setDone={setDone}
+              setCurrentQuestion={setCurrentQuestion}
+              setRecentlySelectedOption={setRecentlySelectedOption}
+            />
+          ) : (
+            isChatting ?
+              <p style={{ textAlign: "center", marginTop: "50%" }}>
+                The questions will appear once you've explored the data and visuals presented to the right<br /><br />
+                You must also ask at least 6 good questions. So far, you have asked {goodQuestionCount}
+              </p>
+              :
+              <p style={{ textAlign: "center", marginTop: "50%" }}>The questions will appear once you've explored the data and visuals presented to the right</p>
+          )}
         </div>
         <div style={{ flex: "0", alignContent: "end" }}>
           <OpenTutorialButton isChatting={isChatting} />
@@ -200,6 +211,8 @@ function App() {
                 setIntroducedVisualizations={setIntroducedVisualizations}
                 recentlySelectedOption={recentlySelectedOption}
                 setRecentlySelectedOption={setRecentlySelectedOption}
+                goodQuestionCount={goodQuestionCount}
+                setGoodQuestionCount={setGoodQuestionCount}
               />
               : null}
           </div>
@@ -222,7 +235,7 @@ function App() {
           introducedVisualizations={introducedVisualizations}
         />
       </div>
-    </div>
+    </div >
   );
 }
 
