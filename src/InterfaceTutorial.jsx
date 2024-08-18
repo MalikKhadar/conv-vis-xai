@@ -51,7 +51,7 @@ const InterfaceTutorial = ({ condition }) => {
 
       <StyledHeader>The Interface:</StyledHeader>
       <StyledParagraph>
-        First, you will explore the data and visualizations in the interface. A quiz will be unlocked once you've explored everything. The data and visualizations will remain accessible while completing the quiz.
+        First, you will explore the data and visualizations in the interface. A quiz will be unlocked once you've explored everything{condition != "noChat" ? " and asked 6 good questions to the bot" : ""}. The data and visualizations will remain accessible while completing the quiz.
       </StyledParagraph>
       <StyledParagraph>
         <b>Note: </b> You don't need to visit every version of every visual to unlock the quiz. You'll only need to view one scatter plot out of the 12 available, and one version of each local visualization.
