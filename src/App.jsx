@@ -182,7 +182,7 @@ function App() {
             isChatting ?
               <p style={{ textAlign: "center", marginTop: "50%" }}>
                 The questions will appear once you've explored the data and visuals presented to the right<br /><br />
-                You must also ask at least 6 good questions. So far, you have asked {goodQuestionCount}
+                You also need to ask a minimum of 6 good questions. Good questions focus on interpreting the data and visualizations. So far, you have asked {goodQuestionCount} good questions
               </p>
               :
               <p style={{ textAlign: "center", marginTop: "50%" }}>The questions will appear once you've explored the data and visuals presented to the right</p>
