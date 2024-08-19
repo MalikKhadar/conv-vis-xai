@@ -53,9 +53,6 @@ const InterfaceTutorial = ({ condition }) => {
       <StyledParagraph>
         First, you will explore the data and visualizations in the interface. A quiz will be unlocked once you've explored everything{condition != "noChat" ? " and asked 6 good questions to the bot" : ""}. The data and visualizations will remain accessible while completing the quiz.
       </StyledParagraph>
-      <StyledParagraph>
-        <b>Note: </b> You don't need to visit every version of every visual to unlock the quiz. You'll only need to view one scatter plot out of the 12 available, and one version of each local visualization.
-      </StyledParagraph>
       <StyledSub>
         <StyledParagraph>
           This is how the interface will look when you first open it:
@@ -87,6 +84,7 @@ const InterfaceTutorial = ({ condition }) => {
         <div>
           <StyledList>
             <StyledListItem>You cannot revisit questions that have been submitted.</StyledListItem>
+            <StyledListItem>You don't need to visit every version of every visual to unlock the quiz. You'll only need to view one scatter plot out of the 12 available, and one version of each local visualization.</StyledListItem>
             <StyledListItem>You'll need to use the dropdowns (1 and 2) to answer some of the questions.</StyledListItem>
           </StyledList>
         </div>
