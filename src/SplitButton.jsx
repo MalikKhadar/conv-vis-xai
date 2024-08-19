@@ -57,7 +57,7 @@ const SplitButton = ({ visualizationObject, visualizationObjects, handleSubVisua
             }}
           >
             {visualizationObject.activeSubVisualization ? visualizationObject.name + ": " + visualizationObject.activeSubVisualization
-            : "New: " + visualizationObject.name + " (Use the dropdown)"}
+            : "New: " + visualizationObject.name + " (Use the dropdown to the right)"}
           </Button>
           <Button
             border
