@@ -320,7 +320,18 @@ const ChatComponent = ({ apiKey, visualizationObjects, chatActive, currentQuesti
       msgListRef.current?.scrollToBottom("auto");
     }
     scrollDown();
-  }, [messages])
+  }, [messages]);
+
+  useEffect(() => {
+    const explainVisualization = async () => {
+      setWritingIntro(true);
+      resetInactivityTimer();
+      handleSend("");
+    }
+    if (visualizationObjects.activeVisualization && visualizationObjects.visualizations[visualizationObjects.activeVisualization].visited) {
+      explainVisualization();
+    }
+  }, [visualizationObjects.visualizations[visualizationObjects.activeVisualization]?.visited]);
 
   // Function to check if an image is wide
   const isImageWide = (imageUrl, callback) => {
@@ -370,17 +381,6 @@ const ChatComponent = ({ apiKey, visualizationObjects, chatActive, currentQuesti
       showVisualization();
     }
   }, [visualizationObjects.visualizations[visualizationObjects.activeVisualization]]);
-
-  useEffect(() => {
-    const explainVisualization = async () => {
-      setWritingIntro(true);
-      resetInactivityTimer();
-      handleSend("");
-    }
-    if (visualizationObjects.activeVisualization && visualizationObjects.visualizations[visualizationObjects.activeVisualization].visited) {
-      explainVisualization();
-    }
-  }, [visualizationObjects.visualizations[visualizationObjects.activeVisualization]?.visited]);
 
   return (
     <div style={{ width: "100%", height: "100%" }}>
